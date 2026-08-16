@@ -1,9 +1,19 @@
 # Team-LEX
 
 ## Policy DB Chatbot
-Team-LEX is developing an AI-powered web application that enables users to access and understand La Trobe University policies through natural language questions. The application combines a React frontend with a Django REST backend and investigates the use of Retrieval-Augmented Generation (RAG) to provide accurate, context-aware and source-grounded responses from the University's official Policy Database.
+Team-LEX is developing **Lex AI**, an AI-powered web application that enables users to access and understand La Trobe University policies through natural language questions. The application combines a React frontend with a Django REST backend and investigates the use of Retrieval-Augmented Generation (RAG) to provide accurate, context-aware and source-grounded responses from the University's official Policy Database.
 
 The project aims to improve the accessibility of institutional policies, reduce the time required to locate and interpret policy information, and support consistent, policy-aligned decision-making for students, staff and administrators.
+
+---
+
+## Development Setup
+
+For local installation and run instructions, see [`docs/SETUP.md`](docs/SETUP.md).
+
+For the Team LEX Git and pull request workflow, see [`docs/BRANCHING_STRATEGY.md`](docs/BRANCHING_STRATEGY.md).
+
+The backend provides a development health endpoint at `http://127.0.0.1:8000/api/health/`. The React frontend is located in `frontend/`.
 
 ---
 
@@ -81,11 +91,13 @@ The project operates under the following constraints:
 - JavaScript
 - HTML
 - CSS
+- Vite
 
 ### Backend
 - Python
 - Django
 - Django REST Framework
+- SQLite for local prototype development
 
 ### AI and Retrieval
 - Retrieval-Augmented Generation (RAG)
@@ -100,21 +112,25 @@ The project operates under the following constraints:
 ---
 
 ## Repository Structure
-```
+```text
 Team-LEX/
-├── api/
-├── mysite/
+├── api/                     # Django API application
+├── mysite/                  # Django project configuration
+├── frontend/                # React/Vite Lex AI frontend
+├── docs/                    # Development documentation
 ├── manage.py
 ├── requirements.txt
+├── .env.example
 ├── .gitignore
-├── README.md
-└── .env (excluded from version control)
+└── README.md
 ```
+
+The local `.env`, Python virtual environment, SQLite database, frontend dependencies and frontend build output are excluded from version control.
 
 ---
 
 ## Team
-Team-LEX is a collaborative capstone project developed by a team of five students at La Trobe University. 
+Team-LEX is a collaborative capstone project developed by a team of five students at La Trobe University.
 
 NOAH U.
 SHARMANE V.
@@ -124,7 +140,7 @@ JOSHUA F.
 
 The project follows a collaborative software development approach, with team members contributing across system architecture, frontend development, backend development, API integration, AI and retrieval components, testing, documentation and project management.
 
-This repository serves as the shared codebase for the design, development and evaluation of the Policy DB Chatbot.
+This repository serves as the shared codebase for the design, development and evaluation of Lex AI.
 
 ---
 
