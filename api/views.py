@@ -1,6 +1,13 @@
-from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
-def test_endpoint(request):
-    return JsonResponse({
-        "message": "Hello from Django!"
-    })
+
+@api_view(["GET"])
+def health_check(request):
+    """Return a simple response confirming the Lex AI backend is running."""
+    return Response(
+        {
+            "status": "ok",
+            "message": "Lex AI Django API is running",
+        }
+    )
