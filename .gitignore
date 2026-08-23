@@ -6,6 +6,7 @@ __pycache__/
 db.sqlite3
 .env
 .DS_Store
+qdrant_storage/
 
 # Frontend
 frontend/node_modules/
