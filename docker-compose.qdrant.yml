@@ -1,0 +1,23 @@
+# Local Qdrant instance for Project Lex (COPL-183).
+#
+# Usage:
+#   docker compose -f docker-compose.qdrant.yml up -d
+#
+# Qdrant REST API:      http://localhost:6333
+# Qdrant Web dashboard:  http://localhost:6333/dashboard
+# Qdrant gRPC:           localhost:6334
+#
+# Data is persisted to ./qdrant_storage on the host so the collection
+# survives container restarts. This directory is intentionally excluded
+# from Git (see .gitignore).
+
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: lex-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./qdrant_storage:/qdrant/storage
+    restart: unless-stopped
