@@ -1,0 +1,249 @@
+{
+  "name": "Lex AI retrieval test set",
+  "created": "2026-09-06",
+  "notes": [
+    "15 questions. The expected chunk ids were found by reading the files in data/processed/chunks/.",
+    "Categories: supported, ambiguous, unsupported, current_policy, superseded_policy.",
+    "Run against COPL-184's PolicyRetriever, which only returns chunks with status Current and a similarity score of at least 0.55.",
+    "If the chunker gets re-run the chunk ids might change, so run --dry-run first to check."
+  ],
+  "questions": [
+    {
+      "id": "Q01",
+      "category": "supported",
+      "question": "What is the maximum percentage of a subject's final grade that group assessment can make up?",
+      "expected_policy": "Assessment Standards",
+      "expected_document_ids": [
+        "363"
+      ],
+      "expected_section": "Section 6 - Standards",
+      "expected_subsection": "Part F - Group Assessment Tasks",
+      "expected_chunk_ids": [
+        "363-11"
+      ],
+      "expected_outcome": "answered",
+      "note": "Group assessment can be no more than 40% of the final grade."
+    },
+    {
+      "id": "Q02",
+      "category": "supported",
+      "question": "By what time on the due date do assignments have to be submitted?",
+      "expected_policy": "Assessment Standards",
+      "expected_document_ids": [
+        "363"
+      ],
+      "expected_section": "Section 6 - Standards",
+      "expected_subsection": "Part I - Submission of Assessment Tasks",
+      "expected_chunk_ids": [
+        "363-15"
+      ],
+      "expected_outcome": "answered",
+      "note": "11:59pm Melbourne time, in the LMS where possible."
+    },
+    {
+      "id": "Q03",
+      "category": "supported",
+      "question": "Is attendance at classes mandatory, and when can attendance be assessed?",
+      "expected_policy": "Assessment Standards",
+      "expected_document_ids": [
+        "363"
+      ],
+      "expected_section": "Section 6 - Standards",
+      "expected_subsection": "Part G - Assessment of Attendance",
+      "expected_chunk_ids": [
+        "363-12"
+      ],
+      "expected_outcome": "answered",
+      "note": "Only mandatory where there is a minimum needed for practice, performance or accreditation."
+    },
+    {
+      "id": "Q04",
+      "category": "supported",
+      "question": "How do I make a privacy complaint to the University?",
+      "expected_policy": "Privacy Policy",
+      "expected_document_ids": [
+        "1"
+      ],
+      "expected_section": "Section 6 - Procedures",
+      "expected_subsection": "Part I - Complaints",
+      "expected_chunk_ids": [
+        "1-30"
+      ],
+      "expected_outcome": "answered",
+      "note": "Complain to the Privacy Officer at privacy@latrobe.edu.au."
+    },
+    {
+      "id": "Q05",
+      "category": "supported",
+      "question": "What should a staff member do if they receive a court subpoena or a warrant?",
+      "expected_policy": "Privacy Policy",
+      "expected_document_ids": [
+        "1"
+      ],
+      "expected_section": "Section 6 - Procedures",
+      "expected_subsection": "Part B - Use and Disclosure",
+      "expected_chunk_ids": [
+        "1-20"
+      ],
+      "expected_outcome": "answered",
+      "note": "Send it straight to Legal Services at legal.services@latrobe.edu.au."
+    },
+    {
+      "id": "Q06",
+      "category": "supported",
+      "question": "Can the University give a student's results or personal information to their parents?",
+      "expected_policy": "Privacy Policy",
+      "expected_document_ids": [
+        "1"
+      ],
+      "expected_section": "Section 6 - Procedures",
+      "expected_subsection": "Part B - Use and Disclosure",
+      "expected_chunk_ids": [
+        "1-17"
+      ],
+      "expected_outcome": "answered",
+      "note": "Not unless the student has given consent."
+    },
+    {
+      "id": "Q07",
+      "category": "supported",
+      "question": "How long does the Student Complaints Office have to tell me the outcome of my complaint?",
+      "expected_policy": "Student Complaints Management Policy",
+      "expected_document_ids": [
+        "160"
+      ],
+      "expected_section": "Section 6 - Procedures",
+      "expected_subsection": "Part E - Outcomes of Complaints",
+      "expected_chunk_ids": [
+        "160-14"
+      ],
+      "expected_outcome": "answered",
+      "note": "In writing within 10 business days of the outcome being finalised."
+    },
+    {
+      "id": "Q08",
+      "category": "supported",
+      "question": "What can I do if I am unhappy with the outcome of my student complaint?",
+      "expected_policy": "Student Complaints Management Policy",
+      "expected_document_ids": [
+        "160"
+      ],
+      "expected_section": "Section 6 - Procedures",
+      "expected_subsection": "Part F - Review of Complaint Outcomes",
+      "expected_chunk_ids": [
+        "160-15"
+      ],
+      "expected_outcome": "answered",
+      "note": "You can ask for a review, see Part F."
+    },
+    {
+      "id": "Q09",
+      "category": "supported",
+      "question": "Who approves high risk AI use cases at La Trobe?",
+      "expected_policy": "Responsible AI Adoption Policy",
+      "expected_document_ids": [
+        "417"
+      ],
+      "expected_section": "Section 4 - Key Decisions",
+      "expected_subsection": null,
+      "expected_chunk_ids": [
+        "417-4"
+      ],
+      "expected_outcome": "answered",
+      "note": "The Responsible AI Adoption Committee (RAAC)."
+    },
+    {
+      "id": "Q10",
+      "category": "ambiguous",
+      "question": "Who oversees assessment?",
+      "expected_policy": null,
+      "expected_document_ids": [
+        "216",
+        "363"
+      ],
+      "expected_section": "Section 4 - Key Decisions",
+      "expected_subsection": null,
+      "expected_chunk_ids": [
+        "216-4",
+        "363-4"
+      ],
+      "expected_outcome": "ambiguous",
+      "note": "Both the Assessment Policy and the Assessment Standards have a Key Decisions section about oversight. The system should show both instead of picking one."
+    },
+    {
+      "id": "Q11",
+      "category": "ambiguous",
+      "question": "What are the rules about using AI?",
+      "expected_policy": null,
+      "expected_document_ids": [
+        "417",
+        "363"
+      ],
+      "expected_section": null,
+      "expected_subsection": null,
+      "expected_chunk_ids": [
+        "417-5",
+        "417-2",
+        "363-17"
+      ],
+      "expected_outcome": "ambiguous",
+      "note": "AI is in the Responsible AI Adoption Policy and also in the Assessment Standards definitions. The question doesn't say which one."
+    },
+    {
+      "id": "Q12",
+      "category": "unsupported",
+      "question": "How much does a Bundoora campus parking permit cost?",
+      "expected_policy": null,
+      "expected_document_ids": [],
+      "expected_section": null,
+      "expected_subsection": null,
+      "expected_chunk_ids": [],
+      "expected_outcome": "unsupported",
+      "note": "Parking is not in any of our five policies, so the system has to say it doesn't know."
+    },
+    {
+      "id": "Q13",
+      "category": "unsupported",
+      "question": "What are the library opening hours during the exam period?",
+      "expected_policy": null,
+      "expected_document_ids": [],
+      "expected_section": null,
+      "expected_subsection": null,
+      "expected_chunk_ids": [],
+      "expected_outcome": "unsupported",
+      "note": "Library hours are not policy content and are not indexed."
+    },
+    {
+      "id": "Q14",
+      "category": "current_policy",
+      "question": "What is the current Privacy Policy and when did it take effect?",
+      "expected_policy": "Privacy Policy",
+      "expected_document_ids": [
+        "1"
+      ],
+      "expected_section": "Section 1 - Key Information",
+      "expected_subsection": null,
+      "expected_chunk_ids": [
+        "1-1"
+      ],
+      "expected_outcome": "answered",
+      "note": "Effective 31st August 2023, status Current. Every chunk we return has to say Current."
+    },
+    {
+      "id": "Q15",
+      "category": "superseded_policy",
+      "question": "What did the previous version of the Student Complaints Management Policy say about complaint pathways?",
+      "expected_policy": "Student Complaints Management Policy",
+      "expected_document_ids": [
+        "160"
+      ],
+      "expected_section": "Section 6 - Procedures",
+      "expected_subsection": "Part A - Complaints Pathways",
+      "expected_chunk_ids": [
+        "160-8"
+      ],
+      "expected_outcome": "answered",
+      "note": "We only indexed the current version, so there is no old version to find. All this test can check is that we never hand back something that isn't marked Current. See the limitations in the report."
+    }
+  ]
+}

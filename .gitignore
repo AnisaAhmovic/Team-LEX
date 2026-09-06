@@ -11,3 +11,7 @@ qdrant_storage/
 # Frontend
 frontend/node_modules/
 frontend/dist/
+
+# Audit log and test output
+data/audit/
+tests/results/

@@ -1,0 +1,1243 @@
+{
+  "run_time": "06/09/2026 17:15:53",
+  "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+  "totals": {
+    "total_questions": 15,
+    "answerable_questions": 10,
+    "passed": 12,
+    "failed": 3,
+    "top1_chunk": 80.0,
+    "top3_chunk": 80.0,
+    "top5_chunk": 90.0,
+    "top1_policy": 90.0,
+    "top3_policy": 90.0,
+    "top5_policy": 90.0,
+    "by_category": {
+      "supported": {
+        "passed": 8,
+        "total": 9
+      },
+      "ambiguous": {
+        "passed": 1,
+        "total": 2
+      },
+      "unsupported": {
+        "passed": 2,
+        "total": 2
+      },
+      "current_policy": {
+        "passed": 0,
+        "total": 1
+      },
+      "superseded_policy": {
+        "passed": 1,
+        "total": 1
+      }
+    }
+  },
+  "rows": [
+    {
+      "id": "Q01",
+      "category": "supported",
+      "question": "What is the maximum percentage of a subject's final grade that group assessment can make up?",
+      "expected_policy": "Assessment Standards",
+      "expected_section": "Section 6 - Standards",
+      "expected_chunk_ids": [
+        "363-11"
+      ],
+      "expected_document_ids": [
+        "363"
+      ],
+      "expected_outcome": "answered",
+      "outcome": "answered",
+      "top_score": 0.724895,
+      "time_taken_ms": 16536,
+      "audit_id": 1,
+      "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "363-11",
+          "document_id": "363",
+          "policy_title": "Assessment Standards",
+          "section": "Section 6 - Standards",
+          "subsection": "Part F - Group Assessment Tasks",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=363",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=363",
+          "status": "Current",
+          "effective_date": "4th May 2026",
+          "score": 0.724895,
+          "text_snippet": "Part F - Group Assessment Tasks (21) Subjects should include a balance of individual and group assessment. Group assessment may comprise no more than 40% of the final grade in a subject. (22) Where a single group assessment task is weighted at 40% of the final grade in a subject, Subject Coordinators must be able to demonstrate that students are provided with adequate opportunities to demonstrate "
+        },
+        {
+          "rank": 2,
+          "chunk_id": "363-10",
+          "document_id": "363",
+          "policy_title": "Assessment Standards",
+          "section": "Section 6 - Standards",
+          "subsection": "Part E - Timing and Weighting of Assessment",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=363",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=363",
+          "status": "Current",
+          "effective_date": "4th May 2026",
+          "score": 0.582174,
+          "text_snippet": "Part E - Timing and Weighting of Assessment (20) The assessment regime for subjects should be designed to take place periodically, rather than throughout the teaching period, and to align with the following rules: all subjects should have a maximum of four (4) weighted assessment tasks. Each of the four assessment tasks must be captured in the course management system (CourseLoop) as a single line"
+        }
+      ],
+      "marks": {
+        "top1_chunk": true,
+        "top3_chunk": true,
+        "top5_chunk": true,
+        "top1_policy": true,
+        "top3_policy": true,
+        "top5_policy": true,
+        "all_current": true,
+        "rule": "right chunk in the top 3 and outcome is 'answered'",
+        "passed": true
+      }
+    },
+    {
+      "id": "Q02",
+      "category": "supported",
+      "question": "By what time on the due date do assignments have to be submitted?",
+      "expected_policy": "Assessment Standards",
+      "expected_section": "Section 6 - Standards",
+      "expected_chunk_ids": [
+        "363-15"
+      ],
+      "expected_document_ids": [
+        "363"
+      ],
+      "expected_outcome": "answered",
+      "outcome": "answered",
+      "top_score": 0.697128,
+      "time_taken_ms": 208,
+      "audit_id": 2,
+      "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "363-15",
+          "document_id": "363",
+          "policy_title": "Assessment Standards",
+          "section": "Section 6 - Standards",
+          "subsection": "Part I - Submission of Assessment Tasks",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=363",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=363",
+          "status": "Current",
+          "effective_date": "4th May 2026",
+          "score": 0.697128,
+          "text_snippet": "Part I - Submission of Assessment Tasks (33) All assignments must be submitted: by the deadline of 11:59pm Melbourne time on the due date within the LMS wherever possible. This does not include assessment tasks such as practical activities and oral assessments that cannot be submitted via the LMS. (34) Where appropriate, essays, reports and similar written assessments are submitted through Turniti"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "363-10",
+          "document_id": "363",
+          "policy_title": "Assessment Standards",
+          "section": "Section 6 - Standards",
+          "subsection": "Part E - Timing and Weighting of Assessment",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=363",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=363",
+          "status": "Current",
+          "effective_date": "4th May 2026",
+          "score": 0.575094,
+          "text_snippet": "Part E - Timing and Weighting of Assessment (20) The assessment regime for subjects should be designed to take place periodically, rather than throughout the teaching period, and to align with the following rules: all subjects should have a maximum of four (4) weighted assessment tasks. Each of the four assessment tasks must be captured in the course management system (CourseLoop) as a single line"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "160-13",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part E - Outcomes of Complaints",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.561976,
+          "text_snippet": "Determination and Implementation of Outcomes (34) The relevant school or business area must make a determination regarding the proposed outcome and provide a response to the Student Complaints Office within 10 business days of the complaint being referred to the area. (35) Where the responsible person within the Student Complaints Office has any concerns regarding the appropriateness of the propos"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "363-8",
+          "document_id": "363",
+          "policy_title": "Assessment Standards",
+          "section": "Section 6 - Standards",
+          "subsection": "Part C - Information to Students",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=363",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=363",
+          "status": "Current",
+          "effective_date": "4th May 2026",
+          "score": 0.552749,
+          "text_snippet": "Part C - Information to Students (8) Students are informed about the assessment for individual subjects through the University Handbook and the Subject Learning Guide. The University Handbook entries include the assessment tasks for each subject, including broad information about the types of assessment and their respective weightings. (9) Full details of assessment are provided to students in the"
+        }
+      ],
+      "marks": {
+        "top1_chunk": true,
+        "top3_chunk": true,
+        "top5_chunk": true,
+        "top1_policy": true,
+        "top3_policy": true,
+        "top5_policy": true,
+        "all_current": true,
+        "rule": "right chunk in the top 3 and outcome is 'answered'",
+        "passed": true
+      }
+    },
+    {
+      "id": "Q03",
+      "category": "supported",
+      "question": "Is attendance at classes mandatory, and when can attendance be assessed?",
+      "expected_policy": "Assessment Standards",
+      "expected_section": "Section 6 - Standards",
+      "expected_chunk_ids": [
+        "363-12"
+      ],
+      "expected_document_ids": [
+        "363"
+      ],
+      "expected_outcome": "answered",
+      "outcome": "answered",
+      "top_score": 0.699572,
+      "time_taken_ms": 207,
+      "audit_id": 3,
+      "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "363-12",
+          "document_id": "363",
+          "policy_title": "Assessment Standards",
+          "section": "Section 6 - Standards",
+          "subsection": "Part G - Assessment of Attendance",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=363",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=363",
+          "status": "Current",
+          "effective_date": "4th May 2026",
+          "score": 0.699572,
+          "text_snippet": "Part G - Assessment of Attendance (24) Attendance in subjects is only mandatory where there is a necessary minimum attendance for practice, performance or external requirements, such as for accreditation, a placement or practice assessment. (25) In subjects where attendance for specific activities is mandatory, students are advised through the Subject Learning Guide on the LMS, and verbally or in "
+        },
+        {
+          "rank": 2,
+          "chunk_id": "363-8",
+          "document_id": "363",
+          "policy_title": "Assessment Standards",
+          "section": "Section 6 - Standards",
+          "subsection": "Part C - Information to Students",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=363",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=363",
+          "status": "Current",
+          "effective_date": "4th May 2026",
+          "score": 0.572428,
+          "text_snippet": "Part C - Information to Students (8) Students are informed about the assessment for individual subjects through the University Handbook and the Subject Learning Guide. The University Handbook entries include the assessment tasks for each subject, including broad information about the types of assessment and their respective weightings. (9) Full details of assessment are provided to students in the"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "363-10",
+          "document_id": "363",
+          "policy_title": "Assessment Standards",
+          "section": "Section 6 - Standards",
+          "subsection": "Part E - Timing and Weighting of Assessment",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=363",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=363",
+          "status": "Current",
+          "effective_date": "4th May 2026",
+          "score": 0.563868,
+          "text_snippet": "Part E - Timing and Weighting of Assessment (20) The assessment regime for subjects should be designed to take place periodically, rather than throughout the teaching period, and to align with the following rules: all subjects should have a maximum of four (4) weighted assessment tasks. Each of the four assessment tasks must be captured in the course management system (CourseLoop) as a single line"
+        }
+      ],
+      "marks": {
+        "top1_chunk": true,
+        "top3_chunk": true,
+        "top5_chunk": true,
+        "top1_policy": true,
+        "top3_policy": true,
+        "top5_policy": true,
+        "all_current": true,
+        "rule": "right chunk in the top 3 and outcome is 'answered'",
+        "passed": true
+      }
+    },
+    {
+      "id": "Q04",
+      "category": "supported",
+      "question": "How do I make a privacy complaint to the University?",
+      "expected_policy": "Privacy Policy",
+      "expected_section": "Section 6 - Procedures",
+      "expected_chunk_ids": [
+        "1-30"
+      ],
+      "expected_document_ids": [
+        "1"
+      ],
+      "expected_outcome": "answered",
+      "outcome": "answered",
+      "top_score": 0.739196,
+      "time_taken_ms": 283,
+      "audit_id": 4,
+      "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "1-30",
+          "document_id": "1",
+          "policy_title": "Privacy Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part I - Complaints",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=1",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=1",
+          "status": "Current",
+          "effective_date": "31st August 2023",
+          "score": 0.739196,
+          "text_snippet": "Part I - Complaints (86) Individuals may complain to the Privacy Officer about a University act or practice that they believe is an interference with their privacy via privacy@latrobe.edu.au (87) The Privacy Officer will promptly investigate the complaint and advise the Vice-Chancellor or nominee of their findings and recommendations about the complaint within 30 days of receipt. (88) Individuals "
+        },
+        {
+          "rank": 2,
+          "chunk_id": "160-6",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 5 - Policy Statement",
+          "subsection": null,
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.679435,
+          "text_snippet": "Section 5 - Policy Statement (9) As part of its commitment to quality, La Trobe University recognises the need for an effective complaints mechanism to adequately resolve student grievances and complaints about University life. (10) The University seeks to provide a student complaints service that: is free of charge, easily accessible for all students, and sensitive to the needs of the diverse com"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "160-10",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part C - Submitting a Formal Complaint",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.676818,
+          "text_snippet": "Part C - Submitting a Formal Complaint (22) In cases where direct and informal local level resolution is not appropriate or successful, or the student does not feel comfortable to pursue this path, the student may lodge a formal complaint in writing via the following channels: the online form provided on the Student Complaints website to formally register the complaint in the University\u2019s SCM; ema"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "160-15",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part F - Review of Complaint Outcomes",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.67203,
+          "text_snippet": "Part F - Review of Complaint Outcomes (39) Complainants who are dissatisfied with any aspect of how this Policy has been applied, or the outcome of their complaint, may seek a review through the Office of the University Ombudsman, under the provisions of the La Trobe University Ombudsman Statute 2009 . (40) Complainants may also choose to lodge a complaint with an external organisation such as the"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "1-24",
+          "document_id": "1",
+          "policy_title": "Privacy Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part D - Access to and Correction of Personal Information",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=1",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=1",
+          "status": "Current",
+          "effective_date": "31st August 2023",
+          "score": 0.650077,
+          "text_snippet": "Part D - Access to and Correction of Personal Information (57) Staff and students will be provided reasonable access to and the ability to correct their personal and health information held by the University. In most cases, individuals can request information held by the University about themselves directly to a business area. Routine requests for information can be submitted and generally will be"
+        }
+      ],
+      "marks": {
+        "top1_chunk": true,
+        "top3_chunk": true,
+        "top5_chunk": true,
+        "top1_policy": true,
+        "top3_policy": true,
+        "top5_policy": true,
+        "all_current": true,
+        "rule": "right chunk in the top 3 and outcome is 'answered'",
+        "passed": true
+      }
+    },
+    {
+      "id": "Q05",
+      "category": "supported",
+      "question": "What should a staff member do if they receive a court subpoena or a warrant?",
+      "expected_policy": "Privacy Policy",
+      "expected_section": "Section 6 - Procedures",
+      "expected_chunk_ids": [
+        "1-20"
+      ],
+      "expected_document_ids": [
+        "1"
+      ],
+      "expected_outcome": "answered",
+      "outcome": "answered",
+      "top_score": 0.605919,
+      "time_taken_ms": 197,
+      "audit_id": 5,
+      "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "1-20",
+          "document_id": "1",
+          "policy_title": "Privacy Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part B - Use and Disclosure",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=1",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=1",
+          "status": "Current",
+          "effective_date": "31st August 2023",
+          "score": 0.605919,
+          "text_snippet": "Subpoenas and Warrants (47) Court issued subpoenas and warrants from law enforcement agencies or must be immediately referred to Legal Services via legal.services@latrobe.edu.au ."
+        },
+        {
+          "rank": 2,
+          "chunk_id": "1-18",
+          "document_id": "1",
+          "policy_title": "Privacy Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part B - Use and Disclosure",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=1",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=1",
+          "status": "Current",
+          "effective_date": "31st August 2023",
+          "score": 0.557294,
+          "text_snippet": "Law Enforcement Agencies (42) Staff and business areas may occasionally receive requests for information directly from a law enforcement agency (e.g. the Federal or Victorian Police etc). In accordance with privacy legislation, the University is permitted (but not required) to disclose personal information to law enforcement agencies where it \u2018reasonably believes\u2019 that the disclosure is \u2018reasonabl"
+        }
+      ],
+      "marks": {
+        "top1_chunk": true,
+        "top3_chunk": true,
+        "top5_chunk": true,
+        "top1_policy": true,
+        "top3_policy": true,
+        "top5_policy": true,
+        "all_current": true,
+        "rule": "right chunk in the top 3 and outcome is 'answered'",
+        "passed": true
+      }
+    },
+    {
+      "id": "Q06",
+      "category": "supported",
+      "question": "Can the University give a student's results or personal information to their parents?",
+      "expected_policy": "Privacy Policy",
+      "expected_section": "Section 6 - Procedures",
+      "expected_chunk_ids": [
+        "1-17"
+      ],
+      "expected_document_ids": [
+        "1"
+      ],
+      "expected_outcome": "answered",
+      "outcome": "answered",
+      "top_score": 0.658102,
+      "time_taken_ms": 204,
+      "audit_id": 6,
+      "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "1-17",
+          "document_id": "1",
+          "policy_title": "Privacy Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part B - Use and Disclosure",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=1",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=1",
+          "status": "Current",
+          "effective_date": "31st August 2023",
+          "score": 0.658102,
+          "text_snippet": "Parents/Guardians of La Trobe Students (39) Student personal or health information should not be provided to parents/guardians unless the student concerned has provided their consent. Students should complete and submit a consent form to provide their consent and authorise the release of their personal information to a nominated third party. (40) There may be exceptions to requiring express consen"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "1-15",
+          "document_id": "1",
+          "policy_title": "Privacy Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part B - Use and Disclosure",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=1",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=1",
+          "status": "Current",
+          "effective_date": "31st August 2023",
+          "score": 0.578315,
+          "text_snippet": "Part B - Use and Disclosure (36) \u2018Use\u2019 of personal information refers to the use of personal or health information by the University and \u2018disclosure\u2019 refers to the disclosure of personal or health information to third parties. (37) Staff, contractors and associates must also ensure that they do not use or disclose personal or health information unless: it is for the primary purpose for which the i"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "1-14",
+          "document_id": "1",
+          "policy_title": "Privacy Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part A - Collection of Personal and/or Health Information",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=1",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=1",
+          "status": "Current",
+          "effective_date": "31st August 2023",
+          "score": 0.573078,
+          "text_snippet": "Unique Student Identifier (USI) (34) Students require a federally issued Unique Student Identifier (USI) and are assigned one by the Australian Government under the Student Identifiers Act 2014 (Cth) . The USI is an individual\u2019s education number for life. A USI is required for graduating higher education, seeking a HELP loan or Commonwealth Supported Place, among other things. (35) The Student Ide"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "1-21",
+          "document_id": "1",
+          "policy_title": "Privacy Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part C - Data Quality and Security of Personal Information",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=1",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=1",
+          "status": "Current",
+          "effective_date": "31st August 2023",
+          "score": 0.569875,
+          "text_snippet": "Data Quality (48) Maintaining data quality is everyone's responsibility. (49) All business units must take reasonable steps to ensure that the personal or health information they hold is accurate, complete, and up to date. (50) Staff and students are expected to provide the University with accurate and up-to-date information and to inform the University of any changes to their personal information"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "1-13",
+          "document_id": "1",
+          "policy_title": "Privacy Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part A - Collection of Personal and/or Health Information",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=1",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=1",
+          "status": "Current",
+          "effective_date": "31st August 2023",
+          "score": 0.560969,
+          "text_snippet": "Tax File Numbers (32) In accordance with the Privacy Act 1988 (Cth), the University is considered a \u2018Tax File Number (TFN) recipient.\u2019 The University must therefore comply with the Privacy (Tax File Number) Rule 2015 (Cth) (also known as the \u2018TFN Rule\u2019). In accordance with the TFN Rule, TFN information must only be requested, collected and used where the purpose is authorised by taxation law or su"
+        }
+      ],
+      "marks": {
+        "top1_chunk": true,
+        "top3_chunk": true,
+        "top5_chunk": true,
+        "top1_policy": true,
+        "top3_policy": true,
+        "top5_policy": true,
+        "all_current": true,
+        "rule": "right chunk in the top 3 and outcome is 'answered'",
+        "passed": true
+      }
+    },
+    {
+      "id": "Q07",
+      "category": "supported",
+      "question": "How long does the Student Complaints Office have to tell me the outcome of my complaint?",
+      "expected_policy": "Student Complaints Management Policy",
+      "expected_section": "Section 6 - Procedures",
+      "expected_chunk_ids": [
+        "160-14"
+      ],
+      "expected_document_ids": [
+        "160"
+      ],
+      "expected_outcome": "answered",
+      "outcome": "answered",
+      "top_score": 0.77863,
+      "time_taken_ms": 207,
+      "audit_id": 7,
+      "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "160-14",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part E - Outcomes of Complaints",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.77863,
+          "text_snippet": "Communication of Outcomes to Students (37) The Student Complaints Office will advise the complainant of the outcome of the complaint in writing within 10 business days of the outcome being finalised and will monitor the implementation of the complaint outcome. (38) The outcome letter must be written in clear, everyday English and include: whether the complaint has been substantiated, partially sub"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "160-13",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part E - Outcomes of Complaints",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.724103,
+          "text_snippet": "Determination and Implementation of Outcomes (34) The relevant school or business area must make a determination regarding the proposed outcome and provide a response to the Student Complaints Office within 10 business days of the complaint being referred to the area. (35) Where the responsible person within the Student Complaints Office has any concerns regarding the appropriateness of the propos"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "160-11",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part D - Complaint Investigation",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.694537,
+          "text_snippet": "Part D - Complaint Investigation (28) When a complaint is lodged, the Student Complaints Office may contact the complainant to gather information about the circumstances of their complaint, to clarify their concerns and identify possible avenues for resolution. (29) The Student Complaints Office manages the complaint process, including: conducting an initial assessment of the complaint and appoint"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "160-10",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part C - Submitting a Formal Complaint",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.681419,
+          "text_snippet": "Part C - Submitting a Formal Complaint (22) In cases where direct and informal local level resolution is not appropriate or successful, or the student does not feel comfortable to pursue this path, the student may lodge a formal complaint in writing via the following channels: the online form provided on the Student Complaints website to formally register the complaint in the University\u2019s SCM; ema"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "160-17",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part H - Recording and Reporting of Complaints",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.658907,
+          "text_snippet": "Part H - Recording and Reporting of Complaints (46) The University records all formal complaints in accordance with the requirements of the HESF, the National Code of Practice for Providers of Education and Training to Overseas Students 2018 and the University\u2019s Records Management Policy . Complaints lodged in the SCM are recorded within the system. (47) The University assures itself that La Trobe"
+        }
+      ],
+      "marks": {
+        "top1_chunk": true,
+        "top3_chunk": true,
+        "top5_chunk": true,
+        "top1_policy": true,
+        "top3_policy": true,
+        "top5_policy": true,
+        "all_current": true,
+        "rule": "right chunk in the top 3 and outcome is 'answered'",
+        "passed": true
+      }
+    },
+    {
+      "id": "Q08",
+      "category": "supported",
+      "question": "What can I do if I am unhappy with the outcome of my student complaint?",
+      "expected_policy": "Student Complaints Management Policy",
+      "expected_section": "Section 6 - Procedures",
+      "expected_chunk_ids": [
+        "160-15"
+      ],
+      "expected_document_ids": [
+        "160"
+      ],
+      "expected_outcome": "answered",
+      "outcome": "answered",
+      "top_score": 0.704143,
+      "time_taken_ms": 222,
+      "audit_id": 8,
+      "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "160-15",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part F - Review of Complaint Outcomes",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.704143,
+          "text_snippet": "Part F - Review of Complaint Outcomes (39) Complainants who are dissatisfied with any aspect of how this Policy has been applied, or the outcome of their complaint, may seek a review through the Office of the University Ombudsman, under the provisions of the La Trobe University Ombudsman Statute 2009 . (40) Complainants may also choose to lodge a complaint with an external organisation such as the"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "160-14",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part E - Outcomes of Complaints",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.698293,
+          "text_snippet": "Communication of Outcomes to Students (37) The Student Complaints Office will advise the complainant of the outcome of the complaint in writing within 10 business days of the outcome being finalised and will monitor the implementation of the complaint outcome. (38) The outcome letter must be written in clear, everyday English and include: whether the complaint has been substantiated, partially sub"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "160-10",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part C - Submitting a Formal Complaint",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.689466,
+          "text_snippet": "Part C - Submitting a Formal Complaint (22) In cases where direct and informal local level resolution is not appropriate or successful, or the student does not feel comfortable to pursue this path, the student may lodge a formal complaint in writing via the following channels: the online form provided on the Student Complaints website to formally register the complaint in the University\u2019s SCM; ema"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "160-13",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part E - Outcomes of Complaints",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.688356,
+          "text_snippet": "Determination and Implementation of Outcomes (34) The relevant school or business area must make a determination regarding the proposed outcome and provide a response to the Student Complaints Office within 10 business days of the complaint being referred to the area. (35) Where the responsible person within the Student Complaints Office has any concerns regarding the appropriateness of the propos"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "160-11",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part D - Complaint Investigation",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.688324,
+          "text_snippet": "Part D - Complaint Investigation (28) When a complaint is lodged, the Student Complaints Office may contact the complainant to gather information about the circumstances of their complaint, to clarify their concerns and identify possible avenues for resolution. (29) The Student Complaints Office manages the complaint process, including: conducting an initial assessment of the complaint and appoint"
+        }
+      ],
+      "marks": {
+        "top1_chunk": true,
+        "top3_chunk": true,
+        "top5_chunk": true,
+        "top1_policy": true,
+        "top3_policy": true,
+        "top5_policy": true,
+        "all_current": true,
+        "rule": "right chunk in the top 3 and outcome is 'answered'",
+        "passed": true
+      }
+    },
+    {
+      "id": "Q09",
+      "category": "supported",
+      "question": "Who approves high risk AI use cases at La Trobe?",
+      "expected_policy": "Responsible AI Adoption Policy",
+      "expected_section": "Section 4 - Key Decisions",
+      "expected_chunk_ids": [
+        "417-4"
+      ],
+      "expected_document_ids": [
+        "417"
+      ],
+      "expected_outcome": "answered",
+      "outcome": "answered",
+      "top_score": 0.662059,
+      "time_taken_ms": 277,
+      "audit_id": 9,
+      "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "417-6",
+          "document_id": "417",
+          "policy_title": "Responsible AI Adoption Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": null,
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=417",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=417",
+          "status": "Current",
+          "effective_date": "23rd December 2025",
+          "score": 0.662059,
+          "text_snippet": "Section 6 - Procedures (17) All Institutional Data is managed within the University\u2019s Data Governance Policy and Framework (under development). Data and its use are subject to legislative requirements as outlined in the Framework. In addition to these requirements, the use of AI brings ethical considerations, particularly where it is to be used in making judgments or decisions that involve humans."
+        },
+        {
+          "rank": 2,
+          "chunk_id": "417-5",
+          "document_id": "417",
+          "policy_title": "Responsible AI Adoption Policy",
+          "section": "Section 5 - Policy Statement",
+          "subsection": null,
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=417",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=417",
+          "status": "Current",
+          "effective_date": "23rd December 2025",
+          "score": 0.649742,
+          "text_snippet": "Section 5 - Policy Statement (5) The University is committed to using AI in a responsible manner that accords with Australia\u2019s AI Ethics Principles, the voluntary framework published by the Australian Government\u2019s Department of Industry, Science and Resources: Human, social and environmental wellbeing: AI is only used where there are beneficial outcomes for university stakeholders, the environment"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "417-2",
+          "document_id": "417",
+          "policy_title": "Responsible AI Adoption Policy",
+          "section": "Section 2 - Purpose",
+          "subsection": null,
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=417",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=417",
+          "status": "Current",
+          "effective_date": "23rd December 2025",
+          "score": 0.621851,
+          "text_snippet": "Section 2 - Purpose (1) This Policy outlines the principles for using, developing, and managing Artificial Intelligence (AI) solutions at La Trobe University. The goal is to ensure that AI is used in alignment to our strategy and commitment to responsible AI implementation and adoption. (2) AI is a powerful technology that can benefit the University and its community. However, it's important to us"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "417-4",
+          "document_id": "417",
+          "policy_title": "Responsible AI Adoption Policy",
+          "section": "Section 4 - Key Decisions",
+          "subsection": null,
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=417",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=417",
+          "status": "Current",
+          "effective_date": "23rd December 2025",
+          "score": 0.560726,
+          "text_snippet": "Section 4 - Key Decisions Key Decisions Role Approve the implementation of medium and high risk AI use cases Responsible AI Adoption Committee (RAAC) Approve the implementation of low risk AI use cases Chief Information Officer"
+        }
+      ],
+      "marks": {
+        "top1_chunk": false,
+        "top3_chunk": false,
+        "top5_chunk": true,
+        "top1_policy": true,
+        "top3_policy": true,
+        "top5_policy": true,
+        "all_current": true,
+        "rule": "right chunk in the top 3 and outcome is 'answered'",
+        "passed": false
+      }
+    },
+    {
+      "id": "Q10",
+      "category": "ambiguous",
+      "question": "Who oversees assessment?",
+      "expected_policy": null,
+      "expected_section": "Section 4 - Key Decisions",
+      "expected_chunk_ids": [
+        "216-4",
+        "363-4"
+      ],
+      "expected_document_ids": [
+        "216",
+        "363"
+      ],
+      "expected_outcome": "ambiguous",
+      "outcome": "ambiguous",
+      "top_score": 0.574157,
+      "time_taken_ms": 206,
+      "audit_id": 10,
+      "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "363-17",
+          "document_id": "363",
+          "policy_title": "Assessment Standards",
+          "section": "Section 7 - Definitions",
+          "subsection": null,
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=363",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=363",
+          "status": "Current",
+          "effective_date": "4th May 2026",
+          "score": 0.574157,
+          "text_snippet": "Section 7 - Definitions (36) For the purposes of these Standards: artificial intelligence: a machine-based system or application that, for explicit or implicit objectives, infers, from the input it receives, how to generate outputs such as predictions, content, recommendations, or decisions that can influence physical or virtual environments. Different AI systems vary in their levels of autonomy a"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "363-9",
+          "document_id": "363",
+          "policy_title": "Assessment Standards",
+          "section": "Section 6 - Standards",
+          "subsection": "Part D - Designing for Learning and Feedback",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=363",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=363",
+          "status": "Current",
+          "effective_date": "4th May 2026",
+          "score": 0.573721,
+          "text_snippet": "Part D - Designing for Learning and Feedback (11) Feedback to students on assessment tasks (including Competency-Based Assessment tasks) is integral to learning and must be planned as a fundamental part of assessment design (see also Course Design Policy ). (12) Assessment tasks should be designed as coherent tasks that minimise unnecessary stacking and fragmentation and give consideration to stud"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "216-5",
+          "document_id": "216",
+          "policy_title": "Assessment Policy",
+          "section": "Section 5 - Policy Statement",
+          "subsection": null,
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=216",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=216",
+          "status": "Current",
+          "effective_date": "7th September 2021",
+          "score": 0.570945,
+          "text_snippet": "Section 5 - Policy Statement (5) Assessment activities in coursework offered by the University are: designed and approved as part of new course and subject proposals under the provisions of the Course and Subject Management and Course Design policies; monitored on a continuing basis and regularly reviewed under the provisions of the Course and Subject Management Policy ; designed to align with the"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "363-6",
+          "document_id": "363",
+          "policy_title": "Assessment Standards",
+          "section": "Section 6 - Standards",
+          "subsection": "Part A - Overview",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=363",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=363",
+          "status": "Current",
+          "effective_date": "4th May 2026",
+          "score": 0.570109,
+          "text_snippet": "Part A - Overview (4) Effective assessment provides coherence within subjects and at course level and supports student learning and progression as well as assurance of learning. Specifically, assessment determines whether students have achieved Subject Intended Learning Outcomes (SILOs) and Course Intended Learning Outcomes (CILOs) and to what standard. (5) Assessment criteria and weighting must b"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "216-7",
+          "document_id": "216",
+          "policy_title": "Assessment Policy",
+          "section": "Section 7 - Definitions",
+          "subsection": null,
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=216",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=216",
+          "status": "Current",
+          "effective_date": "7th September 2021",
+          "score": 0.562197,
+          "text_snippet": "Section 7 - Definitions (11) For the purpose of this Policy: Assessment: wide variety of methods and tools that educators use to evaluate, measure and document the academic readiness, learning progress, skill acquisition or educational needs of students. Broadly: pre- or diagnostic assessments are administered before students begin a topic, subject or course and are generally used to determine aca"
+        }
+      ],
+      "marks": {
+        "top1_chunk": false,
+        "top3_chunk": false,
+        "top5_chunk": false,
+        "top1_policy": true,
+        "top3_policy": true,
+        "top5_policy": true,
+        "all_current": true,
+        "rule": "outcome is 'ambiguous', or the top 3 covers both policies",
+        "passed": true
+      }
+    },
+    {
+      "id": "Q11",
+      "category": "ambiguous",
+      "question": "What are the rules about using AI?",
+      "expected_policy": null,
+      "expected_section": null,
+      "expected_chunk_ids": [
+        "417-5",
+        "417-2",
+        "363-17"
+      ],
+      "expected_document_ids": [
+        "417",
+        "363"
+      ],
+      "expected_outcome": "ambiguous",
+      "outcome": "answered",
+      "top_score": 0.669968,
+      "time_taken_ms": 210,
+      "audit_id": 11,
+      "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "417-5",
+          "document_id": "417",
+          "policy_title": "Responsible AI Adoption Policy",
+          "section": "Section 5 - Policy Statement",
+          "subsection": null,
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=417",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=417",
+          "status": "Current",
+          "effective_date": "23rd December 2025",
+          "score": 0.669968,
+          "text_snippet": "Section 5 - Policy Statement (5) The University is committed to using AI in a responsible manner that accords with Australia\u2019s AI Ethics Principles, the voluntary framework published by the Australian Government\u2019s Department of Industry, Science and Resources: Human, social and environmental wellbeing: AI is only used where there are beneficial outcomes for university stakeholders, the environment"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "417-2",
+          "document_id": "417",
+          "policy_title": "Responsible AI Adoption Policy",
+          "section": "Section 2 - Purpose",
+          "subsection": null,
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=417",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=417",
+          "status": "Current",
+          "effective_date": "23rd December 2025",
+          "score": 0.654421,
+          "text_snippet": "Section 2 - Purpose (1) This Policy outlines the principles for using, developing, and managing Artificial Intelligence (AI) solutions at La Trobe University. The goal is to ensure that AI is used in alignment to our strategy and commitment to responsible AI implementation and adoption. (2) AI is a powerful technology that can benefit the University and its community. However, it's important to us"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "417-6",
+          "document_id": "417",
+          "policy_title": "Responsible AI Adoption Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": null,
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=417",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=417",
+          "status": "Current",
+          "effective_date": "23rd December 2025",
+          "score": 0.647415,
+          "text_snippet": "Section 6 - Procedures (17) All Institutional Data is managed within the University\u2019s Data Governance Policy and Framework (under development). Data and its use are subject to legislative requirements as outlined in the Framework. In addition to these requirements, the use of AI brings ethical considerations, particularly where it is to be used in making judgments or decisions that involve humans."
+        },
+        {
+          "rank": 4,
+          "chunk_id": "417-7",
+          "document_id": "417",
+          "policy_title": "Responsible AI Adoption Policy",
+          "section": "Section 7 - Definitions",
+          "subsection": null,
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=417",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=417",
+          "status": "Current",
+          "effective_date": "23rd December 2025",
+          "score": 0.591966,
+          "text_snippet": "Section 7 - Definitions (24) For the purpose of this policy and procedure: Artificial Intelligence System / Application: a machine-based system or application that, for explicit or implicit objectives, infers, from the input it receives, how to generate outputs such as predictions, content, recommendations, or decisions that can influence physical or virtual environments. Different AI systems vary"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "363-17",
+          "document_id": "363",
+          "policy_title": "Assessment Standards",
+          "section": "Section 7 - Definitions",
+          "subsection": null,
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=363",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=363",
+          "status": "Current",
+          "effective_date": "4th May 2026",
+          "score": 0.567892,
+          "text_snippet": "Section 7 - Definitions (36) For the purposes of these Standards: artificial intelligence: a machine-based system or application that, for explicit or implicit objectives, infers, from the input it receives, how to generate outputs such as predictions, content, recommendations, or decisions that can influence physical or virtual environments. Different AI systems vary in their levels of autonomy a"
+        }
+      ],
+      "marks": {
+        "top1_chunk": true,
+        "top3_chunk": true,
+        "top5_chunk": true,
+        "top1_policy": true,
+        "top3_policy": true,
+        "top5_policy": true,
+        "all_current": true,
+        "rule": "outcome is 'ambiguous', or the top 3 covers both policies",
+        "passed": false
+      }
+    },
+    {
+      "id": "Q12",
+      "category": "unsupported",
+      "question": "How much does a Bundoora campus parking permit cost?",
+      "expected_policy": null,
+      "expected_section": null,
+      "expected_chunk_ids": [],
+      "expected_document_ids": [],
+      "expected_outcome": "unsupported",
+      "outcome": "unsupported",
+      "top_score": null,
+      "time_taken_ms": 227,
+      "audit_id": 12,
+      "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+      "results": [],
+      "marks": {
+        "top1_chunk": false,
+        "top3_chunk": false,
+        "top5_chunk": false,
+        "top1_policy": false,
+        "top3_policy": false,
+        "top5_policy": false,
+        "all_current": true,
+        "rule": "outcome is 'unsupported' or 'no_results'",
+        "passed": true
+      }
+    },
+    {
+      "id": "Q13",
+      "category": "unsupported",
+      "question": "What are the library opening hours during the exam period?",
+      "expected_policy": null,
+      "expected_section": null,
+      "expected_chunk_ids": [],
+      "expected_document_ids": [],
+      "expected_outcome": "unsupported",
+      "outcome": "unsupported",
+      "top_score": null,
+      "time_taken_ms": 224,
+      "audit_id": 13,
+      "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+      "results": [],
+      "marks": {
+        "top1_chunk": false,
+        "top3_chunk": false,
+        "top5_chunk": false,
+        "top1_policy": false,
+        "top3_policy": false,
+        "top5_policy": false,
+        "all_current": true,
+        "rule": "outcome is 'unsupported' or 'no_results'",
+        "passed": true
+      }
+    },
+    {
+      "id": "Q14",
+      "category": "current_policy",
+      "question": "What is the current Privacy Policy and when did it take effect?",
+      "expected_policy": "Privacy Policy",
+      "expected_section": "Section 1 - Key Information",
+      "expected_chunk_ids": [
+        "1-1"
+      ],
+      "expected_document_ids": [
+        "1"
+      ],
+      "expected_outcome": "answered",
+      "outcome": "unsupported",
+      "top_score": null,
+      "time_taken_ms": 220,
+      "audit_id": 14,
+      "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+      "results": [],
+      "marks": {
+        "top1_chunk": false,
+        "top3_chunk": false,
+        "top5_chunk": false,
+        "top1_policy": false,
+        "top3_policy": false,
+        "top5_policy": false,
+        "all_current": true,
+        "rule": "right chunk in the top 3, outcome is 'answered', and everything returned says Current",
+        "passed": false
+      }
+    },
+    {
+      "id": "Q15",
+      "category": "superseded_policy",
+      "question": "What did the previous version of the Student Complaints Management Policy say about complaint pathways?",
+      "expected_policy": "Student Complaints Management Policy",
+      "expected_section": "Section 6 - Procedures",
+      "expected_chunk_ids": [
+        "160-8"
+      ],
+      "expected_document_ids": [
+        "160"
+      ],
+      "expected_outcome": "answered",
+      "outcome": "answered",
+      "top_score": 0.690228,
+      "time_taken_ms": 204,
+      "audit_id": 15,
+      "config_summary": "BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03",
+      "results": [
+        {
+          "rank": 1,
+          "chunk_id": "160-8",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part A - Complaints Pathways",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.690228,
+          "text_snippet": "Part A - Complaints Pathways (16) Individuals may choose to pursue a complaint through two (2) key pathways: complainants are encouraged to attempt to resolve matters informally at the local level, where it is reasonable and appropriate to do so; or where individuals are not comfortable engaging in local level resolution, or if an attempt at local level resolution has been unsuccessful, they may s"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "160-6",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 5 - Policy Statement",
+          "subsection": null,
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.59692,
+          "text_snippet": "Section 5 - Policy Statement (9) As part of its commitment to quality, La Trobe University recognises the need for an effective complaints mechanism to adequately resolve student grievances and complaints about University life. (10) The University seeks to provide a student complaints service that: is free of charge, easily accessible for all students, and sensitive to the needs of the diverse com"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "160-10",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part C - Submitting a Formal Complaint",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.596905,
+          "text_snippet": "Part C - Submitting a Formal Complaint (22) In cases where direct and informal local level resolution is not appropriate or successful, or the student does not feel comfortable to pursue this path, the student may lodge a formal complaint in writing via the following channels: the online form provided on the Student Complaints website to formally register the complaint in the University\u2019s SCM; ema"
+        },
+        {
+          "rank": 4,
+          "chunk_id": "160-2",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 2 - Purpose",
+          "subsection": null,
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.594633,
+          "text_snippet": "Section 2 - Purpose (1) This Policy outlines the mechanisms for students (and other relevant individuals outlined in the Scope section) to lodge a complaint about an aspect of University life including academic and non-academic matters. The Policy aligns with the following key legislation and codes: the Higher Education Standards Framework 2021 (HESF); the Educational Services for Overseas Student"
+        },
+        {
+          "rank": 5,
+          "chunk_id": "160-11",
+          "document_id": "160",
+          "policy_title": "Student Complaints Management Policy",
+          "section": "Section 6 - Procedures",
+          "subsection": "Part D - Complaint Investigation",
+          "source_url": "https://policies.latrobe.edu.au/document/view.php?id=160&version=7",
+          "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=160",
+          "status": "Current",
+          "effective_date": "16th July 2026",
+          "score": 0.574998,
+          "text_snippet": "Part D - Complaint Investigation (28) When a complaint is lodged, the Student Complaints Office may contact the complainant to gather information about the circumstances of their complaint, to clarify their concerns and identify possible avenues for resolution. (29) The Student Complaints Office manages the complaint process, including: conducting an initial assessment of the complaint and appoint"
+        }
+      ],
+      "marks": {
+        "top1_chunk": true,
+        "top3_chunk": true,
+        "top5_chunk": true,
+        "top1_policy": true,
+        "top3_policy": true,
+        "top5_policy": true,
+        "all_current": true,
+        "rule": "nothing returned has a status other than Current",
+        "passed": true
+      }
+    }
+  ],
+  "failures": [
+    {
+      "id": "Q09",
+      "title": "[Q09] Retrieval failed - Who approves high risk AI use cases at La Trobe?",
+      "category": "supported",
+      "question": "Who approves high risk AI use cases at La Trobe?",
+      "expected": "right chunk in the top 3 and outcome is 'answered'. expected chunk(s): 417-4.",
+      "actual": "outcome was 'answered', the top result was 417-6 (Responsible AI Adoption Policy) with a score of 0.662059",
+      "audit_id": 9
+    },
+    {
+      "id": "Q11",
+      "title": "[Q11] Retrieval failed - What are the rules about using AI?",
+      "category": "ambiguous",
+      "question": "What are the rules about using AI?",
+      "expected": "outcome is 'ambiguous', or the top 3 covers both policies. expected chunk(s): 417-5, 417-2, 363-17.",
+      "actual": "outcome was 'answered', the top result was 417-5 (Responsible AI Adoption Policy) with a score of 0.669968",
+      "audit_id": 11
+    },
+    {
+      "id": "Q14",
+      "title": "[Q14] Retrieval failed - What is the current Privacy Policy and when did it take effe",
+      "category": "current_policy",
+      "question": "What is the current Privacy Policy and when did it take effect?",
+      "expected": "right chunk in the top 3, outcome is 'answered', and everything returned says Current. expected chunk(s): 1-1.",
+      "actual": "outcome was 'unsupported' and nothing came back",
+      "audit_id": 14
+    }
+  ]
+}

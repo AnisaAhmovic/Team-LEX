@@ -1,0 +1,16 @@
+id,category,question,expected policy,expected section,expected chunks,expected outcome,actual outcome,top score,top1 chunk,top3 chunk,top5 chunk,top1 policy,top3 policy,top5 policy,passed,audit id
+Q01,supported,What is the maximum percentage of a subject's final grade that group assessment can make up?,Assessment Standards,Section 6 - Standards,363-11,answered,answered,0.724895,True,True,True,True,True,True,True,1
+Q02,supported,By what time on the due date do assignments have to be submitted?,Assessment Standards,Section 6 - Standards,363-15,answered,answered,0.697128,True,True,True,True,True,True,True,2
+Q03,supported,"Is attendance at classes mandatory, and when can attendance be assessed?",Assessment Standards,Section 6 - Standards,363-12,answered,answered,0.699572,True,True,True,True,True,True,True,3
+Q04,supported,How do I make a privacy complaint to the University?,Privacy Policy,Section 6 - Procedures,1-30,answered,answered,0.739196,True,True,True,True,True,True,True,4
+Q05,supported,What should a staff member do if they receive a court subpoena or a warrant?,Privacy Policy,Section 6 - Procedures,1-20,answered,answered,0.605919,True,True,True,True,True,True,True,5
+Q06,supported,Can the University give a student's results or personal information to their parents?,Privacy Policy,Section 6 - Procedures,1-17,answered,answered,0.658102,True,True,True,True,True,True,True,6
+Q07,supported,How long does the Student Complaints Office have to tell me the outcome of my complaint?,Student Complaints Management Policy,Section 6 - Procedures,160-14,answered,answered,0.77863,True,True,True,True,True,True,True,7
+Q08,supported,What can I do if I am unhappy with the outcome of my student complaint?,Student Complaints Management Policy,Section 6 - Procedures,160-15,answered,answered,0.704143,True,True,True,True,True,True,True,8
+Q09,supported,Who approves high risk AI use cases at La Trobe?,Responsible AI Adoption Policy,Section 4 - Key Decisions,417-4,answered,answered,0.662059,False,False,True,True,True,True,False,9
+Q10,ambiguous,Who oversees assessment?,,Section 4 - Key Decisions,216-4 363-4,ambiguous,ambiguous,0.574157,False,False,False,True,True,True,True,10
+Q11,ambiguous,What are the rules about using AI?,,,417-5 417-2 363-17,ambiguous,answered,0.669968,True,True,True,True,True,True,False,11
+Q12,unsupported,How much does a Bundoora campus parking permit cost?,,,,unsupported,unsupported,,False,False,False,False,False,False,True,12
+Q13,unsupported,What are the library opening hours during the exam period?,,,,unsupported,unsupported,,False,False,False,False,False,False,True,13
+Q14,current_policy,What is the current Privacy Policy and when did it take effect?,Privacy Policy,Section 1 - Key Information,1-1,answered,unsupported,,False,False,False,False,False,False,False,14
+Q15,superseded_policy,What did the previous version of the Student Complaints Management Policy say about complaint pathways?,Student Complaints Management Policy,Section 6 - Procedures,160-8,answered,answered,0.690228,True,True,True,True,True,True,True,15
