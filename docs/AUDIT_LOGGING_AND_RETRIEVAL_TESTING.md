@@ -226,8 +226,9 @@ from api.models import AuditLog
 # how many times the system refused to answer
 AuditLog.objects.filter(outcome="unsupported").count()
 
-# one search, start to finish
-log = AuditLog.objects.get(test_id="Q04")
+# one search, start to finish. Use filter().first() rather than get(), because
+# every time you run the tests you add another row for the same question.
+log = AuditLog.objects.filter(test_id="Q04").first()
 for chunk in log.chunks.all():
     print(chunk.rank, chunk.score, chunk.chunk_id, chunk.source_url)
 ```

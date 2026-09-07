@@ -7,7 +7,7 @@ run the tests again instead so the numbers still match the audit log.
 
 | | |
 | --- | --- |
-| When it was run | 06/09/2026 17:15:53 (local time) |
+| When it was run | 07/09/2026 10:46:17 (local time) |
 | Questions | 15 |
 | Chunks indexed | 85 |
 | Setup | `BAAI/bge-m3 st3.3.1 chunks=85 k=5 min=0.55 gap=0.03` |
@@ -63,7 +63,7 @@ are marked on behaviour in section 3 instead.
 
 ### Q01 - What is the maximum percentage of a subject's final grade that group assessment can make up?
 
-Audit id 1, outcome `answered`, took 16536 ms.
+Audit id 17, outcome `answered`, took 40034 ms.
 
 | Rank | Chunk | Policy | Section | Status | Score | Link |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -72,7 +72,7 @@ Audit id 1, outcome `answered`, took 16536 ms.
 
 ### Q02 - By what time on the due date do assignments have to be submitted?
 
-Audit id 2, outcome `answered`, took 208 ms.
+Audit id 18, outcome `answered`, took 211 ms.
 
 | Rank | Chunk | Policy | Section | Status | Score | Link |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -83,7 +83,7 @@ Audit id 2, outcome `answered`, took 208 ms.
 
 ### Q03 - Is attendance at classes mandatory, and when can attendance be assessed?
 
-Audit id 3, outcome `answered`, took 207 ms.
+Audit id 19, outcome `answered`, took 201 ms.
 
 | Rank | Chunk | Policy | Section | Status | Score | Link |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -93,7 +93,7 @@ Audit id 3, outcome `answered`, took 207 ms.
 
 ### Q04 - How do I make a privacy complaint to the University?
 
-Audit id 4, outcome `answered`, took 283 ms.
+Audit id 20, outcome `answered`, took 221 ms.
 
 | Rank | Chunk | Policy | Section | Status | Score | Link |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -105,7 +105,7 @@ Audit id 4, outcome `answered`, took 283 ms.
 
 ### Q05 - What should a staff member do if they receive a court subpoena or a warrant?
 
-Audit id 5, outcome `answered`, took 197 ms.
+Audit id 21, outcome `answered`, took 198 ms.
 
 | Rank | Chunk | Policy | Section | Status | Score | Link |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -114,7 +114,7 @@ Audit id 5, outcome `answered`, took 197 ms.
 
 ### Q06 - Can the University give a student's results or personal information to their parents?
 
-Audit id 6, outcome `answered`, took 204 ms.
+Audit id 22, outcome `answered`, took 194 ms.
 
 | Rank | Chunk | Policy | Section | Status | Score | Link |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -126,7 +126,7 @@ Audit id 6, outcome `answered`, took 204 ms.
 
 ### Q07 - How long does the Student Complaints Office have to tell me the outcome of my complaint?
 
-Audit id 7, outcome `answered`, took 207 ms.
+Audit id 23, outcome `answered`, took 216 ms.
 
 | Rank | Chunk | Policy | Section | Status | Score | Link |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -138,7 +138,7 @@ Audit id 7, outcome `answered`, took 207 ms.
 
 ### Q08 - What can I do if I am unhappy with the outcome of my student complaint?
 
-Audit id 8, outcome `answered`, took 222 ms.
+Audit id 24, outcome `answered`, took 200 ms.
 
 | Rank | Chunk | Policy | Section | Status | Score | Link |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -150,7 +150,7 @@ Audit id 8, outcome `answered`, took 222 ms.
 
 ### Q09 - Who approves high risk AI use cases at La Trobe?
 
-Audit id 9, outcome `answered`, took 277 ms.
+Audit id 25, outcome `answered`, took 217 ms.
 
 | Rank | Chunk | Policy | Section | Status | Score | Link |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -161,7 +161,7 @@ Audit id 9, outcome `answered`, took 277 ms.
 
 ### Q10 - Who oversees assessment?
 
-Audit id 10, outcome `ambiguous`, took 206 ms.
+Audit id 26, outcome `ambiguous`, took 179 ms.
 
 | Rank | Chunk | Policy | Section | Status | Score | Link |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -173,7 +173,7 @@ Audit id 10, outcome `ambiguous`, took 206 ms.
 
 ### Q11 - What are the rules about using AI?
 
-Audit id 11, outcome `answered`, took 210 ms.
+Audit id 27, outcome `answered`, took 251 ms.
 
 | Rank | Chunk | Policy | Section | Status | Score | Link |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -185,25 +185,25 @@ Audit id 11, outcome `answered`, took 210 ms.
 
 ### Q12 - How much does a Bundoora campus parking permit cost?
 
-Audit id 12, outcome `unsupported`, took 227 ms.
+Audit id 28, outcome `unsupported`, took 374 ms.
 
 Nothing came back.
 
 ### Q13 - What are the library opening hours during the exam period?
 
-Audit id 13, outcome `unsupported`, took 224 ms.
+Audit id 29, outcome `unsupported`, took 275 ms.
 
 Nothing came back.
 
 ### Q14 - What is the current Privacy Policy and when did it take effect?
 
-Audit id 14, outcome `unsupported`, took 220 ms.
+Audit id 30, outcome `unsupported`, took 240 ms.
 
 Nothing came back.
 
 ### Q15 - What did the previous version of the Student Complaints Management Policy say about complaint pathways?
 
-Audit id 15, outcome `answered`, took 204 ms.
+Audit id 31, outcome `answered`, took 205 ms.
 
 | Rank | Chunk | Policy | Section | Status | Score | Link |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -224,7 +224,7 @@ a reason if the team decides not to fix it this sprint.
 - Question: Who approves high risk AI use cases at La Trobe?
 - Expected: right chunk in the top 3 and outcome is 'answered'. expected chunk(s): 417-4.
 - What happened: outcome was 'answered', the top result was 417-6 (Responsible AI Adoption Policy) with a score of 0.662059
-- Audit id: 9
+- Audit id: 25
 - To reproduce: close the Django server, then run `python tests/run_retrieval_tests.py` and look at Q09.
 
 ### [Q11] Retrieval failed - What are the rules about using AI?
@@ -233,7 +233,7 @@ a reason if the team decides not to fix it this sprint.
 - Question: What are the rules about using AI?
 - Expected: outcome is 'ambiguous', or the top 3 covers both policies. expected chunk(s): 417-5, 417-2, 363-17.
 - What happened: outcome was 'answered', the top result was 417-5 (Responsible AI Adoption Policy) with a score of 0.669968
-- Audit id: 11
+- Audit id: 27
 - To reproduce: close the Django server, then run `python tests/run_retrieval_tests.py` and look at Q11.
 
 ### [Q14] Retrieval failed - What is the current Privacy Policy and when did it take effe
@@ -242,7 +242,7 @@ a reason if the team decides not to fix it this sprint.
 - Question: What is the current Privacy Policy and when did it take effect?
 - Expected: right chunk in the top 3, outcome is 'answered', and everything returned says Current. expected chunk(s): 1-1.
 - What happened: outcome was 'unsupported' and nothing came back
-- Audit id: 14
+- Audit id: 30
 - To reproduce: close the Django server, then run `python tests/run_retrieval_tests.py` and look at Q14.
 
 ## 7. Limitations
@@ -262,8 +262,8 @@ a reason if the team decides not to fix it this sprint.
 
 ## 8. Evidence files
 
-- Full results: `tests/results/results_2026-09-06_17-15-53.json`
-- Spreadsheet: `tests/results/results_2026-09-06_17-15-53.csv`
+- Full results: `tests/results/results_2026-09-07_10-46-17.json`
+- Spreadsheet: `tests/results/results_2026-09-07_10-46-17.csv`
 - Audit log file: `data/audit/audit_log.jsonl`
 - Audit log database: `db.sqlite3`, tables `api_auditlog` and `api_auditchunk`
 - Test set: `tests/retrieval_test_set.json`
