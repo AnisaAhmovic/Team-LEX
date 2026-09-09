@@ -1,0 +1,71 @@
+{
+    "document_id": "35",
+    "policy_title": "Critical Incident and Business Continuity Management Policy",
+    "document_type": "Policy",
+    "source_url": "https://policies.latrobe.edu.au/document/view.php?id=35",
+    "discovery_source_url": "https://policies.latrobe.edu.au/browse",
+    "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=35",
+    "source_system": "La Trobe University Policy Library",
+    "retrieved_at": "2026-09-09T07:59:56.472795+00:00",
+    "status": "Current",
+    "effective_date": "8th November 2024",
+    "review_date": "8th November 2027",
+    "approval_authority": "University Council",
+    "approval_date": "8th November 2024",
+    "version": null,
+    "headings": [
+        {
+            "level": "h1",
+            "text": "Section 1 - Key Information"
+        },
+        {
+            "level": "h1",
+            "text": "Section 2 - Purpose"
+        },
+        {
+            "level": "h1",
+            "text": "Section 3 - Scope"
+        },
+        {
+            "level": "h1",
+            "text": "Section 4 - Key Decisions"
+        },
+        {
+            "level": "h1",
+            "text": "Section 5 - Policy Statement"
+        },
+        {
+            "level": "h1",
+            "text": "Section 6 - Procedures"
+        },
+        {
+            "level": "h2",
+            "text": "Part A - Incident Classification"
+        },
+        {
+            "level": "h2",
+            "text": "Part B - Key Phases"
+        },
+        {
+            "level": "h2",
+            "text": "Part C - Buisness Continuity Management"
+        },
+        {
+            "level": "h2",
+            "text": "Part D - Training and Testing"
+        },
+        {
+            "level": "h2",
+            "text": "Part E - Responsibilities"
+        },
+        {
+            "level": "h1",
+            "text": "Section 7 - Definitions"
+        },
+        {
+            "level": "h1",
+            "text": "Section 8 - Authority and Associated Information"
+        }
+    ],
+    "content": "Section 1 - Key Information\nPolicy Type and Approval Body\nAdministrative – Vice-Chancellor\nAccountable Executive – Policy\nChief Operating Officer\nResponsible Manager – Policy\nDeputy Director, Risk, Audit and Insurance\nReview Date\n8 November 2027\nSection 2 - Purpose\n(1)\nThis Policy outlines La Trobe University’s (University) commitment to effective management of Critical Incidents and the maintenance of services through business continuity processes.\nSection 3 - Scope\n(2)\nThis Policy applies to:\nall campuses of the University;\nall\nstaff\n,\nstudents\n, Council members, volunteers and contractors; and\nall activities that are under the control or direction of the University, whether conducted on or off University property.\n(3)\nThis Policy should be read in conjunction with the\nCritical Incident Management Framework\n(CIM Framework). For detailed action plans and related resources, the Critical Incident Team should consult the Crisis Management Plan, which outlines specific procedural steps and provides necessary templates for implementation. These documents ensure a uniform approach in managing Critical Incidents and Business Continuity throughout the University.\n(4)\nDisaster Recovery (DR) and Information Services (IS) Incident Response plans are managed by the Chief Information Officer under separate policy documents.\nSection 4 - Key Decisions\nKey Decisions\nRole\nDeclare a Critical Incident and convene the Critical Incident Team.\nChief Operating Officer  or nominee\nControl the University's strategic response and provide executive decisions and strategic direction relating to Critical Incidents (Level 3), and managing related Business Continuity responses.\nCritical Incident Team\nSection 5 - Policy Statement\n(5)\nThis Policy is underpinned by the following guiding principles:\nensuring the safety and wellbeing of\nstaff\n,\nstudents\n, contractors, volunteers, guests and the public;\nusing a risk-based approach consistent with the University’s\nRisk Management Framework\n;\nensuring University assets are protected and preventing harm to the environment;\nensuring normal operations are maintained or resumed as soon as possible;\nensuring compliance with all laws and regulations;\neffectively managing financial implications;\nensuring that internal and public confidence is preserved through a visible and professional response; and\nundertaking action to prevent re-occurrence and improving future responses.\nSection 6 - Procedures\nPart A - Incident Classification\n(6)\nThe University uses a risk-based incident classification process in alignment with the Risk Assessment Matrix found within the University’s\nRisk Management Framework\n. All incidents are classified as Minor (Level 1), Major (Level 2) or Critical (Level 3) to determine the appropriate level of response required to manage incidents effectively. Refer to the table below for further details.\nIncident Classification\nDescription\nResponsible\nMinor Incident (Level 1)\nA local event or issue that:\n• has no more than a minor consequence rating in any risk category and little or no potential to escalate; and\n• can be resolved satisfactorily through standard procedures and business as usual (BAU) resources.\nLocal management with the support of Emergency Service Operators, Campus Security and Subject Matter Experts (SMEs) as required.\nMajor Incident (Level 2)\nAn event or issue that:\n• has no more than a moderate consequence rating in any risk category but potential to escalate;\n• may not necessarily be resolved satisfactorily by standard procedures and BAU resources; and\n• may include a Business Continuity response.\nSenior management with the support of Emergency Service Operators, Campus Security and SMEs as required.\nCritical Incident\n(Level 3)\nA situation with a major or catastrophic consequence rating in any risk category and will be an event or issue that:\n• has a long-term or profound effect;\n• cannot be controlled through standard procedures and BAU resources;\n• needs high levels of resourcing and support to manage, including involvement of the Critical Incident Team; and\n• may require a Business Continuity response.\nCritical Incident Team with the support of Emergency Service Operators, Campus Security and SMEs as required.\nPart B - Key Phases\n(7)\nThe University’s Critical Incident management procedures are outlined in the\nCIM Framework\nwhich support coordinated decision-making through three key phases:\nRespond: the immediate priority is to identify the nature and severity of the incident and to stabilise incident volatility by ensuring the health and safety of individuals, protecting property and assets, and preventing further loss or harm. Depending on the nature of the incident, the initial response may be supported by Emergency Services Operators, Campus Security or IT Helpdesk with the support of local and senior management, as required. The\nCIM Framework\nprovides further guidance on identifying, reporting and escalating incidents.\nManage: the Chief Operating Officer(or their nominee) is responsible for declaring a Critical Incident (Level 3) and convening the Critical Incident Team to coordinate University management of the event. The activities of the Critical Incident Team are flexible, ensuring readiness to manage a range of incident scenarios. The team’s structure, roles and responsibilities are set out in the\nCIM Framework\n. In addition, the Crisis Management Plan outlines actionable steps for a coordinated team response and contains a comprehensive Communication Plan.\nRecover: if a Business Disruption occurs, the University will activate the appropriate Business Continuity Plan(s) to maintain or recover the Critical Business Activities impacted to an acceptable level until business-as-usual procedures have been resumed. Other recovery plans including DR and IS Incident Response plans should be implemented as required to support IT service restoration.\nPart C - Buisness Continuity Management\n(8)\nThe University is committed to building and improving organisational resilience, which enhances its capacity to respond to an unexpected Business Disruption and resume operations in an efficient and orderly manner.\n(9)\nBusiness Continuity requirements will be informed by a Business Impact Analysis (BIA) of the activities undertaken by the relevant Divisions. A BIA is a systematic process to identify and analyse the business activities that must be restored as a priority during a Business Disruption. As part of this process, Divisions are required to determine the target and maximum timeframes to restore each Critical Business Activity.\n(10)\nThe information gathered through the BIA process will assist Divisions in developing appropriate Business Continuity strategies to maintain or recover the identified Critical Business Activities, within defined timeframes. These strategies and the resources required for implementation should be documented in the Business Continuity Plan (BCP) for the relevant Division.\n(11)\nTo assist Divisions, the University's BCP template includes examples of specific disruption scenarios, where Divisions are required to document the corresponding recovery strategies for:\nloss of key\nstaff\n;\nloss of access to building or facilities;\nloss of IT systems; and\nloss of critical suppliers.\n(12)\nContinuity of service provision must be adequately addressed for services, infrastructure or any resources provided by third parties through service level agreements or other contractual arrangements in accordance with the assessed level of risk.\n(13)\nThe Critical Incident Team will determine whether a BCP is to be activated in response to a Critical Incident (Level 3) that has a sustained impact on Critical Business Activities. The Critical Incident Team will maintain primary responsibility for ongoing monitoring and decision-making of the Critical Incident and is responsible for advising and updating stakeholders of Critical Incident response activity. The University’s BCPs can be enacted individually or simultaneously and will be managed by the relevant Division Heads, under the direction of the Critical Incident Team.\n(14)\nDisruptive incidents that do not require involvement from the Critical Incident Team (ie, Major Incident (Level 2)), are managed at a local level by the relevant Division through the implementation of their BCP. Consideration must be taken for any other business area that might be impacted.\n(15)\nEach Division Head will store a copy of their respective BCP, and the Risk, Audit and Insurance Team will maintain copies of all BCPs.\n(16)\nThe University's BCP template (other than IS related plans) is developed and maintained by the Risk, Audit and Insurance Team.\nPart D - Training and Testing\n(17)\nRegular updates and testing, knowledge development and awareness programs are to be undertaken as required to ensure that key staff are familiar with this Policy, the\nCIM Framework\nand the BCPs.\nPart E - Responsibilities\nKey Responsibilities\nRole\n• Promote this Policy, the CIM Framework and any other procedures and documents relating to Critical Incident and Business Continuity management.\n• Ensure members of the Critical Incident Team are aware of their responsibilities by delivering appropriate training.\nHealth and Safety Committee\n• Provide central coordination, monitoring and reporting of all University Business Continuity management initiatives.\n• Facilitate governance reporting to Corporate Governance, Risk, Internal Audit and Safety Committee (CGRIASC), as required.\nRisk, Audit and Insurance Team\nDevelopment and ongoing review of the Business Impact Analysis and the Business Continuity Plans within the respective Divisions\nDivision Heads\nCyber Security Incident Response Plan, IS Business Continuity Plan and IT DR processes\nChief Information Officer\nSection 7 - Definitions\n(18)\nFor the purpose of this Policy and Procedure:\nBusiness Continuity: means the capability of the University to continue to deliver services at an acceptable level during a Business Disruption.\nBusiness Continuity Plan (BCP): means the documented procedures that guide the University to respond, recover, resume and restore to a pre-defined level of operation following a Business Disruption.\nBusiness Disruption: means an incident or event that interrupts the University’s Critical Business Activities, and cannot be managed through standard procedures. Incidents include both physical and non-physical events such as loss of infrastructure, major utility outages, IT system breakdowns, pandemics and natural disasters.\nBusiness Impact Analysis (BIA): means the process of identifying and analysing Critical Business Activities and the impact that a Business Disruption might have on them.\nCritical Business Activity: means an activity identified through the Business Impact Analysis process which must be maintained or restored to an acceptable level within a defined timeframe in the event of a Business Disruption. These activities, if interrupted, could lead to a range of risks including financial, health, reputational and legal for the University.\nCritical Incident: has the meaning given to that term in Section 5 (under ‘Incident Classification’).\nEmergency Service Operator: means Fire, Police, Ambulance or any other external service providing emergency support in the event of an incident.\nSection 8 - Authority and Associated Information\n(19)\nThis Policy is made under the\nLa Trobe University Act 2009\n.\n(20)\nAssociated information includes:\nCritical Incident Management Framework\nCrisis Management Plan (under development)\nRisk Management Framework\nEmergency and Critical Incident Procedures\n(21)\nThis document aligns with the following standards:\nAustralian Standard 3745-2010 Planning for Emergencies in Facilities\nNFPA 1660: Standard on Disaster/Emergency Management and Business Continuity/Continuity of Operations Programs\nAS/NZS 5050 (2020): Business Continuity – Managing Disruption-Related Risk\nAustralasian Inter-Service Incident Management System (AIIMS)"
+}

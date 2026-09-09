@@ -1,0 +1,259 @@
+{
+    "document_id": "69",
+    "policy_title": "Information Security Policy",
+    "document_type": "Policy",
+    "source_url": "https://policies.latrobe.edu.au/document/view.php?id=69",
+    "discovery_source_url": "https://policies.latrobe.edu.au/browse",
+    "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=69",
+    "source_system": "La Trobe University Policy Library",
+    "retrieved_at": "2026-09-09T08:01:25.608430+00:00",
+    "status": "Current",
+    "effective_date": "12th August 2026",
+    "review_date": "12th August 2029",
+    "approval_authority": "Vice-Chancellor",
+    "approval_date": "12th August 2026",
+    "version": null,
+    "headings": [
+        {
+            "level": "h1",
+            "text": "Section 1 - Key Information"
+        },
+        {
+            "level": "h1",
+            "text": "Section 2 - Purpose"
+        },
+        {
+            "level": "h1",
+            "text": "Section 3 - Scope"
+        },
+        {
+            "level": "h1",
+            "text": "Section 4 - Key Decisions"
+        },
+        {
+            "level": "h1",
+            "text": "Section 5 - Policy Statement"
+        },
+        {
+            "level": "h1",
+            "text": "Section 6 - Procedures"
+        },
+        {
+            "level": "h3",
+            "text": "General"
+        },
+        {
+            "level": "h3",
+            "text": "Responsibilities"
+        },
+        {
+            "level": "h3",
+            "text": "Compliance with Legislative, Regulatory and Contractual Requirements"
+        },
+        {
+            "level": "h4",
+            "text": "Compliance with Legal Requirements"
+        },
+        {
+            "level": "h4",
+            "text": "Compliance with Security Policies and Standards, and Technical Compliance"
+        },
+        {
+            "level": "h4",
+            "text": "Information Systems Audit Considerations"
+        },
+        {
+            "level": "h3",
+            "text": "Information Security Incident Management"
+        },
+        {
+            "level": "h4",
+            "text": "Reporting Information Security Events And Weaknesses"
+        },
+        {
+            "level": "h4",
+            "text": "Management of Information Security Incidents and Improvements"
+        },
+        {
+            "level": "h3",
+            "text": "People & Culture and User Access Security"
+        },
+        {
+            "level": "h4",
+            "text": "Prior to Engagement"
+        },
+        {
+            "level": "h4",
+            "text": "During Engagement"
+        },
+        {
+            "level": "h4",
+            "text": "Termination or Change of Role"
+        },
+        {
+            "level": "h3",
+            "text": "Communications and Connectivity Management"
+        },
+        {
+            "level": "h4",
+            "text": "Operational Procedures and Responsibilities"
+        },
+        {
+            "level": "h4",
+            "text": "Third Party and Cloud Service Delivery Management"
+        },
+        {
+            "level": "h4",
+            "text": "System Planning and Acceptance"
+        },
+        {
+            "level": "h4",
+            "text": "Protection Against Malicious and Mobile Code"
+        },
+        {
+            "level": "h4",
+            "text": "Back-Up"
+        },
+        {
+            "level": "h4",
+            "text": "Network Security Management"
+        },
+        {
+            "level": "h4",
+            "text": "Media Handling"
+        },
+        {
+            "level": "h4",
+            "text": "Exchange of Information"
+        },
+        {
+            "level": "h4",
+            "text": "Electronic Commerce Services"
+        },
+        {
+            "level": "h4",
+            "text": "Monitoring"
+        },
+        {
+            "level": "h3",
+            "text": "Asset Management and Allocation"
+        },
+        {
+            "level": "h4",
+            "text": "Responsibilities for Assets"
+        },
+        {
+            "level": "h4",
+            "text": "Information Classification"
+        },
+        {
+            "level": "h3",
+            "text": "Business Continuity Management"
+        },
+        {
+            "level": "h4",
+            "text": "Information Security Aspects of Business Continuity Management"
+        },
+        {
+            "level": "h3",
+            "text": "Information Systems Acquisition, Development and Maintenance"
+        },
+        {
+            "level": "h4",
+            "text": "Security Requirements of Information Systems"
+        },
+        {
+            "level": "h4",
+            "text": "Correct Processing in Applications"
+        },
+        {
+            "level": "h4",
+            "text": "Cryptographic Controls"
+        },
+        {
+            "level": "h4",
+            "text": "Security of System Files"
+        },
+        {
+            "level": "h4",
+            "text": "Security in Development and Support Processes"
+        },
+        {
+            "level": "h4",
+            "text": "Technical Vulnerability Management"
+        },
+        {
+            "level": "h3",
+            "text": "Physical and Environmental Security"
+        },
+        {
+            "level": "h4",
+            "text": "Secure Areas"
+        },
+        {
+            "level": "h4",
+            "text": "Equipment Security"
+        },
+        {
+            "level": "h3",
+            "text": "Access Control"
+        },
+        {
+            "level": "h4",
+            "text": "Business Requirement for Access Control"
+        },
+        {
+            "level": "h4",
+            "text": "User Access Management"
+        },
+        {
+            "level": "h4",
+            "text": "User Responsibilities"
+        },
+        {
+            "level": "h4",
+            "text": "Network Access Control"
+        },
+        {
+            "level": "h4",
+            "text": "Operating System Access Control"
+        },
+        {
+            "level": "h4",
+            "text": "Application and Information Access Control"
+        },
+        {
+            "level": "h4",
+            "text": "Mobile Computing and Teleworking"
+        },
+        {
+            "level": "h3",
+            "text": "Security Education, Training and Awareness"
+        },
+        {
+            "level": "h4",
+            "text": "Security Education, Training and Awareness"
+        },
+        {
+            "level": "h3",
+            "text": "Consequences of Information Security Policy Violations"
+        },
+        {
+            "level": "h4",
+            "text": "Consequences for the University"
+        },
+        {
+            "level": "h4",
+            "text": "Consequences for the Individual"
+        },
+        {
+            "level": "h1",
+            "text": "Section 7 - Definitions"
+        },
+        {
+            "level": "h1",
+            "text": "Section 8 - Authority and Associated Information"
+        }
+    ],
+    "content": "Section 1 - Key Information\nPolicy Type and Approval Body\nAdministrative – Vice-Chancellor\nAccountable Executive – Policy\nChief Operating Officer\nResponsible Manager – Policy\nChief Information Officer\nReview Date\n6 August 2029\nSection 2 - Purpose\n(1)\nThe purpose of this document is to detail La Trobe University’s policy and approach to managing Information Security, and inform students, staff, contractors, and other third parties of their responsibilities. This Policy should be read in conjunction with the\nData Governance\nand\nRecords Management\npolicies.\n(2)\nThe procedures in this document do not override the\nUse of Computer Facilities Statute 2009\n. At the discretion of the Chief Information Officer (CIO) the procedures in this document may be interpreted, subject to the provisions in the\nUse of Computer Facilities Statute 2009\n.\nSection 3 - Scope\n(3)\nThis Policy applies to:\nall La Trobe University campuses and external locations;\nall information, information systems and equipment used, owned, operated, processed, or kept in custody on behalf of or by La Trobe University; and\nstudents, staff, contractors, and other third parties who in the course of their work or studies have access to the University’s information, information systems and other facilities on the computer network.\nSection 4 - Key Decisions\nKey Decisions\nRole\nDiscretion to interpret these procedures subject to the provisions in the Use of Computer Facilities Statute 2009.\nChief Information Officer\nChief Information Security Officer\nSection 5 - Policy Statement\n(4)\nAll members of the La Trobe University community are responsible for the preservation of confidentiality integrity and availability of University information. They must:\ncomply with all legislative, regulatory and contractual requirements;\nfollow incident management processes;\nabide by People & Culture and user access security procedures;\nfollow communication and connectivity management processes;\nfollow asset management, physical security, and allocation processes;\nfollow business continuity management practices;\nuse approved acquisition, development and maintenance practices;\nfollow physical and environmental security procedures;\nfollow access control procedures;\nundertake security education, training and awareness; and\nmake themselves aware of the consequences of information security policy violations and adhere to the\nData Governance\nand\nRecords Management\npolicies.\n(5)\nUnder the\nUse of Computer Facilities Statute 2009\nthe CIO may issue determinations from time to time with prospective effect to determine authorised usage. The CIO is empowered to determine the levels of compliance to the practices contained in this policy and procedure.\nSection 6 - Procedures\nGeneral\n(6)\nThese procedures are to assist members of the University Community in maintaining and improving information security.\nResponsibilities\n(7)\nThe Security team are responsible for:\ndeveloping and maintaining the Information Security policy and procedures;\ninvestigating security incidents and taking corrective actions;\ncommunicating security risks and awareness to employees; and\nreviewing and updating security controls based on changing threats.\n(8)\nThird-Party Vendors are responsible for:\nadhering to the university security standards when accessing sensitive data;\nimplementing robust security practices in their own operations; and\nproviding necessary security documentation upon request.\n(9)\nSystem Owners are responsible for:\nensuring data classification and protection for their assigned systems;\nimplementing appropriate security controls based on data sensitivity; and\nreporting data breaches or potential incidents to the security team.\n(10)\nIT Administrators are responsible for:\nmonitoring for potential security breaches and incidents;\npatching systems promptly to address vulnerabilities;\nmanaging user access controls and privileges;\nconducting regular security assessments and audits;\nthe protection and secure disposal of physical information assets; and\nclear identification and inventory of physical information assets.\n(11)\nAll staff are responsible for:\nreporting suspicious activity to IT security immediately;\nmaintaining strong passwords and not sharing credentials;\nusing university-approved devices for work-related activities;\ncompleting mandatory security awareness training regularly; and\nproperly handling sensitive data according to university guidelines.\nCompliance with Legislative, Regulatory and Contractual Requirements\nCompliance with Legal Requirements\n(12)\nAll relevant statutory, regulatory, and contractual requirements and the organisation's approach to meet these requirements shall be explicitly defined, documented, and kept up to date for each information system and the organisation.\n(13)\nAppropriate procedures shall be implemented to ensure compliance with legislative, regulatory, and contractual requirements on the use of material in respect of which there may be intellectual property rights and on the use of proprietary software products.\n(14)\nImportant records shall be protected from loss, destruction, and falsification, in accordance with statutory, regulatory, contractual, and business requirements.\n(15)\nData protection and privacy shall be ensured as required in relevant legislation, regulations, and, if applicable, contractual clauses.\n(16)\nUsers shall be deterred from using information processing facilities for unauthorised purposes.\n(17)\nCryptographic controls shall be used in compliance with all relevant agreements, laws, and regulations.\nCompliance with Security Policies and Standards, and Technical Compliance\n(18)\nManagers shall ensure that all security procedures within their area of responsibility are carried out correctly to achieve compliance with security policies and standards.\n(19)\nInformation systems shall be regularly checked for compliance with security implementation standards.\nInformation Systems Audit Considerations\n(20)\nAudit requirements and activities involving checks on operational systems shall be carefully planned and agreed to minimise the risk of disruptions to business processes.\n(21)\nAccess to information systems audit tools shall be protected to prevent any possible misuse or compromise.\nInformation Security Incident Management\nReporting Information Security Events And Weaknesses\n(22)\nInformation security events should be reported through appropriate management channels to Information Services as quickly as possible.\n(23)\nAll students, staff, contractors and third-party users of information systems and services are required to note and report any observed or suspected security weaknesses in systems or services.\nManagement of Information Security Incidents and Improvements\n(24)\nManagement responsibilities and procedures shall be established to ensure a quick, effective, and orderly response to information security incidents.\n(25)\nThere shall be mechanisms in place to enable the types, volumes, and costs of information security incidents to be quantified and monitored.\n(26)\nWhere a follow-up action against a person or organisation after an information security incident involves legal action (either civil or criminal), evidence shall be collected, retained, and presented to conform to the rules for evidence laid down in the relevant jurisdiction(s).\nPeople & Culture and User Access Security\nPrior to Engagement\n(27)\nSecurity roles and responsibilities of students, staff, contractors and third-party users shall be defined and documented.\n(28)\nBackground verification checks on all individual candidates for employment, contractors, students, and third-party users shall be carried out where applicable in accordance with relevant laws, regulations and ethics, and proportional to the business requirements, the classification of the information to be accessed, and the perceived risks.\n(29)\nAs part of their enrolment or contractual obligation, students, staff, contractors and third-party users shall agree and sign the terms and conditions of their enrolment or contract, which shall state their and the organisation's responsibilities for information security.\nDuring Engagement\n(30)\nManagement shall require students, staff, contractors and third-party users to apply security in accordance with established policies and procedures of the organisation.\n(31)\nAll students, staff of the organisation and, where relevant, contractors and third-party users shall receive appropriate awareness training and regular updates in organisational policies and procedures, as relevant.\n(32)\nThere shall be a formal disciplinary process for students and staff who have committed a security breach.\nTermination or Change of Role\n(33)\nResponsibilities for performing employment termination or change of role shall be clearly defined and assigned.\n(34)\nAll students, staff, contractors and third-party users shall return all of the organisation's assets in their possession upon termination unless otherwise agreed with the University.\n(35)\nThe access rights of all students, staff, contractors and third-party users to information and information processing facilities shall be removed upon termination or adjusted upon a role change.\nCommunications and Connectivity Management\nOperational Procedures and Responsibilities\n(36)\nOperating procedures shall be documented, maintained, and made available to all users who need them.\n(37)\nChanges to information processing facilities and systems shall be controlled.\n(38)\nDuties and areas of responsibility shall be segregated to reduce opportunities for unauthorised or unintentional modification or misuse of the organisation's assets.\n(39)\nDevelopment, test, and operational facilities shall be separated to reduce the risks of unauthorised access or changes to the operational system.\nThird Party and Cloud Service Delivery Management\n(40)\nIt shall be ensured that the security controls, service definitions and delivery levels included in the third party service delivery agreement are implemented, operated, and maintained by the third-party.\n(41)\nThe services, reports and records provided by the third-party shall be regularly monitored and reviewed, and audits shall be carried out regularly.\n(42)\nChanges to the provision of services, including maintaining and improving existing information security policies, procedures and controls, shall be managed, taking account of the criticality of business systems and processes involved and re-assessment of risks.\nSystem Planning and Acceptance\n(43)\nThe use of resources shall be monitored, tuned, and projections made of future capacity requirements to ensure the required system performance.\n(44)\nAcceptance criteria for new information systems, upgrades, and new versions shall be established and suitable tests of the system(s) carried out during development and prior to acceptance.\nProtection Against Malicious and Mobile Code\n(45)\nDetection, prevention, and recovery controls to protect against malicious code and appropriate user awareness procedures shall be implemented.\n(46)\nWhere the use of mobile code is authorised, the configuration should ensure that the authorised mobile code operates according to a clearly defined security policy, and unauthorised mobile code should be prevented from executing.\nBack-Up\n(47)\nBack-up copies of software and information necessary to achieve effective and efficient delivery of objectives and outcomes shall be taken and tested regularly in accordance with the agreed backup policy.\nNetwork Security Management\n(48)\nNetworks shall be adequately managed and controlled, in order to be protected from threats, and to maintain security for the systems and applications using the network, including information in transit.\n(49)\nSecurity features, service levels, and management requirements of all network services shall be identified and included in any network services agreement, whether these services are provided in-house or outsourced.\n(50)\nUsers of cloud and other external data services are required to subject any terms of use, conditions of service or any other agreement to the requirements of the University’s\nContracts Policy\nprior to accessing the service.\nMedia Handling\n(51)\nThere shall be procedures in place for the management of removable media.\n(52)\nMedia shall be disposed of securely and safely when no longer required, using formal procedures.\n(53)\nProcedures for the handling and storage of information shall be established to protect this information from unauthorised disclosure or misuse.\n(54)\nSystem documentation shall be protected against unauthorised access.\nExchange of Information\n(55)\nFormal exchange procedures and controls shall be in place to protect the exchange of information through the use of all types of communication facilities.\n(56)\nAgreements shall be established for the exchange of information and software between the organisation and external parties.\n(57)\nMedia containing information shall be protected against unauthorised access, misuse or corruption during transportation beyond an organisation's physical boundaries.\n(58)\nInformation involved in electronic messaging shall be appropriately protected.\n(59)\nPolicies and procedures shall be developed and implemented to protect information associated with the interconnection of business information systems.\nElectronic Commerce Services\n(60)\nInformation involved in electronic commerce passing over public networks shall be protected from fraudulent activity, contract dispute, and unauthorised disclosure and modification.\n(61)\nInformation involved in on-line transactions shall be protected to prevent incomplete transmission, mis-routing, unauthorised message alteration, unauthorised disclosure, unauthorised message duplication or replay.\n(62)\nThe integrity of information being made available on a publicly available system shall be protected to prevent unauthorised modification.\nMonitoring\n(63)\nWhere practical, audit logs recording user activities, exceptions, and information security events shall be produced and kept for an agreed period to assist in future investigations and access control monitoring.\n(64)\nProcedures for monitoring use of information processing facilities shall be established and the results of the monitoring activities reviewed regularly.\n(65)\nLogging facilities and log information shall be protected against tampering and unauthorised access.\n(66)\nSystem administrator and system operator activities shall be logged wherever possible.\n(67)\nFaults shall be logged, analysed, and appropriate action taken.\n(68)\nThe clocks of all relevant information processing systems within an organisation or security domain shall be synchronised with an agreed accurate time source.\nAsset Management and Allocation\nResponsibilities for Assets\n(69)\nAll assets shall be clearly identified and an inventory of all important assets drawn up and maintained.\n(70)\nAll information and assets associated with information processing facilities shall have a nominated owner.\n(71)\nRules for the acceptable use of information and assets associated with information processing facilities shall be identified, documented, and implemented.\nInformation Classification\n(72)\nInformation shall be classified in terms of its value, legal requirements, sensitivity, and criticality to the organisation.\n(73)\nAn appropriate set of procedures for information labelling and handling shall be developed and implemented in accordance with the classification scheme adopted by the organisation.\n(74)\nThe University classifies all information and data in accordance with the following security classifications, which align to the Australian Government Protective Security Policy Framework (PSPF) and the Australian Cyber Security Centre Information Security Manual (ISM). This Policy is the authoritiative source for these classifications:\nLTU Classification\nClosest PSPF/ISM Alignment\nHandling requirements (indicative)\nUNOFFICIAL\nNot a standard PSPF classification (local La Trobe University category)\nInformation with no or negligible consequences if compromised. No special handling; may be stored and shared using standard University systems, with routine access controls.\nOFFICIAL\nOFFICIAL\nRoutine information where compromise would cause low business impact. Store and process on University-managed systems and share on a business need basis, with standard access controls.\nOFFICIAL: SENSITIVE\nOFFICIAL: Sensitive\nCompromise could cause limited damage. Restrict on a need-to-know basis; label documents and messages, encrypt in transit and at rest, do not store on unmanaged or personal devices; dispose of securely.\nOFFICIAL: SENSITIVE PERSONAL\nOFFICIAL: Sensitive (with privacy-specific handling)\nAs for OFFICIAL: SENSITIVE, plus privacy obligations under the Privacy and Data Protection Act 2014 (Vic). Minimise collection and retention, restict access to authorised staff, log access, encrypt and dispose of securely.\nPROTECTED\nPROTECTED\nCompromise could serious damage. Apply strict need-to-know with documented authorisation and multi-factor authentication, encrypt in transit and at rest, store and process only on systems approved for PROTECTED information, enable audit logging, dispose of securely in line with the PSPF.\nBusiness Continuity Management\nInformation Security Aspects of Business Continuity Management\n(75)\nA managed process shall be developed and maintained for business continuity throughout the organisation that addresses the information security requirements needed for the organisation's business continuity.\n(76)\nEvents that can cause interruptions to business processes shall be identified, along with the probability and impact of such interruptions and their consequences for information security.\n(77)\nPlans shall be developed and implemented to maintain or restore operations and ensure availability of information at the required level and in the required time scales following interruption to, or failure of, critical business processes.\n(78)\nA single framework of business continuity plans shall be maintained to ensure all plans are consistent, to consistently address information security requirements, and to identify priorities for testing and maintenance.\n(79)\nBusiness continuity plans shall be tested and updated regularly to ensure that they are up to date and effective.\nInformation Systems Acquisition, Development and Maintenance\nSecurity Requirements of Information Systems\n(80)\nStatements of business requirements for new information systems, or enhancements to existing information systems shall specify the requirements for security controls.\nCorrect Processing in Applications\n(81)\nData input to applications shall be validated to ensure that this data is correct and appropriate.\n(82)\nValidation checks shall be incorporated into applications to detect any corruption of information through processing errors or deliberate acts.\n(83)\nRequirements for ensuring authenticity and protecting message integrity in applications shall be identified, and appropriate controls identified and implemented.\n(84)\nData output from an application shall be validated to ensure that the processing of stored information is correct and appropriate to the circumstances.\nCryptographic Controls\n(85)\nCryptographic controls for protection of information should be developed and implemented for sensitive information where practical.\n(86)\nKey management shall be in place to support the organisation's use of cryptographic techniques.\nSecurity of System Files\n(87)\nThere shall be procedures in place to control the installation of software on operational systems.\n(88)\nTest data shall be selected carefully, protected and controlled.\n(89)\nAccess to program source code shall be restricted.\nSecurity in Development and Support Processes\n(90)\nThe implementation of changes shall be controlled using formal change control procedures.\n(91)\nWhen operating systems are changed, business critical applications shall be reviewed and tested to ensure there is no adverse impact on organisational operations or security.\n(92)\nModifications to software packages are discouraged, and limited to necessary changes, and all changes shall be strictly controlled.\n(93)\nOpportunities for information leakage shall be prevented.\n(94)\nOutsourced software development shall be supervised and monitored by the organisation.\nTechnical Vulnerability Management\n(95)\nTimely information about technical vulnerabilities of information systems being used shall be obtained, the organisation's exposure to such vulnerabilities evaluated, and appropriate measures taken to address the associated risk.\nPhysical and Environmental Security\nSecure Areas\n(96)\nSecurity perimeters (barriers such as walls, card controlled entry gates or manned reception desks) shall be used to protect areas that contain information and information processing facilities.\n(97)\nSecure areas shall be protected by appropriate entry controls to ensure that only authorised personnel are allowed access.\n(98)\nPhysical security for offices, rooms, and facilities should be designed and applied.\n(99)\nPhysical protection against damage from fire, flood, earthquake, explosion, civil unrest, and other forms of natural or man-made disaster shall be designed and applied.\n(100)\nPhysical protection and guidelines for working in secure areas shall be designed and applied.\n(101)\nAccess points such as delivery and loading areas and other points where unauthorised persons may enter the premises shall be controlled and, if possible, isolated from information processing facilities to avoid unauthorised access.\nEquipment Security\n(102)\nEquipment shall be sited or protected to reduce the risks from environmental threats and hazards, and opportunities for unauthorised access.\n(103)\nImportant equipment shall be protected from power failures and other disruptions caused by failures in supporting utilities.\n(104)\nPower and telecommunications cabling carrying data or supporting information services shall be protected from interception or damage.\n(105)\nEquipment shall be correctly maintained to ensure its continued availability and integrity.\n(106)\nSecurity should be applied to off-site equipment taking into account the different risks of working outside University premises.\n(107)\nAll items of equipment containing storage media shall be checked to ensure that any sensitive data and licensed software has been removed or securely overwritten prior to disposal.\n(108)\nEquipment, information or software shall not be taken off-site without prior authorisation.\n(109)\nUniversity data on equipment not owned or leased by the University is still the responsibility of the member of the University, as specified in the Information Security Policy, this includes mobile devices such as iPhones, iPads, android devices, home PCs or other personal and cloud computing storage or services.\nAccess Control\nBusiness Requirement for Access Control\n(110)\nUser access to Organization’s information systems shall be granted on the basis of the need-to-know principle. Users shall be given access only at the appropriate level required to perform their job functions for the business.\nUser Access Management\n(111)\nThere shall be a formal user registration and de-registration procedure in place for granting and revoking access to all information systems and services.\n(112)\nThe allocation and use of privileges shall be restricted and controlled.\n(113)\nThe allocation of passwords shall be controlled through a formal management process.\n(114)\nUsers' access rights shall be subject to review at regular intervals.\nUser Responsibilities\n(115)\nUsers shall be required to follow good security practices in the selection and use of passwords.\n(116)\nUsers shall ensure that unattended equipment has appropriate protection.\n(117)\nA clear desk policy for papers and removable storage media and a clear screen policy for information processing facilities shall be adopted where information of a sensitive nature is being handled.\nNetwork Access Control\n(118)\nUsers shall only be provided with access to the services that they have been specifically authorised to use.\n(119)\nAppropriate authentication methods shall be used to control access by remote users.\n(120)\nAutomatic equipment identification shall be considered as a means to authenticate connections from specific locations and equipment.\n(121)\nPhysical and logical access to diagnostic and configuration ports shall be controlled.\n(122)\nGroups of information services, users, and information systems shall be segregated on networks.\n(123)\nFor shared networks, especially those extending across the organisation's boundaries, the capability of users to connect to the network shall be restricted, in line with the need-to-know principle and requirements of the business applications.\n(124)\nRouting controls shall be implemented for networks to ensure that computer connections and information flows do not breach the security of the business applications.\nOperating System Access Control\n(125)\nAccess to operating systems shall be controlled by a secure log-on procedure.\n(126)\nAll users shall have a unique identifier (user ID) for their personal use only, and a suitable authentication technique shall be chosen to substantiate the claimed identity of a user.\n(127)\nSystems for managing passwords shall be interactive and shall ensure quality passwords.\n(128)\nThe use of utility programs that might be capable of overriding system and application controls shall be restricted and tightly controlled.\n(129)\nInactive sessions shall shut down after a defined period of inactivity.\n(130)\nRestrictions on connection times shall be used to provide additional security for high-risk applications.\nApplication and Information Access Control\n(131)\nAccess to information and application system functions by users and support personnel shall be restricted in accordance with the need to know principle. Sensitive systems shall have a dedicated (isolated) computing environment.\nMobile Computing and Teleworking\n(132)\nAppropriate security measures, such as the use of encryption for data in transit and at rest, shall be adopted to protect against the risks of using mobile computing and communication facilities.\n(133)\nA policy, operational plans and procedures shall be developed and implemented for teleworking activities.\nSecurity Education, Training and Awareness\nSecurity Education, Training and Awareness\n(134)\nInformation Security awareness training shall be included in the professional development plans of all personnel.\n(135)\nThe level of training required will be appropriate to the role of the individual in the University Community.\nConsequences of Information Security Policy Violations\nConsequences for the University\n(136)\nViolation of Security Policy and Procedures may result in Reputational, Financial, Regulatory/Legal, Business Performance or Stakeholder or Safety and Security risks or losses for the University and as a result are viewed very seriously.\nConsequences for the Individual\n(137)\nBreaches of the Information Security Policy may also constitute breaches of the\nUse of Computer Facilities Statute 2009\nor the\nCode of Conduct\n. The penalties for breaches of the statute are outlined in the statute itself. Breaches of the\nCode of Conduct\nmay also result in disciplinary action being taken.\nSection 7 - Definitions\n(138)\nFor the purpose of this Policy and Procedure:\nAndroid devices: The Android platform is Google Inc.'s open and free software stack that includes an operating system, middleware and also key applications for use on mobile devices, including smartphones.\nAsset: anything that has value to the organisation.\nNOTE This definition is independent to that used by the Finance Division.\nCloud Computing: the use of computing resources that are delivered as a service over the network (typically the internet).\nControl: means of managing risk, including policies, procedures, guidelines, practices or organisational structures, which can be of administrative, technical, management, or legal nature.\nNOTE Control is also used as a synonym for safeguard or countermeasure.\nEquipment: an electronic device or media used to store, process or transmit information.\nGuideline: a description that clarifies what should be done and how, to achieve the objectives set out in policies.\nHome PC: any computer not owned or leased by the University and used by a member of the University community.\niPad: a tablet computer developed by Apple Inc.\niPhone: a smartphone developed by Apple Inc.\nInformation processing facilities: any information processing system, service or infrastructure, or the physical locations housing them.\nInformation security: preservation of confidentiality, integrity and availability of information; in addition, other properties, such as authenticity, accountability, non-repudiation, reliability and privacy can also be involved.\nInformation security event: an information security event is an identified occurrence of a system, service or network state indicating a possible breach of information security policy or failure of safeguards, or a previously unknown situation that may be security relevant.\nInformation security incident: an information security incident is indicated by a single or a series of unwanted or unexpected information security events that have a significant probability of compromising business operations and threatening information security.\nInformation systems: any information processing system, service or infrastructure, or the physical locations housing them.\nMobile Code: mobile code (MMC) is any software program designed to move from computer to computer and network to network, in order to intentionally modify computer systems without the consent of the owner or operator. MMC includes viruses, Trojan horses, worms, script attacks and rogue internet code.\nPolicy: overall intention and direction as formally expressed by management.\nRisk: combination of the probability of an event and its consequence.\nRisk analysis: systematic use of information to identify sources and to estimate the risk.\nRisk assessment: overall process of risk analysis and risk evaluation.\nRisk evaluation: process of comparing the estimated risk against given risk criteria to determine the significance of the risk.\nRisk management: coordinated activities to direct and control an organisation with regard to risk.\nNOTE Risk management typically includes risk assessment, risk treatment, risk acceptance and risk communication.\nRisk treatment: process of selection and implementation of measures to modify risk.\nThird-party: that person or body that is recognised as being independent of the parties involved, as concerns the issue in question.\nThreat: a potential cause of an unwanted incident, which may result in harm to a system or organisation.\nUniversity: refers to La Trobe University.\nVulnerability: a weakness of an asset or group of assets that can be exploited by one or more threats.\nSection 8 - Authority and Associated Information\n(139)\nThis Policy is made under the\nLa Trobe University Act 2009\n.\n(140)\nAssociated information includes:\nInformation Services Intranet"
+}
