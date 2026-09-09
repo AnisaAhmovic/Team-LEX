@@ -88,9 +88,18 @@ def get_status_metadata(document_id):
     return metadata
 
 
-def process_policy(document_id, policy_url, output_file):
+def process_policy(
+    document_id,
+    policy_url,
+    output_file,
+    document_type=None,
+    discovery_source_url=None
+):
     """
     Retrieve, clean, structure and persist one La Trobe Policy Library document.
+
+    Optional discovery metadata is preserved when processing documents supplied
+    by the corpus manifest. Existing Sprint 3 callers remain supported.
 
     Returns the structured policy data so the validated Sprint 3 processor can
     also be reused by the corpus processing pipeline.
@@ -160,7 +169,9 @@ def process_policy(document_id, policy_url, output_file):
     policy_data = {
         "document_id": document_id,
         "policy_title": policy_title,
+        "document_type": document_type,
         "source_url": policy_url,
+        "discovery_source_url": discovery_source_url,
         "status_details_url": status_metadata["status_details_url"],
         "source_system": "La Trobe University Policy Library",
         "retrieved_at": datetime.now(timezone.utc).isoformat(),
