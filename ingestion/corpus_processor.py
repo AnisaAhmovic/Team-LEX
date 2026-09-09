@@ -1,17 +1,19 @@
 """
-Project Lex - COPL-276 / COPL-277
+Project Lex - COPL-276 / COPL-277 / COPL-278
 
-Generalised corpus input for the La Trobe University Policy Library.
+Corpus processing for the La Trobe University Policy Library.
 
 Loads documents discovered by the systematic discovery process from the
-corpus manifest and converts them into processing inputs for the reusable
-Sprint 3 policy processor.
+corpus manifest, converts them into processing inputs, and processes the
+discovered corpus using the reusable Sprint 3 policy processor.
 
 Discovery provenance is carried through the corpus processing interface.
 La Trobe document_id remains the authoritative document identity.
+Individual document failures do not stop the remaining corpus from processing.
 """
 
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 from ingestion.policy_processor import process_policy
@@ -19,6 +21,7 @@ from ingestion.policy_processor import process_policy
 
 CORPUS_MANIFEST_PATH = Path("data/corpus/corpus_manifest.json")
 CORPUS_OUTPUT_DIRECTORY = Path("data/processed/corpus")
+CORPUS_RUN_REPORT_PATH = Path("data/corpus/corpus_processing_report.json")
 
 
 def load_corpus_manifest(manifest_path=CORPUS_MANIFEST_PATH):
@@ -121,25 +124,108 @@ def process_corpus_document(processing_input):
     )
 
 
+def process_corpus(processing_inputs):
+    """
+    Process every corpus input while isolating individual document failures.
+
+    Returns a run report containing success and failure details.
+    """
+
+    started_at = datetime.now(timezone.utc).isoformat()
+    results = []
+
+    for position, processing_input in enumerate(processing_inputs, start=1):
+        document_id = processing_input["document_id"]
+
+        print(
+            f"\n[{position}/{len(processing_inputs)}] "
+            f"Processing document {document_id}"
+        )
+
+        try:
+            processed_document = process_corpus_document(processing_input)
+
+            results.append({
+                "document_id": document_id,
+                "policy_title": processed_document["policy_title"],
+                "status": "Processed",
+                "output_file": processing_input["output_file"],
+                "error": None
+            })
+
+        except Exception as error:
+            print(
+                f"Document {document_id} failed: "
+                f"{type(error).__name__}: {error}"
+            )
+
+            results.append({
+                "document_id": document_id,
+                "policy_title": None,
+                "status": "Failed",
+                "output_file": processing_input["output_file"],
+                "error": f"{type(error).__name__}: {error}"
+            })
+
+    processed_count = sum(
+        result["status"] == "Processed"
+        for result in results
+    )
+    failed_count = sum(
+        result["status"] == "Failed"
+        for result in results
+    )
+
+    return {
+        "started_at": started_at,
+        "completed_at": datetime.now(timezone.utc).isoformat(),
+        "documents_attempted": len(processing_inputs),
+        "documents_processed": processed_count,
+        "documents_failed": failed_count,
+        "results": results
+    }
+
+
+def save_corpus_run_report(
+    run_report,
+    report_path=CORPUS_RUN_REPORT_PATH
+):
+    """
+    Persist the corpus processing run report as JSON.
+    """
+
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(report_path, "w", encoding="utf-8") as output_file:
+        json.dump(
+            run_report,
+            output_file,
+            ensure_ascii=False,
+            indent=4
+        )
+
+
 def main():
     """
-    Validate the generalised corpus input without processing the full corpus.
+    Process the discovered Policy Library corpus and save a run report.
     """
 
     documents = load_corpus_manifest()
     processing_inputs = build_corpus_processing_inputs(documents)
 
-    print("Project Lex Generalised Corpus Input")
-    print("------------------------------------")
+    print("Project Lex Corpus Processor")
+    print("----------------------------")
     print(f"Documents loaded from manifest: {len(documents)}")
     print(f"Processing inputs created: {len(processing_inputs)}")
 
-    if processing_inputs:
-        print("\nFirst processing input:")
-        print(json.dumps(processing_inputs[0], indent=4))
+    run_report = process_corpus(processing_inputs)
+    save_corpus_run_report(run_report)
 
-    print("\nCorpus input prepared successfully.")
-    print("Full corpus processing has not been run.")
+    print("\nCorpus processing complete.")
+    print(f"Documents attempted: {run_report['documents_attempted']}")
+    print(f"Documents processed: {run_report['documents_processed']}")
+    print(f"Documents failed: {run_report['documents_failed']}")
+    print(f"Run report: {CORPUS_RUN_REPORT_PATH}")
 
 
 if __name__ == "__main__":

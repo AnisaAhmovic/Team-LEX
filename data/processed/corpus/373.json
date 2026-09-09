@@ -1,0 +1,131 @@
+{
+    "document_id": "373",
+    "policy_title": "Data Governance Policy",
+    "document_type": "Policy",
+    "source_url": "https://policies.latrobe.edu.au/document/view.php?id=373",
+    "discovery_source_url": "https://policies.latrobe.edu.au/browse",
+    "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=373",
+    "source_system": "La Trobe University Policy Library",
+    "retrieved_at": "2026-09-09T07:59:57.587008+00:00",
+    "status": "Current",
+    "effective_date": "13th November 2024",
+    "review_date": "13th November 2027",
+    "approval_authority": "Vice-Chancellor",
+    "approval_date": "13th November 2024",
+    "version": null,
+    "headings": [
+        {
+            "level": "h1",
+            "text": "Section 1 - Key Information"
+        },
+        {
+            "level": "h1",
+            "text": "Section 2 - Purpose"
+        },
+        {
+            "level": "h1",
+            "text": "Section 3 - Scope"
+        },
+        {
+            "level": "h1",
+            "text": "Section 4 - Key Decisions"
+        },
+        {
+            "level": "h1",
+            "text": "Section 5 - Policy Statement"
+        },
+        {
+            "level": "h1",
+            "text": "Section 6 - Procedures"
+        },
+        {
+            "level": "h2",
+            "text": "Part A - Roles and Responsibilities"
+        },
+        {
+            "level": "h3",
+            "text": "Senior Executive"
+        },
+        {
+            "level": "h3",
+            "text": "Data and Analytics & Associated Roles"
+        },
+        {
+            "level": "h4",
+            "text": "Chief Data and Analytics Officer"
+        },
+        {
+            "level": "h4",
+            "text": "Data Modelers, Data Engineers and Business Analysts"
+        },
+        {
+            "level": "h3",
+            "text": "Privacy Officer"
+        },
+        {
+            "level": "h3",
+            "text": "Data Owners & Data Stewards"
+        },
+        {
+            "level": "h4",
+            "text": "Data Owners (also sometimes referred to as Data Custodians)"
+        },
+        {
+            "level": "h4",
+            "text": "Data Stewards"
+        },
+        {
+            "level": "h3",
+            "text": "Information Services"
+        },
+        {
+            "level": "h4",
+            "text": "Chief Information Officer (CIO)"
+        },
+        {
+            "level": "h4",
+            "text": "Chief Information Security Officer (CISO) & Information Services (IS) Custodian"
+        },
+        {
+            "level": "h4",
+            "text": "Information Architects"
+        },
+        {
+            "level": "h4",
+            "text": "Records Management"
+        },
+        {
+            "level": "h2",
+            "text": "Part B - Governance Structure"
+        },
+        {
+            "level": "h3",
+            "text": "Data Information Governance Council (DIGC)"
+        },
+        {
+            "level": "h3",
+            "text": "Data Governance Working Group (DGWG)"
+        },
+        {
+            "level": "h2",
+            "text": "Part C - Classifications"
+        },
+        {
+            "level": "h3",
+            "text": "Sensitivity Classification"
+        },
+        {
+            "level": "h3",
+            "text": "Security Classification"
+        },
+        {
+            "level": "h1",
+            "text": "Section 7 - Definitions"
+        },
+        {
+            "level": "h1",
+            "text": "Section 8 - Authority and Associated Information"
+        }
+    ],
+    "content": "Section 1 - Key Information\nPolicy Type and Approval Body\nAdministrative – Vice-Chancellor\nAccountable Executive – Policy\nChief Operating Officer\nResponsible Manager – Policy\nChief Data and Analytics Officer (DDA)\nReview Date\n13 November 2027\nSection 2 - Purpose\n(1)\nData Governance is the exercise of authority, control, and shared decision-making (planning, monitoring and enforcement) over the management of data assets.\n(2)\nInstitutional data is defined as data created, received, maintained and/or transmitted by the University. Institutional data is used for reporting and decision making. Examples include: enrolment data, financial data, People & Culture data, course data, and subject data.\n(3)\nThis Policy establishes the principles, roles and responsibilities required for effective institutional Data Governance, the core component of data management.\nSection 3 - Scope\n(4)\nThis Policy applies to:\nall institutional data;\nstudents\n,\nstaff\n, contractors, third-parties, CONAGOTHs (Consultants, Agency or Other) and other members of the University community who use or have access to the University’s data.\n(5)\nThis Policy does not apply to:\nResearch data as defined in\nResearch Data Management Policy\n.\nSection 4 - Key Decisions\nKey Decisions\nRole\nApprove data sets, business terms, access, quality rules, reference data and business entities.\nData Owner / Custodian\nApprove data classifications in terms of sensitivity and security, taking into account relevant legislation and privacy acts.\nData Owner / Custodians\nImplement security measures to safeguard sensitive data, both from external threats (such as cyberattacks) and internal risks (such as unauthorized access). This may involve setting up firewalls, encryption, access controls, and security protocols.\nIS Custodians\nWork with the different internal entities (information security, corporate risk, and compliance risk) to define the policies and programs to ensure data delivery, protection, and retirement.\nChief Data and Analytics Officer\nMonitor and provide guidance on collection, legal and regulatory requirements to ensure compliance with data protection laws and advise on data sensitivity classifications for Personal Information (PI).\nPrivacy Officer\nApprove data sources for metadata scanning and profiling.\nData Information Governance Council (DIGC)\nSection 5 - Policy Statement\n(6)\nThe University acknowledges the role of institutional data in achieving its strategic and operational objectives. The University applies the following fundamentals when governing institutional data:\nInstitutional data is an asset of the University\nIt is governed through defined roles and responsibilities\nIndividuals are responsible for the data they collect and manage on behalf of the University\nData must be of good quality e.g. accuracy, completeness, consistency, timeliness, validity and uniqueness, and managed consistently across its lifecycle\nThe management of institutional data must comply with applicable legislation and relevant policies\nInstitutional data is held securely and protected from unauthorised access, use and disclosure\nSection 6 - Procedures\nPart A - Roles and Responsibilities\nSenior Executive\n(7)\nThe Chief Operating Officer is accountable for the University’s Data Governance. They are:\nresponsible for ensuring it is adequately resourced and aligned to the University’s strategic objectives; and\nthe final point of escalation in relation to data governance issues, including non-compliance of this Policy which will be handled under the\nCode of Conduct\n.\nData and Analytics & Associated Roles\nChief Data and Analytics Officer\n(8)\nThe Chief Data and Analytics Officer (DDA) is responsible for:\nestablishing and maintaining the University’s Data Governance Framework;\npromoting good data governance by working with data owners to ensure they embed data governance requirements across the data assets for which they are accountable; and\nensuring appropriate processes are in place to enable data security on reports, dashboards, Application Programming Interfaces (APIs) and the University’s data warehouse.\nData Modelers, Data Engineers and Business Analysts\n(9)\nData Modelers, Data Engineers and Business Analysts are responsible for:\nensuring that data is accurately defined, modeled, stored and transmitted in alignment with business, technical and legislative requirements;\nensuring data assets conform with the University’s Data Governance Framework;\nensuring the relevant Data Owner has approved the use of the data in advance;\nreporting data asset security risks or incidents to the Chief Information Security Officer (CISO); and\nreporting privacy risks or incidents in accordance with the\nPrivacy Policy\n.\nPrivacy Officer\n(10)\nThe Privacy Officer is responsible for:\nproviding privacy advice as follows:\nadvice to Data Owners and Data Stewards to help inform the data sensitivity\nadvice on what legislation inform data classifications\nproviding privacy training to employees and raising awareness about the importance of privacy in data governance\nreceiving and assessing privacy incidents and concerns.\nData Owners & Data Stewards\nData Owners (also sometimes referred to as Data Custodians)\n(11)\nData Owners are senior managers who are accountable for the data assets associated with the operational units which they manage (e.g. the Chief People Officer (P&C) is responsible for P&C-related data assets).\n(12)\nA Data Owner is accountable for:\naccuracy of data assets, including definitions, data sets, data and security classifications;\nsetting and/or approving the conditions of use, including any system or storage requirements. They have the right to override the assigned security classification based on revised risk. However, care must be taken to ensure data is protected;\nensuring access is on a ‘need to know basis’ and conforms with:\nprivacy law obligations; and\nsecurity and data classification requirements.\ncomplying with the University’s record keeping requirements in relation to the storage, retention and destruction of data.\n(13)\nAll Data Owners are members of Data Information Governance Council (which is outlined in more detail below).\nData Stewards\n(14)\nData Stewards are appointed by the Data Owner to support them in managing day-to-day data-related activities.\n(15)\nA Data Steward is responsible for:\nassigning the data and security classifications for which they are responsible\ncontributing to the Data Governance Working Group, the function of which is described in more detail below\nproviding expertise on data assets associated with their operational unit\nInformation Services\nChief Information Officer (CIO)\n(16)\nThe Chief Information Officer is accountable for:\nensuring adequate security controls are in place to protect data against unauthorised access, breaches, and other security threats;\nprioritising data security in regards to the nature of the risk;\nensuring data protection from unauthorised disclosure or interception;\noverseeing the management of platforms (e.g. databases, files system, communication channels).\nChief Information Security Officer (CISO) & Information Services (IS) Custodian\n(17)\nThe CISO & IS Custodians are responsible for:\nthe technical management, security, and maintenance of data assets. In particular:\nimplementing and maintaining the IT infrastructure that supports data storage, processing, and transmission;\nensuring data is securely backed up, reliably recovered, and protected from unauthorised access through robust security measures and access controls;\nworking with data stewards, business analysts, and other stakeholders to enforce data governance;\nthe technical aspects of data lifecycle management, including data archiving, purging, and ensuring data integrity;\nconducting regular audits and implementing updates and patches to maintain system security and efficiency.\nInformation Architects\n(18)\nThe Information Architect is responsible for:\nensuring consistency and interoperability across system integrations;\ndata architecture for the organisation, including the enterprise data model, application register and their associated data business entities;\noverseeing the data lifecycle, from creation to disposal, balancing business needs with regulatory requirements;\nensuring data quality to utilise the full potential of data assets while also mitigating risks associated with data governance.\nRecords Management\n(19)\nThe Records Management Office is responsible for:\ndata retention, ensuring that data is retained in compliance with legal and regulatory requirements and supports data lifecycle management;\nauditing and reviewing data retention and disposal practices to ensure compliance.\nPart B - Governance Structure\nData Information Governance Council (DIGC)\n(20)\nThe Data Information Governance Council is a forum for Data Owners and other designated officials (who have planning, policy-level, and management responsibility for data within their functional areas) to discuss data assets.\n(21)\nThe Data Information Governance Council will:\nmeet regularly and upon the request of Chief Data and Analytics Officer\nmonitor data quality\npromote data literacy, awareness, and appropriate data use\nensure alignment with the strategic plan\nData Governance Working Group (DGWG)\n(22)\nThe Data Governance Working Group consists of data governance leads, data stewards, subject matter experts, data modelers, Privacy Officer, Information Services security, digital records representatives and information architects.\n(23)\nThe Data Governance Working Group will:\nmonitor and review business terms, metrics, enterprise information model updates, data sets, data classifications, reference data, marketplace collections and data quality rules.\nPart C - Classifications\n(24)\nData classifications are used to manage and protect data based on sensitivity, value, and regulatory requirements. Security classifications protect information e.g. documents, data sets, business terms and metrics. Both classifications ensure handling of data is compliant with laws, regulations, policies and standards throughout its lifecycle. To do this institutional data is to be classified as follows:\nSensitivity Classification\n(25)\nThe classification is based on the impact disclosing the data has on the University:\nNone – data that is not sensitive and poses no risk to the University if exposed or accessed by unauthorised individuals.\nLow - data that has a low impact on the University if exposed or accessed by unauthorised individuals.\nMedium - data that could pose a moderate risk to the University if exposed or accessed improperly.\nHigh - data that has a significant impact on the University if accessed, or modified without authorisation.\n(26)\nData sensitivity classification can be used for data security, compliance, incident response and data lifecycle management.\nSecurity Classification\n(27)\nThe classification determines the level of protection on the information:\nPublic – freely disclosed to the public without any risk of harm to the University. Is for open access and does not require special handling.\nInternal - intended for use within the University and not for public disclosure. Unauthorised access could cause moderate harm but typically would not have severe consequences.\nConfidential - if disclosed without authorisation, could cause significant harm. Access is usually limited to specific individuals or groups.\nRestricted - highest level of classification and is applied to information that, if disclosed without authorisation, could cause severe damage.\nSection 7 - Definitions\n(28)\nFor the purpose of this Policy and Procedures:\nData Asset: is a resource that is owned and controlled, is expected to be of value and to generate positive future economic benefit.\nBusiness Domain: an area of responsibility or a grouping of naturally coherent concepts.\nBusiness Entity: a business entity encapsulates data with common characteristics. It is used to align, Data Governance, Data Flow Diagrams, Integration, Conceptual Models and Logical Models, Data Sources.\nBusiness Term: the definition of key business information that is used in day-to-day business operations and analysis. Business terms also help to provide the link from information to the underlying data.\nData: any recorded information and can include technical data, computer software documents, financial information, management information, representation of facts, numbers, or datum of any nature that can be communicated, stored, and processed.\nData attribute: this is the smallest unit of data, the column or field level in tables and files.\nData classification: Is the process of separating and organizing data into relevant groups (“classes”) based on their shared characteristics, such as their level of sensitivity, the risks they present, and could be the compliance regulations that protects the data.\nData governance framework: is a structured approach that ensures data assets are managed effectively, efficiently, securely, and in compliance with relevant regulations and policies. It encompasses the processes, roles, policies, standards, and technologies.\nData set: the collection of data attributes within a business context. A data set may be in the format of a flat file, database table, report, application programming interface (API), etc.\nEnterprise Information Model: La Trobe’s Enterprise Information Model is derived from the Higher Education Data Reference Model published by the Council of Australasian University Directors of Information Technology (CAUDIT). It defines our foundation, enabling and core business domains to allow further data categorizing into each domain’s business entities. It provides a reference point for all data management activities.\nHealth information: health information has the meaning set out in the\nHealth Records Act 2001 (Vic)\n. Health information is personal information: about the physical, mental or psychological health or disability of an individual; about an individual’s expressed wishes regarding the future provision of health services to them; about a health service provided, or to be provided, to an individual; collected to provide a health service; about an individual collected in connection with organ or body substance donation; or that is genetic information in a form which is or could be predictive of the health of the individual or of their descendants.\nPersonal information: has the meaning set out in the\nPrivacy and Data Protection Act 2014 (Vic)\nand includes information or an opinion (including information or an opinion forming part of a database), whether true or not, and whether recorded in a material form or not, about an individual whose identity is apparent, or can reasonably be ascertained, from the information or opinion.\nSecurity Classification: The process of categorizing information assets based on the level of protection required. This classification helps in determining the appropriate security controls, access restrictions, and protective measures required to safeguard the data from unauthorized access, disclosure, or misuse.\nSensitive information: personal information about an individual’s racial or ethnic origin, political opinions, membership of a political, professional or trade association or trade union, religious beliefs or affiliations, philosophical beliefs, sexual preferences or practices or criminal record.\nSection 8 - Authority and Associated Information\n(29)\nThis Policy is made under the\nLa Trobe University Act 2009\n.\n(30)\nAssociated information includes:\nRecords Management Policy\nInformation Security Policy\nResearch Data Management Policy\nCode of Conduct\nRisk Management Policy\nCritical Incident and Business Continuity Management Policy\nData Governance Framework (under development)"
+}

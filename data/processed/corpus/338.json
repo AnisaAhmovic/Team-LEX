@@ -1,0 +1,259 @@
+{
+    "document_id": "338",
+    "policy_title": "Assessment Procedure - Examinations",
+    "document_type": "Procedure",
+    "source_url": "https://policies.latrobe.edu.au/document/view.php?id=338",
+    "discovery_source_url": "https://policies.latrobe.edu.au/browse",
+    "status_details_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=338",
+    "source_system": "La Trobe University Policy Library",
+    "retrieved_at": "2026-09-09T07:59:23.984593+00:00",
+    "status": "Current",
+    "effective_date": "29th July 2025",
+    "review_date": "29th July 2028",
+    "approval_authority": "Academic Board",
+    "approval_date": "29th July 2025",
+    "version": null,
+    "headings": [
+        {
+            "level": "h1",
+            "text": "Section 1 - Key Information"
+        },
+        {
+            "level": "h1",
+            "text": "Section 2 - Purpose"
+        },
+        {
+            "level": "h1",
+            "text": "Section 3 - Scope"
+        },
+        {
+            "level": "h1",
+            "text": "Section 4 - Key Decisions"
+        },
+        {
+            "level": "h1",
+            "text": "Section 5 - Policy Statement"
+        },
+        {
+            "level": "h1",
+            "text": "Section 6 - Procedures"
+        },
+        {
+            "level": "h2",
+            "text": "Part A - Classification of Assessment Types"
+        },
+        {
+            "level": "h2",
+            "text": "Part B - Overview of Responsibilities"
+        },
+        {
+            "level": "h2",
+            "text": "Part C - Reasonable Adjustments"
+        },
+        {
+            "level": "h3",
+            "text": "Central Examinations"
+        },
+        {
+            "level": "h3",
+            "text": "Other Examinations"
+        },
+        {
+            "level": "h2",
+            "text": "Part D - Format of Examinations"
+        },
+        {
+            "level": "h2",
+            "text": "Part E - Scheduling and Publication"
+        },
+        {
+            "level": "h3",
+            "text": "Central and Scheduled-Only Examinations"
+        },
+        {
+            "level": "h3",
+            "text": "Partner Examinations"
+        },
+        {
+            "level": "h3",
+            "text": "Considerations in Scheduling – All Examinations"
+        },
+        {
+            "level": "h3",
+            "text": "Reading Time"
+        },
+        {
+            "level": "h3",
+            "text": "Information to Students"
+        },
+        {
+            "level": "h2",
+            "text": "Part F - Examination Preparation"
+        },
+        {
+            "level": "h3",
+            "text": "Central Examinations"
+        },
+        {
+            "level": "h3",
+            "text": "Other Examinations"
+        },
+        {
+            "level": "h2",
+            "text": "Part G - Security of Examination Instruments"
+        },
+        {
+            "level": "h3",
+            "text": "Onsite Examinations"
+        },
+        {
+            "level": "h3",
+            "text": "Central Examinations – Onsite"
+        },
+        {
+            "level": "h3",
+            "text": "Other Examinations – Onsite"
+        },
+        {
+            "level": "h3",
+            "text": "All Online Examinations"
+        },
+        {
+            "level": "h2",
+            "text": "Part H - Breaches of Security"
+        },
+        {
+            "level": "h3",
+            "text": "Central Examinations"
+        },
+        {
+            "level": "h3",
+            "text": "Other Examinations"
+        },
+        {
+            "level": "h2",
+            "text": "Part I - Responsibilities of Examination Supervisors and Academic Supports"
+        },
+        {
+            "level": "h3",
+            "text": "All Central Examinations"
+        },
+        {
+            "level": "h4",
+            "text": "Onsite Central Examinations"
+        },
+        {
+            "level": "h4",
+            "text": "Online Central Examinations"
+        },
+        {
+            "level": "h3",
+            "text": "Other Examinations"
+        },
+        {
+            "level": "h2",
+            "text": "Part J - Disruptions to Examinations"
+        },
+        {
+            "level": "h3",
+            "text": "Individual Students in Central Examinations"
+        },
+        {
+            "level": "h3",
+            "text": "Broader Disruptions to Central Examinations"
+        },
+        {
+            "level": "h4",
+            "text": "Onsite Examinations"
+        },
+        {
+            "level": "h4",
+            "text": "Online Examinations"
+        },
+        {
+            "level": "h3",
+            "text": "Other Examinations"
+        },
+        {
+            "level": "h2",
+            "text": "Part K - Concluding Examinations"
+        },
+        {
+            "level": "h3",
+            "text": "Central Examinations – Onsite"
+        },
+        {
+            "level": "h3",
+            "text": "Central Examinations – Online"
+        },
+        {
+            "level": "h3",
+            "text": "Other Examinations"
+        },
+        {
+            "level": "h2",
+            "text": "Part L - Student Responsibilities"
+        },
+        {
+            "level": "h3",
+            "text": "Central Examinations"
+        },
+        {
+            "level": "h3",
+            "text": "Other Examinations"
+        },
+        {
+            "level": "h2",
+            "text": "Part M - Academic Misconduct"
+        },
+        {
+            "level": "h3",
+            "text": "Central Examinations"
+        },
+        {
+            "level": "h4",
+            "text": "Onsite Examinations"
+        },
+        {
+            "level": "h4",
+            "text": "Online Examinations"
+        },
+        {
+            "level": "h3",
+            "text": "Scheduled-Only Examinations"
+        },
+        {
+            "level": "h3",
+            "text": "Partner Examinations"
+        },
+        {
+            "level": "h2",
+            "text": "Part N - Quality Assurance of Examinations"
+        },
+        {
+            "level": "h2",
+            "text": "Part O - Retention of Examination and Related Material"
+        },
+        {
+            "level": "h3",
+            "text": "Examination Material"
+        },
+        {
+            "level": "h3",
+            "text": "Recordings and Personal Information – Online Proctored Examinations"
+        },
+        {
+            "level": "h2",
+            "text": "Part P - Review"
+        },
+        {
+            "level": "h1",
+            "text": "Section 7 - Definitions"
+        },
+        {
+            "level": "h1",
+            "text": "Section 8 - Authority and Associated Information"
+        }
+    ],
+    "content": "Section 1 - Key Information\nPolicy Type and Approval Body\nAcademic – Academic Board\nAccountable Executive – Policy\nDeputy Vice-Chancellor (Academic)\nResponsible Manager – Policy\nPro Vice-Chancellor (Learning and Teaching)\nReview Date\n29 August 2028\nSection 2 - Purpose\n(1)\nThis Procedure establishes the authority, roles and responsibilities for the conduct and management of examinations for coursework subjects.\nSection 3 - Scope\n(2)\nThis Procedure applies to examinations in non-thesis coursework subjects.\n(3)\nAn examination is a type of Supervised Assessment and may be onsite or online. While an examination may be conducted by Academic Services (Central Examination), a La Trobe school or a third-party teaching partner, by definition all examinations must:\nbe scheduled during the Final Assessment Period;\ntake place in a controlled setting such as an exam hall, classroom or online environment where students complete tasks under direct supervision, including with online proctors;\nbe time-limited.\n(4)\nThe following assessment activities are not included in the scope of this Procedure:\n‘Tests’ that are run by schools or Partners during teaching periods;\nany other types of assessment tasks that have due dates during the Final Assessment Period.\n(5)\nFor provisions in relation to Supplementary and Alternative examinations see\nAssessment Procedure - Adjustments (including Special Consideration)\n.\nSection 4 - Key Decisions\nKey Decisions\nRole\nApprove changes to examinations following quality assurance.\nDean or nominee\nDecision whether to proceed with an examination where major errors are discovered during reading time.\nSubject Coordinator or the relevant Associate Dean (Learning and Teaching)\nDetermine appropriate action following a disruption to an onsite examination in progress.\nManager, Academic Services\nDetermine appropriate action following a disruption to an online examination in progress.\nAssociate Dean (Learning and Teaching)\nDetermine appropriate action following a security breach in an examination.\nAssociate Dean (Learning and Teaching)\nSection 5 - Policy Statement\n(6)\nThis Procedure forms part of the\nAssessment Policy\nsuite which governs its application.\nSection 6 - Procedures\nPart A - Classification of Assessment Types\n(7)\nAssessment activities in subjects are classified by type in the University’s course database when new subjects are proposed or existing subjects are amended. The examinations governed by this Procedure are classified into three sub-types:\nCentral Examination – an examination scheduled and conducted by Academic Services in the Final Assessment Period;\nScheduled-Only Examination - an examination scheduled by Academic Services but conducted by a school in the Final Assessment Period;\nPartner Examination – an examination scheduled and conducted by a third-party teaching partner in the Final Assessment Period.\n(8)\nOther database categories (such as Test) in the course database must be selected for assessment activities that do not meet the definition of an examination.\n(9)\nThe Subject Coordinator is responsible for determining whether an assessment activity is appropriately classified as an examination, in accordance with guidelines approved by the Pro Vice-Chancellor (Learning and Teaching).\nPart B - Overview of Responsibilities\n(10)\nThe organisers responsible for the scheduling, conduct and coordination of supervision of examinations are as follows:\nExamination Sub-Type\nFormat\nResponsibility for Scheduling\nResponsibility for Conduct\nResponsibility for Coordinating Supervision*\nCentral Examination\nOnsite/Online\nAcademic Services\nAcademic Services\nAcademic Services\nScheduled-Only Examination\nOnsite/Online\nAcademic Services\nSchool\n(Subject and Course Coordinators)\nSchool\n(Subject and Course Coordinators)\nPartner Examination\nOnsite/Online\nPartner\nPartner\nPartner\n* Includes the use of external contractors or proctors as appropriate.\nPart C - Reasonable Adjustments\n(11)\nStudents with a medical condition, including a mental health condition or a disability, may be eligible to have Reasonable Adjustments (RAs) applied to their arrangements for any required examination. RAs must be documented in a Learning Access Plan (LAP) by a student advisor within the Student Advising Team.\nCentral Examinations\n(12)\nLAPs, or changes to existing LAPs, must be completed by the following deadlines in order for RAs to be provided for examinations:\nfor semester-based subjects four (4) weeks prior to the Final Assessment Period;\nfor term-based subjects three (3) weeks prior to the Final Assessment Period.\n(13)\nAcademic Services, in collaboration with staff from the Student Advising Team, is responsible for arranging RAs for Central Examinations, including requirements for specific scheduling, booking of isolation rooms, or additional printing. Subject/Instance Coordinators are required to assist where an RA includes an alternative assessment mode or instrument.\nOther Examinations\n(14)\nThe responsibility for arranging RAs for other examinations is as follows:\nSubject Coordinators, in collaboration with advisors from the Student Advising Team, are responsible for arranging RAs for Scheduled-Only Examinations conducted by schools;\nthe delivery partner is responsible for arranging RAs for examinations for students enrolled in La Trobe subjects delivered by a third party.\nPart D - Format of Examinations\n(15)\nThe format of an examination is determined by the Subject Coordinator, for all examinations conducted by La Trobe, or by the Partner as appropriate. The following protocols apply:\nwhere a subject has any online delivery instance in a given teaching period the examination must be held online and students must undertake the examination from home or other suitable venue of their choice. A suitable venue is one that is quiet, well-lit and where a student will not be disturbed during their examination.\nwhere a subject is only delivered in face-to-face mode in a given teaching period schools may choose whether an examination is to be offered online or onsite;\nwhere required by an external accreditation body an examination will be held face-to-face, irrespective of the subject delivery mode.\n(16)\nWhen the format of an examination has been determined all students must undertake the examination in that format, with the exception of students with a LAP that includes relevant RAs.\nPart E - Scheduling and Publication\nCentral and Scheduled-Only Examinations\n(17)\nAcademic Services is responsible for producing and publishing the timetables for main and Supplementary Examination periods for Central and Scheduled-Only Examinations in accordance with scheduling requirements submitted by schools.\nPartner Examinations\n(18)\nUnder third-party teaching arrangements, delivery partners are responsible for:\nscheduling their examinations, in consultation with the La Trobe University (LTU) Academic Program Director, wherever possible at the same date and time as the La Trobe examination for that subject;\nliaising with the LTU Academic Program Director to confirm the use of an alternative examination, where synchronous scheduling is not possible;\npublishing the third-party examination timetable and communicating arrangements to students;\ncommunicating with affected students via email regarding arrangements for any Supplementary Hurdle or Special Examination.\nConsiderations in Scheduling – All Examinations\n(19)\nExaminations for subjects with high enrolment numbers, excluding those which consist entirely of multiple-choice questions, are scheduled early in the Final Assessment Period where possible to enable marking to be completed by the official date for release of results.\n(20)\nA student may have a maximum of two examinations scheduled for the same day.\n(21)\nWhen Academic Services (or a Partner as appropriate) becomes aware of a clash of examination schedules for individual students, they will notify students of the required arrangements and alternative examination times by e-mail and SMS, giving as much notice as possible and, in the case of a major change (e.g., day, time, length), at least five (5) calendar days in advance.\nReading Time\n(22)\nReading time is allowed for at the start of the majority of onsite examinations and is either 15 minutes or 30 minutes in duration, depending on the nature of the examination.\n(23)\nIf reading time is required for an online examination Subject Coordinators (or a Partner as appropriate) must extend the total duration of the examination by the required time.\n(24)\nThe times listed on the examination timetable will be displayed in 24-hour clock format and denote:\nfor onsite examinations commencement of reading time and duration;\nfor online examinations the commencement time (including onboarding and reading time) and duration.\nInformation to Students\n(25)\nGeneral information about examinations for each subject is published in the relevant Subject Learning Guide on the LMS before the commencement of the relevant teaching period. Specific examination arrangements are published prior to the Final Assessment Period in the Examination Timetable or in the LMS as appropriate.\nPart F - Examination Preparation\nCentral Examinations\n(26)\nThe Subject Coordinator or nominee must prepare two (2) examinations for each examination which includes a main examination and a Special/Supplementary examination, except in the following circumstances:\nSpecial/Supplementary examinations for online examinations will be requested by Academic Services when required;\nadditional examinations are required when specific cohorts, such as offshore students, sit an examination at a different time to the main cohort of students.\n(27)\nAll examinations for Central Examinations (onsite and online) must be submitted to Academic Services by the respective nominated deadlines. Schools are responsible for creating online examinations in the LMS and undertaking all required preparations in advance of the scheduled date, including access arrangements.\n(28)\nWhere an examination is not submitted by the due date, the examination will be withdrawn from the central Examination Timetable and the relevant school must then manage the examination administration and communications to students.\nOther Examinations\n(29)\nThe responsibility for the preparation of other examinations lies with the school or Partner.\n(30)\nWhere any students sitting an alternative examination with a Partner are subsequently awarded an SPE grade (see\nAssessment Procedure - Grades and Administrative Codes\n), the Subject Coordinator must provide a new examination for the Special/Supplementary examination period.\nPart G - Security of Examination Instruments\n(31)\nStaff involved with any aspect of the examination process must observe the following protocols:\nexaminations may not be released to unauthorised personnel;\nexaminations may not be released to students in advance of the scheduled examination time;\nstrict security protocols must be observed in the writing, collating, assuring and communication of examination questions and solutions, both physically and online. This includes adopting measures such as using password-protected files and not sharing relevant files on open repositories.\nOnsite Examinations\n(32)\nPapers for onsite examinations must be securely stored whether by Academic Services, schools or Partners. This requires:\nsecure processes for handling examination papers while they are in the control of school staff, both on University premises and outside the University;\nthe provision of secure storage facilities at onsite examination venues, both campus-based and those external to the University, from the time of receipt of materials until the conclusion of the examination period;\ntransportation by a secure door-to-door courier service approved by the University for examinations held in external locations by La Trobe;\nthe maintenance of secure archives in schools for all examination papers.\nCentral Examinations – Onsite\n(33)\nWhere examination papers for onsite Central Examinations are dispatched to regional campuses or sites there must be:\nsystematic recording by Academic Services of all materials dispatched;\ndaily return by the Chief Invigilator of completed examination question papers, answer booklets and related materials to Academic Services;\na reconciliation by Academic Services of returned documents, including spare or unused examination papers, against dispatch lists, with advice provided to the Manager, Academic Services and the Subject Coordinator of any discrepancy found in the reconciliation.\n(34)\nA collection officer must be named and authorised to collect examination material for specified subjects.\n(35)\nAuthorised collection officers will use suitable identification, such as a University Staff Card, before counting and signing for the number of secure packages and examination paper answer booklets.\n(36)\nExamination papers, materials and examination paper answer booklets will only be released to authorised collection officers.\nOther Examinations – Onsite\n(37)\nThe responsibility for all aspects of the distribution of examination papers and associated materials for other examinations lies with the school or Partner as appropriate.\n(38)\nLTU Academic Program Directors are responsible for periodic audit checks on Partner examination storage facilities, and on the access rights applied to storage facilities and examination venues, to ensure adherence to these Procedures.\nAll Online Examinations\n(39)\nSchools and partners are responsible for ensuring in advance that online examinations will be released at the scheduled examination time via the LMS/assessment platform to ensure appropriate security.\nPart H - Breaches of Security\nCentral Examinations\n(40)\nWhere a staff member of the University or an authorised supervisor/proctor has reason to believe that the security or academic integrity of an examination paper has been compromised, the matter must be reported to the Manager, Academic Services either directly (online examinations) or via the Session Report (onsite examinations).\n(41)\nIf a security breach has been identified and the examination has not yet taken place, Academic Services or the authorised supervisor may request a replacement examination be issued by the Subject Coordinator, taking into account:\nwhether the examination has been dispatched to examination locations;\nthe number of locations at which the examination is scheduled, both on and off campus, nationally and overseas;\nthe number of students scheduled to sit the examination;\nthe duration of time before the scheduled examination;\nany other relevant matters.\n(42)\nDepending on the nature of the breach, it may be appropriate to replace the paper only at certain locations in which case the Subject Coordinator must carefully monitor comparability in difficulty and student performance.\n(43)\nIf a security breach has been identified and the examination has already taken place with no replacement paper issued:\nfor an onsite examination the Chief Examination Supervisor will advise the Subject Coordinator and the Manager, Academic Services;\nfor an online examination, the Subject Coordinator will advise the Manager, Academic Services;\nthe Associate Dean (Learning and Teaching) will review the marks and take appropriate action.\n(44)\nWhen a security breach has been identified Academic Services will advise students of any change to or delay in finalising examination assessment, and the details of any alternate or additional assessment that may be required.\n(45)\nWhen any alternate or additional assessment has been completed, students must check their results via StudentOnline.\n(46)\nAny breach of examination security or any act that jeopardises the integrity of examinations will be dealt with under the relevant University legislation, policies and procedures for staff or student misconduct and discipline.\nOther Examinations\n(47)\nThe responsibility for managing breaches of security in school- and Partner-run examinations lies with the respective parties.\nPart I - Responsibilities of Examination Supervisors and Academic Supports\nAll Central Examinations\n(48)\nAcademic staff or current students are not permitted to be examination supervisors or Chief Examination Supervisors for Central Examinations.\n(49)\nSubject Coordinators and an additional academic, nominated by the Subject Coordinator in the event the Subject Coordinator cannot be reached, must be available by phone for the duration of the examination.\n(50)\nExamination supervisors and proctors will perform the following checks prior to students undertaking their examination:\nidentity checks of each student as outlined on the\nExams webpage\n;\nin the case of an online examination a check and/or limit of students’ immediate physical and virtual workspace as part of the onboarding process for the examination.\n(51)\nIn addition to these Procedures, examination supervisors must comply with rules detailed in the Examination Invigilator Manual.\nOnsite Central Examinations\n(52)\nAn examination supervisor is normally appointed for every 50 candidates at an examination venue.\n(53)\nOne Chief Examination Supervisor, who is responsible for the set up and administration of the examination(s) within the venue, is assigned per examination venue.\nOnline Central Examinations\n(54)\nAll Central Examinations conducted online are supervised by an external proctoring service contracted by the University. External proctoring services are required to comply with this Policy as part of the terms of their contract with the University.\n(55)\nThe ratio of examination supervisors or proctors per group of examination candidates by type of examination is determined by Academic Services, depending on the assessment of the level of risk presented by the type of examination. This ratio is validated by the Deputy Vice-Chancellor (Academic).\nOther Examinations\n(56)\nThe responsibility for arranging supervision for Scheduled-Only and Partner examinations lies with the respective parties. Academic staff may supervise examinations in these circumstances.\nPart J - Disruptions to Examinations\nIndividual Students in Central Examinations\n(57)\nStudents who require a break during an examination do not receive any additional time for their examination. Absences are recorded as follows:\nonsite examinations - Examination Supervisors will record in the Session Report the time and student ID for any occasion a student enters or leaves the onsite examination venue;\nonline examinations - supervisors will record the time, student ID and the duration of absence for any occasion where a student leaves the online supervised session, requesting verification of identity of students upon their return to the session.\n(58)\nStudents who experience technical difficulties during an online examination should contact Student IT Support.\n(59)\nStudents who find they are unable to proceed with an examination in any mode due to technical difficulties, or other disruptions outside their control such as illness, will need to provide evidence of such when they apply for Special Consideration (see section on Student Responsibilities in this procedure and the\nAssessment Procedure - Adjustments to Assessment (incorporating Special Consideration)\n.\nBroader Disruptions to Central Examinations\nOnsite Examinations\n(60)\nWhere minor errors are discovered in examination papers during reading time the error is noted and students are advised to answer the relevant questions to the best of their ability. Where major issues are discovered, Academic Services will contact the Subject Coordinator or relevant Associate Dean (Learning and Teaching) to determine whether to proceed with the examination, or whether the examination needs to cease and be rescheduled. Following approval from the Associate Dean (Learning and Teaching) or their nominee, Academic Services will ensure the outcome is communicated to other venues and campuses where the same examination is being held.\n(61)\nIf an on-site examination is disrupted for 30 minutes or more, the Chief Examination Supervisor and Manager, Academic Services will determine whether the examination may be:\ncontinued, with an adjustment made up to the length of the disruption;\nconsidered completed and examination papers may be marked; or\nabandoned and rescheduled, with students notified about new arrangements via email and/or SMS within 24 hours of the abandoned examination.\n(62)\nIf the start time of an onsite examination is delayed for up to 30 minutes, the concluding time of the examination may only be extended by the amount of the delay.\nOnline Examinations\n(63)\nWhere errors are discovered in online examinations, or the examination is disrupted for 30 minutes or more, the external proctor will advise Academic Services who will liaise with the relevant Associate Dean (Learning and Teaching) or their nominee to determine the best course of action. Depending on the circumstances this may include rescheduling the examination, extending the duration of the examination by an appropriate time, or organising a Supplementary Examination for an affected cohort.\n(64)\nOnline examinations that are unable to be conducted at the scheduled time due to a major disruption or outage are rescheduled to a later date.\n(65)\nWhere it is determined that an online examination is to be rescheduled, Academic Services will ensure that students are notified via email and/or SMS regarding the new arrangements within 24 hours through the Student Communications Team. Where an examination is to be extended proctors will advise students during the examination.\nOther Examinations\n(66)\nThe responsibility for managing disruptions during Scheduled-Only and Partner examinations lies with the respective parties.\nPart K - Concluding Examinations\nCentral Examinations – Onsite\n(67)\nExamination Supervisors will give a time warning 15 minutes before the end of the examination.\n(68)\nOnly authorised staff are permitted to remove examination papers, materials, and answer booklets from the examination venue.\n(69)\nAll unused examination papers are to remain in secure storage in accordance with the\nRecords Management Policy\n.\nCentral Examinations – Online\n(70)\nStudents undertaking an online examination must refer to the countdown timer in the LMS for the remaining time for the examination.\nOther Examinations\n(71)\nThe responsibility for managing the conclusion of Scheduled-Only and Partner examinations lies with the respective parties.\nPart L - Student Responsibilities\nCentral Examinations\n(72)\nInformation about examination arrangements will not be given over the phone by Academic Services or ASK La Trobe. Students are responsible for:\nmonitoring the Examination Timetable;\nknowing the location, time, date, and mode of delivery of their examination;\nknowing what materials will be allowed in the examination as published on the Examination Timetable or LMS.\n(73)\nStudents must be available for the entire duration of official examination periods, including Supplementary Hurdle and Special Examination periods.\n(74)\nStudents are expected to:\ncomplete their examination in the manner prescribed within the instructions for the examination they are undertaking and the broader rules for student conduct during examinations as outlined on the\nExams webpage\n;\nobserve the principles of academic integrity as outlined in the\nStudent Academic Misconduct Policy\nat all times prior to or during the examination.\n(75)\nFor an examination conducted online, students are required to:\ncomplete any practice tests prior to the examination to ensure they can access the internet and LMS and resolve any sanctions or technical issues that may block access to the LMS. Such technical issues may not be used as grounds for Special Consideration where students have not undertaken the practice test.\nlog in to the LMS at the scheduled start time (see the\nSupervised Online Exams webpage\n);\nshow their immediate workspace and the room in which they are undertaking the examination to the examination supervisor prior to the commencement of the examination and at any point where the supervisor has any concerns that the conditions of the examination may have been breached;\nallow the examination supervisor to view their on-screen activities and to turn off any software applications or functions that are not permitted during the examination;\nremain logged in and abide by any other advised conditions for the duration of the examination unless they experience exceptional circumstances such as technical difficulties or unforeseen illness.\nOther Examinations\n(76)\nThe responsibility for informing students of their responsibilities for Scheduled-Only and Partner examinations lies with the respective parties.\nPart M - Academic Misconduct\n(77)\nAcademic Misconduct is defined in the\nAcademic Integrity Statute 2015\nand further outlined in the\nStudent Academic Misconduct Policy\n. In addition to other forms of academic misconduct that may take place in an examination it is considered an act of academic misconduct to have, access or use any material, computer program or item not allowed under the instructions for that examination, whether or not it is with the intention of using it to gain an advantage.\nCentral Examinations\nOnsite Examinations\n(78)\nExamination Supervisors will confiscate or record evidence of any unauthorised materials being used in an examination or any article which the Supervisor reasonably believes is evidence of academic misconduct.\n(79)\nWhen items are confiscated the Chief Examination Supervisor will return the items to the student at the end of the exam, unless an item is considered relevant to academic or general misconduct proceedings, in which case the item may be kept until investigations have concluded.\n(80)\nWhen academic misconduct is suspected, an Examination Supervisor:\nmay take photos of unauthorised materials, electronic screens and notes written on a student’s person where appropriate;\nmust advise the student that the matter will be reported to the University;\nmust complete an Examination Misconduct Report, which will:\ndescribe the conduct that the Supervisor believes constitutes academic misconduct;\ninclude any confiscated items or photos taken of this item or describe the item or conduct;\nrecord if a student refuses to surrender any article or thing which the Supervisor reasonably requires.\n(81)\nIncidents of alleged academic misconduct will be referred by the Chief Examination Supervisor and/or the Manager, Academic Services for further action in accordance with the\nStudent Academic Misconduct Policy\n.\nOnline Examinations\n(82)\nProctors may contact students via a chat facility during the examination to establish the facts around an exhibited behaviour or use of unauthorised materials/resources.\n(83)\nProctors will record and flag evidence of any unauthorised materials being used in an examination or any article which the supervisor reasonably believes is evidence of academic misconduct, as well as behaviours that are contrary to instructions provided to students.\nScheduled-Only Examinations\n(84)\nAllegations of academic misconduct in Scheduled-Only examinations are reported directly to the Academic Integrity Unit for investigation in accordance with the\nStudent Academic Misconduct Policy\n.\nPartner Examinations\n(85)\nThe responsibility for managing academic misconduct during partner-run examinations lies with the Partner.\nPart N - Quality Assurance of Examinations\n(86)\nExaminations must be quality-assured for both content and non-content aspects.\n(87)\nNon-content quality assurance includes cross referencing the publication of and access to allowable materials, and, where relevant, confirming the correct number of pages and that the print quality is acceptable, including that of specialised fonts. This is the responsibility of:\nAcademic Services for Central Examination papers;\nschools for Scheduled-Only Examination papers;\nPartners for examinations conducted at their sites.\n(88)\nSchools and Partners are also responsible for ensuring that examinations administered by them comply with the\nAssessment Policy\nand all associated procedures.\n(89)\nAny proposed changes to examinations following quality assurance by relevant staff, other than formatting changes, must be authorised by the Dean or their nominee, or their equivalent in the Partner organisation.\nPart O - Retention of Examination and Related Material\nExamination Material\n(90)\nAssessment records must be retained according to the University’s\nRecords Management Policy\nand relevant state legislation. In relation to examinations this means that:\nthe University must retain master sets of examinations for a period of seven years;\nschools and Partners must retain the following in a secure repository:\ndraft examination material for one year;\ncompleted examinations that have not been through an appeal process for a minimum of six months after completion of the grading process;\ncompleted examinations that have been through an appeals process for a minimum of six months after the conclusion of the appeal process.\nRecordings and Personal Information – Online Proctored Examinations\n(91)\nAll students are recorded throughout the onboarding process and for the duration of their online supervised examination.\n(92)\nRecordings and personal information captured for the purpose of supervision of an online examination are stored securely by the contracted proctoring service for three (3) months and are then archived. Recordings are held securely on La Trobe University servers for up to two (2) years.\n(93)\nRecordings (including on the LMS) may only be accessed by authorised La Trobe staff for the purposes of investigating potential breaches of academic integrity or for records management.\nPart P - Review\n(94)\nStudents who are dissatisfied with the application of any part of this Procedure should raise their concerns in the first instance through\nASK La Trobe\n.\n(95)\nStudents who are still dissatisfied with the outcome of any initial review may lodge a complaint with the University Ombudsman under the terms of the\nOmbudsman Statute 2009\n.\n(96)\nStudents are also eligible to lodge a complaint with the\nNational Student Ombudsman\n.\nSection 7 - Definitions\n(97)\nFor the purpose of this Procedure:\nexamination: an assessment task that is time-limited, supervised, and conducted during the Final Assessment Period. Sub-types include:\nCentral Examination: an examination that is both scheduled and conducted by Academic Services;\nPartner Examination: an examination that is scheduled and conducted by a third-party teaching partner;\nScheduled-Only Examination: an examination that is scheduled by Academic Services but conducted by a school of the University;\nexamination paper: physical (paper) or digital document containing instructions and questions and used as a test deployed under examination conditions;\nFinal Assessment Period: the period after the end of the teaching period in which examinations and centrally scheduled assessments are conducted;\ninvigilator/supervisor: a person who has responsibility for the active supervision of an examination for its duration;\nPartner: a third party teaching partner teaching La Trobe subjects and students;\nproctor: an authorised person or service providing supervision/invigilation of students completing an online examination;\nSupervised Assessment: an evaluation of student learning conducted in a controlled setting, such as an exam hall, classroom, or online environment with proctoring, where students complete tasks under direct supervision. These assessments are primarily used for measuring Course Learning Outcomes and are designed to ensure academic integrity through identity verification measures. Access to external resources and unapproved technology is restricted, minimising the risk of academic misconduct.\nTest: a test, quiz or similar question-based activity conducted during a teaching period;\nUnsupervised Assessment: an evaluation conducted in a flexible environment, such as at home or in an unsupervised setting where students complete tasks independently or in a group. These assessments typically allow access to resources such as AI, textbooks, notes or online tools, supporting self-directed learning and application of knowledge.\nSection 8 - Authority and Associated Information\n(98)\nThis Procedure is made under the\nLa Trobe University Act 2009\n.\n(99)\nAssociated information includes:\nExams webpage\n;\nRecords Management Policy\n;\nGuidelines and templates on the Assessment Policy intranet\n."
+}

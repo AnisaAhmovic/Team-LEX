@@ -111,6 +111,16 @@ def process_policy(
     response = requests.get(policy_url, timeout=30)
     response.raise_for_status()
 
+    # Confirm that retrieval remained within the authoritative Policy Library.
+    final_host = requests.utils.urlparse(response.url).hostname
+
+    if final_host != "policies.latrobe.edu.au":
+        raise ValueError(
+            f"Authoritative source access restricted or redirected "
+            f"outside the Policy Library for document {document_id}. "
+            f"Final host: {final_host}"
+        )
+
     # 2. Parse the returned HTML
     soup = BeautifulSoup(response.text, "html.parser")
 
