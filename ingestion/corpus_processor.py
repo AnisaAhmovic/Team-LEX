@@ -1,5 +1,5 @@
 """
-Project Lex - COPL-276
+Project Lex - COPL-276 / COPL-277
 
 Generalised corpus input for the La Trobe University Policy Library.
 
@@ -7,6 +7,7 @@ Loads documents discovered by the systematic discovery process from the
 corpus manifest and converts them into processing inputs for the reusable
 Sprint 3 policy processor.
 
+Discovery provenance is carried through the corpus processing interface.
 La Trobe document_id remains the authoritative document identity.
 """
 
@@ -51,12 +52,15 @@ def build_processing_input(document):
     """
     Convert one discovered document record into processor input.
 
-    The output filename is derived from the authoritative La Trobe document_id
+    The authoritative document identity, source URL and discovery provenance
+    are retained. The output filename is derived from the La Trobe document_id
     rather than from the document title.
     """
 
     document_id = document.get("document_id")
     source_url = document.get("source_url")
+    document_type = document.get("document_type")
+    discovery_source_url = document.get("discovery_source_url")
 
     if not document_id:
         raise ValueError("Corpus document is missing document_id.")
@@ -66,11 +70,23 @@ def build_processing_input(document):
             f"Corpus document {document_id} is missing source_url."
         )
 
+    if not document_type:
+        raise ValueError(
+            f"Corpus document {document_id} is missing document_type."
+        )
+
+    if not discovery_source_url:
+        raise ValueError(
+            f"Corpus document {document_id} is missing discovery_source_url."
+        )
+
     output_file = CORPUS_OUTPUT_DIRECTORY / f"{document_id}.json"
 
     return {
         "document_id": document_id,
         "policy_url": source_url,
+        "document_type": document_type,
+        "discovery_source_url": discovery_source_url,
         "output_file": str(output_file)
     }
 
@@ -90,8 +106,8 @@ def process_corpus_document(processing_input):
     """
     Process one corpus document using the reusable policy processor.
 
-    This function provides the execution interface for later corpus processing
-    without changing the validated document-processing implementation.
+    Discovery provenance is passed to the processor together with the
+    authoritative document identity and source URL.
     """
 
     CORPUS_OUTPUT_DIRECTORY.mkdir(parents=True, exist_ok=True)
@@ -99,7 +115,9 @@ def process_corpus_document(processing_input):
     return process_policy(
         document_id=processing_input["document_id"],
         policy_url=processing_input["policy_url"],
-        output_file=processing_input["output_file"]
+        output_file=processing_input["output_file"],
+        document_type=processing_input["document_type"],
+        discovery_source_url=processing_input["discovery_source_url"]
     )
 
 
