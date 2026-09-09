@@ -33,9 +33,6 @@ POLICIES = [
     }
 ]
 
-print("Project Lex Multi-Policy Processor")
-print("----------------------------------")
-
 
 def get_status_metadata(document_id):
     """
@@ -90,9 +87,13 @@ def get_status_metadata(document_id):
 
     return metadata
 
+
 def process_policy(document_id, policy_url, output_file):
     """
-    Retrieve, clean and structure one La Trobe policy.
+    Retrieve, clean, structure and persist one La Trobe Policy Library document.
+
+    Returns the structured policy data so the validated Sprint 3 processor can
+    also be reused by the corpus processing pipeline.
     """
 
     print(f"\nRetrieving policy from: {policy_url}")
@@ -115,7 +116,7 @@ def process_policy(document_id, policy_url, output_file):
     policy_title = title_element.get_text(strip=True)
 
     # Retrieve authoritative policy status and currency metadata
-    status_metadata = get_status_metadata(document_id)   
+    status_metadata = get_status_metadata(document_id)
 
     # 4. Locate the actual policy document content
     document_content = soup.find("div", id="sliph-document-content")
@@ -157,21 +158,22 @@ def process_policy(document_id, policy_url, output_file):
 
     # 6. Create structured policy data
     policy_data = {
-    "document_id": document_id,
-    "policy_title": policy_title,
-    "source_url": policy_url,
-    "status_details_url": status_metadata["status_details_url"],
-    "source_system": "La Trobe University Policy Library",
-    "retrieved_at": datetime.now(timezone.utc).isoformat(),
-    "status": status_metadata["status"],
-    "effective_date": status_metadata["effective_date"],
-    "review_date": status_metadata["review_date"],
-    "approval_authority": status_metadata["approval_authority"],
-    "approval_date": status_metadata["approval_date"],
-    "version": status_metadata["version"],
-    "headings": headings,
-    "content": clean_policy_text
-}
+        "document_id": document_id,
+        "policy_title": policy_title,
+        "source_url": policy_url,
+        "status_details_url": status_metadata["status_details_url"],
+        "source_system": "La Trobe University Policy Library",
+        "retrieved_at": datetime.now(timezone.utc).isoformat(),
+        "status": status_metadata["status"],
+        "effective_date": status_metadata["effective_date"],
+        "review_date": status_metadata["review_date"],
+        "approval_authority": status_metadata["approval_authority"],
+        "approval_date": status_metadata["approval_date"],
+        "version": status_metadata["version"],
+        "headings": headings,
+        "content": clean_policy_text
+    }
+
     # 7. Save the structured output
     with open(output_file, "w", encoding="utf-8") as output:
         json.dump(
@@ -188,14 +190,29 @@ def process_policy(document_id, policy_url, output_file):
     print(f"Clean content characters: {len(clean_policy_text)}")
     print(f"Structured output saved to: {output_file}")
 
-
-# Process every policy in the manifest
-for policy in POLICIES:
-    process_policy(
-        document_id=policy["document_id"],
-        policy_url=policy["url"],
-        output_file=policy["output_file"]
-    )
+    return policy_data
 
 
-print("\nAll selected policies processed successfully.")
+def main():
+    """
+    Process the validated Sprint 3 policy set.
+
+    This preserves the existing Sprint 3 execution behaviour while allowing
+    process_policy() to be imported and reused by the corpus pipeline.
+    """
+
+    print("Project Lex Multi-Policy Processor")
+    print("----------------------------------")
+
+    for policy in POLICIES:
+        process_policy(
+            document_id=policy["document_id"],
+            policy_url=policy["url"],
+            output_file=policy["output_file"]
+        )
+
+    print("\nAll selected policies processed successfully.")
+
+
+if __name__ == "__main__":
+    main()
