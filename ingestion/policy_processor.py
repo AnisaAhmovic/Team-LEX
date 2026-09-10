@@ -34,6 +34,23 @@ POLICIES = [
 ]
 
 
+class AuthoritativeSourceAccessError(ValueError):
+    """
+    Raised when an authoritative Policy Library document cannot be accessed
+    because retrieval is redirected outside the public Policy Library.
+    """
+
+    def __init__(self, document_id, final_host):
+        self.document_id = document_id
+        self.final_host = final_host
+
+        super().__init__(
+            f"Authoritative source access restricted or redirected "
+            f"outside the Policy Library for document {document_id}. "
+            f"Final host: {final_host}"
+        )
+
+
 def get_status_metadata(document_id):
     """
     Retrieve authoritative status and currency metadata
@@ -115,10 +132,9 @@ def process_policy(
     final_host = requests.utils.urlparse(response.url).hostname
 
     if final_host != "policies.latrobe.edu.au":
-        raise ValueError(
-            f"Authoritative source access restricted or redirected "
-            f"outside the Policy Library for document {document_id}. "
-            f"Final host: {final_host}"
+        raise AuthoritativeSourceAccessError(
+            document_id=document_id,
+            final_host=final_host
         )
 
     # 2. Parse the returned HTML
@@ -142,7 +158,8 @@ def process_policy(
 
     if not document_content:
         raise ValueError(
-            f"Policy document content could not be located for document {document_id}."
+            f"Policy document content could not be located for document "
+            f"{document_id}."
         )
 
     # Extract the document heading hierarchy

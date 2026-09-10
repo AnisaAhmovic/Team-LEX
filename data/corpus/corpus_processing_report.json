@@ -1,12 +1,14 @@
 {
-    "started_at": "2026-09-09T23:50:26.341993+00:00",
-    "completed_at": "2026-09-09T23:54:27.305841+00:00",
+    "started_at": "2026-09-10T01:03:51.805076+00:00",
+    "completed_at": "2026-09-10T01:07:45.947106+00:00",
     "documents_attempted": 215,
     "documents_processed": 214,
-    "documents_failed": 1,
+    "documents_access_restricted": 1,
+    "documents_failed": 0,
     "outcome_summary": {
         "Processed": 214,
-        "Failed": 1
+        "Access Restricted": 1,
+        "Failed": 0
     },
     "results": [
         {
@@ -1165,9 +1167,9 @@
             "document_type": "Policy",
             "source_url": "https://policies.latrobe.edu.au/document/view.php?id=268",
             "discovery_source_url": "https://policies.latrobe.edu.au/browse",
-            "status": "Failed",
+            "status": "Access Restricted",
             "output_file": "data\\processed\\corpus\\268.json",
-            "error": "ValueError: Authoritative source access restricted or redirected outside the Policy Library for document 268. Final host: login.microsoftonline.com"
+            "error": "AuthoritativeSourceAccessError: Authoritative source access restricted or redirected outside the Policy Library for document 268. Final host: login.microsoftonline.com"
         },
         {
             "document_id": "418",
