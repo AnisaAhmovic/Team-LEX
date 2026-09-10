@@ -1,5 +1,5 @@
 """
-Project Lex - COPL-276 / COPL-277 / COPL-278
+Project Lex - COPL-276 / COPL-277 / COPL-278 / COPL-279
 
 Corpus processing for the La Trobe University Policy Library.
 
@@ -10,6 +10,8 @@ discovered corpus using the reusable Sprint 3 policy processor.
 Discovery provenance is carried through the corpus processing interface.
 La Trobe document_id remains the authoritative document identity.
 Individual document failures do not stop the remaining corpus from processing.
+Processing outcomes retain discovered document identity and provenance for
+successful and failed documents.
 """
 
 import json
@@ -55,12 +57,13 @@ def build_processing_input(document):
     """
     Convert one discovered document record into processor input.
 
-    The authoritative document identity, source URL and discovery provenance
-    are retained. The output filename is derived from the La Trobe document_id
-    rather than from the document title.
+    The authoritative document identity, title, source URL and discovery
+    provenance are retained. The output filename is derived from the La Trobe
+    document_id rather than from the document title.
     """
 
     document_id = document.get("document_id")
+    policy_title = document.get("policy_title")
     source_url = document.get("source_url")
     document_type = document.get("document_type")
     discovery_source_url = document.get("discovery_source_url")
@@ -87,6 +90,7 @@ def build_processing_input(document):
 
     return {
         "document_id": document_id,
+        "policy_title": policy_title,
         "policy_url": source_url,
         "document_type": document_type,
         "discovery_source_url": discovery_source_url,
@@ -128,7 +132,8 @@ def process_corpus(processing_inputs):
     """
     Process every corpus input while isolating individual document failures.
 
-    Returns a run report containing success and failure details.
+    Returns a run report containing success and failure details together with
+    the discovered identity and provenance of each attempted document.
     """
 
     started_at = datetime.now(timezone.utc).isoformat()
@@ -143,11 +148,16 @@ def process_corpus(processing_inputs):
         )
 
         try:
-            processed_document = process_corpus_document(processing_input)
+            process_corpus_document(processing_input)
 
             results.append({
                 "document_id": document_id,
-                "policy_title": processed_document["policy_title"],
+                "policy_title": processing_input["policy_title"],
+                "document_type": processing_input["document_type"],
+                "source_url": processing_input["policy_url"],
+                "discovery_source_url": processing_input[
+                    "discovery_source_url"
+                ],
                 "status": "Processed",
                 "output_file": processing_input["output_file"],
                 "error": None
@@ -161,7 +171,12 @@ def process_corpus(processing_inputs):
 
             results.append({
                 "document_id": document_id,
-                "policy_title": None,
+                "policy_title": processing_input["policy_title"],
+                "document_type": processing_input["document_type"],
+                "source_url": processing_input["policy_url"],
+                "discovery_source_url": processing_input[
+                    "discovery_source_url"
+                ],
                 "status": "Failed",
                 "output_file": processing_input["output_file"],
                 "error": f"{type(error).__name__}: {error}"
@@ -176,12 +191,18 @@ def process_corpus(processing_inputs):
         for result in results
     )
 
+    outcome_summary = {
+        "Processed": processed_count,
+        "Failed": failed_count
+    }
+
     return {
         "started_at": started_at,
         "completed_at": datetime.now(timezone.utc).isoformat(),
         "documents_attempted": len(processing_inputs),
         "documents_processed": processed_count,
         "documents_failed": failed_count,
+        "outcome_summary": outcome_summary,
         "results": results
     }
 
