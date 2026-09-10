@@ -1,5 +1,5 @@
 """
-Project Lex - COPL-276 / COPL-277 / COPL-278 / COPL-279
+Project Lex - COPL-276 / COPL-277 / COPL-278 / COPL-279 / COPL-280
 
 Corpus processing for the La Trobe University Policy Library.
 
@@ -11,14 +11,17 @@ Discovery provenance is carried through the corpus processing interface.
 La Trobe document_id remains the authoritative document identity.
 Individual document failures do not stop the remaining corpus from processing.
 Processing outcomes retain discovered document identity and provenance for
-successful and failed documents.
+processed, access-restricted and failed documents.
 """
 
 import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from ingestion.policy_processor import process_policy
+from ingestion.policy_processor import (
+    AuthoritativeSourceAccessError,
+    process_policy,
+)
 
 
 CORPUS_MANIFEST_PATH = Path("data/corpus/corpus_manifest.json")
@@ -130,10 +133,11 @@ def process_corpus_document(processing_input):
 
 def process_corpus(processing_inputs):
     """
-    Process every corpus input while isolating individual document failures.
+    Process every corpus input while isolating individual document outcomes.
 
-    Returns a run report containing success and failure details together with
-    the discovered identity and provenance of each attempted document.
+    Returns a run report containing processed, access-restricted and failed
+    outcomes together with the discovered identity and provenance of each
+    attempted document.
     """
 
     started_at = datetime.now(timezone.utc).isoformat()
@@ -163,6 +167,24 @@ def process_corpus(processing_inputs):
                 "error": None
             })
 
+        except AuthoritativeSourceAccessError as error:
+            print(
+                f"Document {document_id} access restricted: {error}"
+            )
+
+            results.append({
+                "document_id": document_id,
+                "policy_title": processing_input["policy_title"],
+                "document_type": processing_input["document_type"],
+                "source_url": processing_input["policy_url"],
+                "discovery_source_url": processing_input[
+                    "discovery_source_url"
+                ],
+                "status": "Access Restricted",
+                "output_file": processing_input["output_file"],
+                "error": f"{type(error).__name__}: {error}"
+            })
+
         except Exception as error:
             print(
                 f"Document {document_id} failed: "
@@ -186,6 +208,10 @@ def process_corpus(processing_inputs):
         result["status"] == "Processed"
         for result in results
     )
+    access_restricted_count = sum(
+        result["status"] == "Access Restricted"
+        for result in results
+    )
     failed_count = sum(
         result["status"] == "Failed"
         for result in results
@@ -193,6 +219,7 @@ def process_corpus(processing_inputs):
 
     outcome_summary = {
         "Processed": processed_count,
+        "Access Restricted": access_restricted_count,
         "Failed": failed_count
     }
 
@@ -201,6 +228,7 @@ def process_corpus(processing_inputs):
         "completed_at": datetime.now(timezone.utc).isoformat(),
         "documents_attempted": len(processing_inputs),
         "documents_processed": processed_count,
+        "documents_access_restricted": access_restricted_count,
         "documents_failed": failed_count,
         "outcome_summary": outcome_summary,
         "results": results
@@ -245,6 +273,10 @@ def main():
     print("\nCorpus processing complete.")
     print(f"Documents attempted: {run_report['documents_attempted']}")
     print(f"Documents processed: {run_report['documents_processed']}")
+    print(
+        "Documents access restricted: "
+        f"{run_report['documents_access_restricted']}"
+    )
     print(f"Documents failed: {run_report['documents_failed']}")
     print(f"Run report: {CORPUS_RUN_REPORT_PATH}")
 
