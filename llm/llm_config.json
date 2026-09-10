@@ -1,0 +1,8 @@
+{
+  "provider": "ollama",
+  "model": "qwen3:4b",
+  "base_url": "http://localhost:11434",
+  "timeout_seconds": 60.0,
+  "keep_alive": "5m",
+  "recorded_at_utc": "2026-09-10T09:52:08.440354+00:00"
+}
