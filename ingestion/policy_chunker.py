@@ -3,19 +3,39 @@ import re
 from pathlib import Path
 
 
-POLICY_FILES = [
-    "data/processed/privacy_policy.json",
-    "data/processed/assessment_policy.json",
-    "data/processed/assessment_standards.json",
-    "data/processed/responsible_ai_adoption_policy.json",
-    "data/processed/student_complaints_management_policy.json"
-]
-
+CORPUS_DIRECTORY = Path("data/processed/corpus")
 OUTPUT_DIRECTORY = Path("data/processed/chunks")
 
 
-print("Project Lex Multi-Policy Hierarchical Chunker")
-print("---------------------------------------------")
+def discover_corpus_files():
+    """
+    Return all processed corpus documents in deterministic document ID order.
+    """
+    files = list(CORPUS_DIRECTORY.glob("*.json"))
+
+    if not files:
+        raise FileNotFoundError(
+            f"No processed corpus documents found in {CORPUS_DIRECTORY}."
+        )
+
+    return sorted(
+        files,
+        key=lambda path: int(path.stem),
+    )
+
+
+def clear_chunk_outputs():
+    """
+    Remove existing chunk JSON files before a full corpus rebuild.
+
+    This prevents stale chunk files from previous runs from remaining in
+    the output directory and creating duplicate or obsolete chunks.
+    """
+    if not OUTPUT_DIRECTORY.exists():
+        return
+
+    for chunk_file in OUTPUT_DIRECTORY.glob("*.json"):
+        chunk_file.unlink()
 
 
 def extract_paragraph_range(text):
@@ -25,7 +45,6 @@ def extract_paragraph_range(text):
     Returns the first and last paragraph numbers found.
     If no numbered paragraphs exist, returns None for both values.
     """
-
     paragraph_numbers = re.findall(r"(?m)^\((\d+)\)$", text)
 
     if not paragraph_numbers:
@@ -40,7 +59,6 @@ def chunk_policy(policy_data):
     """
     Convert one processed policy into hierarchical chunks.
     """
-
     policy_text = policy_data["content"]
     headings = policy_data["headings"]
 
@@ -69,7 +87,6 @@ def chunk_policy(policy_data):
         """
         Save the current chunk and attach its source metadata.
         """
-
         if not current_lines or not current_heading:
             return
 
@@ -148,49 +165,55 @@ def chunk_policy(policy_data):
     return chunks
 
 
-# Create a separate directory for chunk outputs
-OUTPUT_DIRECTORY.mkdir(parents=True, exist_ok=True)
+def main():
+    print("Project Lex Multi-Policy Hierarchical Chunker")
+    print("---------------------------------------------")
 
-total_chunks = 0
+    # Create the chunk output directory and remove stale JSON outputs
+    OUTPUT_DIRECTORY.mkdir(parents=True, exist_ok=True)
+    clear_chunk_outputs()
 
+    corpus_files = discover_corpus_files()
+    total_chunks = 0
 
-# Process every policy
-for policy_file in POLICY_FILES:
+    # Process every corpus document
+    for policy_file in corpus_files:
 
-    with open(policy_file, "r", encoding="utf-8") as input_file:
-        policy_data = json.load(input_file)
+        with open(policy_file, "r", encoding="utf-8") as input_file:
+            policy_data = json.load(input_file)
 
-    chunks = chunk_policy(policy_data)
+        chunks = chunk_policy(policy_data)
 
-    input_path = Path(policy_file)
-
-    output_file = OUTPUT_DIRECTORY / (
-        input_path.stem + "_chunks.json"
-    )
-
-    with open(output_file, "w", encoding="utf-8") as output:
-        json.dump(
-            chunks,
-            output,
-            ensure_ascii=False,
-            indent=4
+        output_file = OUTPUT_DIRECTORY / (
+            policy_file.stem + "_chunks.json"
         )
 
-    total_chunks += len(chunks)
+        with open(output_file, "w", encoding="utf-8") as output:
+            json.dump(
+                chunks,
+                output,
+                ensure_ascii=False,
+                indent=4
+            )
 
-    paragraphs_found = sum(
-        1 for chunk in chunks
-        if chunk["paragraph_start"] is not None
-    )
+        total_chunks += len(chunks)
 
-    print(f"\nPolicy: {policy_data['policy_title']}")
-    print(f"Document ID: {policy_data['document_id']}")
-    print(f"Chunks created: {len(chunks)}")
-    print(f"Chunks with paragraph references: {paragraphs_found}")
-    print(f"Output: {output_file}")
+        paragraphs_found = sum(
+            1 for chunk in chunks
+            if chunk["paragraph_start"] is not None
+        )
+
+        print(f"\nPolicy: {policy_data['policy_title']}")
+        print(f"Document ID: {policy_data['document_id']}")
+        print(f"Chunks created: {len(chunks)}")
+        print(f"Chunks with paragraph references: {paragraphs_found}")
+        print(f"Output: {output_file}")
+
+    print("\n---------------------------------------------")
+    print(f"Documents processed: {len(corpus_files)}")
+    print(f"Total chunks created: {total_chunks}")
+    print("All corpus documents chunked successfully.")
 
 
-print("\n---------------------------------------------")
-print(f"Policies processed: {len(POLICY_FILES)}")
-print(f"Total chunks created: {total_chunks}")
-print("All selected policies chunked successfully.")
+if __name__ == "__main__":
+    main()
