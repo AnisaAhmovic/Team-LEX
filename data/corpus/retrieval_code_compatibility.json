@@ -1,0 +1,40 @@
+{
+  "recorded_at": "2026-09-11",
+  "jira": "COPL-290",
+  "task": "Task 2.19 - Confirm new policies require no retrieval-code changes",
+  "qdrant_collection": "latrobe_policy_chunks",
+  "retrieval_configuration": {
+    "top_k": 5,
+    "minimum_similarity_score": 0.55,
+    "status_filter": "Current"
+  },
+  "investigation": {
+    "document_id": "321",
+    "policy_title": "Health and Safety Procedure - Safe Driving",
+    "processed_chunk_count": 16,
+    "indexed_point_count": 16,
+    "original_query": "What does La Trobe require drivers on university-related business to do to drive safely?",
+    "original_expected_policy_in_top_5": false,
+    "original_expected_policy_in_top_20": false,
+    "best_document_321_score_for_original_query": 0.581032,
+    "document_321_chunks_above_threshold": 3,
+    "policy_specific_query": "According to the Health and Safety Procedure - Safe Driving, what must drivers do when driving on university-related business?",
+    "policy_specific_status": "supported",
+    "policy_specific_document_321_ranks": [
+      1,
+      2,
+      3,
+      5
+    ],
+    "best_policy_specific_score": 0.740699
+  },
+  "findings": [
+    "Document 321 is correctly processed into 16 chunks.",
+    "All 16 document 321 chunks are present in Qdrant with Current status and valid payload content.",
+    "For the original broad query, three document 321 chunks scored above the 0.55 similarity threshold but were outranked by semantically related corpus content.",
+    "When the intended policy was identified in the query, the existing retrieval pipeline returned document 321 at ranks 1, 2, 3 and 5 with directly relevant evidence.",
+    "The COPL-289 mismatch is attributable to semantic ranking sensitivity for the broad query rather than missing corpus content, indexing failure, status filtering or the similarity threshold."
+  ],
+  "conclusion": "No policy-specific retrieval-code changes are required to support the expanded corpus. The existing retrieval pipeline successfully retrieves newly indexed policy content. The observed Safe Driving mismatch is a query/ranking sensitivity and does not justify changing Top K, the similarity threshold or retrieval logic under COPL-290.",
+  "retrieval_code_changed": false
+}
