@@ -1,0 +1,92 @@
+{
+  "recorded_at": "2026-09-11",
+  "jira": "COPL-289",
+  "task": "Task 2.18 - Run representative retrieval checks",
+  "qdrant_collection": "latrobe_policy_chunks",
+  "minimum_similarity_score": 0.55,
+  "top_k": 5,
+  "summary": {
+    "checks_run": 6,
+    "checks_passed": 5,
+    "checks_failed": 1,
+    "expanded_corpus_policy_checks": 5,
+    "expected_policy_retrieved_in_top_5": 4,
+    "unsupported_control_passed": true
+  },
+  "checks": [
+    {
+      "check": 1,
+      "question": "Who must follow the Travel Management Policy when travelling on University business?",
+      "expected_status": "supported",
+      "expected_document_id": "263",
+      "expected_policy": "Travel Management Policy",
+      "actual_status": "supported",
+      "expected_policy_rank": 1,
+      "best_expected_policy_score": 0.711506,
+      "result": "PASS"
+    },
+    {
+      "check": 2,
+      "question": "What does La Trobe require drivers on university-related business to do to drive safely?",
+      "expected_status": "supported",
+      "expected_document_id": "321",
+      "expected_policy": "Health and Safety Procedure - Safe Driving",
+      "actual_status": "supported",
+      "expected_policy_rank": null,
+      "best_expected_policy_score": null,
+      "result": "FAIL",
+      "notes": "Expected Safe Driving procedure was not present in the Top 5. Related University driving, travel and health and safety policies were retrieved. Investigation is deferred to COPL-290."
+    },
+    {
+      "check": 3,
+      "question": "Who does the Research Data Management Policy apply to?",
+      "expected_status": "supported",
+      "expected_document_id": "106",
+      "expected_policy": "Research Data Management Policy",
+      "actual_status": "supported",
+      "expected_policy_rank": 3,
+      "best_expected_policy_score": 0.637003,
+      "result": "PASS"
+    },
+    {
+      "check": 4,
+      "question": "Who does the Graduate Research Supervision Policy apply to?",
+      "expected_status": "supported",
+      "expected_document_id": "114",
+      "expected_policy": "Graduate Research Supervision Policy",
+      "actual_status": "supported",
+      "expected_policy_rank": 1,
+      "best_expected_policy_score": 0.695857,
+      "result": "PASS"
+    },
+    {
+      "check": 5,
+      "question": "What does the Student Support Policy cover?",
+      "expected_status": "supported",
+      "expected_document_id": "409",
+      "expected_policy": "Student Support Policy",
+      "actual_status": "supported",
+      "expected_policy_rank": 1,
+      "best_expected_policy_score": 0.676496,
+      "result": "PASS"
+    },
+    {
+      "check": 6,
+      "question": "What will the weather be in Melbourne tomorrow?",
+      "expected_status": "fallback",
+      "expected_document_id": null,
+      "expected_policy": null,
+      "actual_status": "fallback",
+      "expected_policy_rank": null,
+      "best_expected_policy_score": null,
+      "evidence_returned": 0,
+      "result": "PASS"
+    }
+  ],
+  "observations": [
+    "Four of five representative expanded-corpus policy queries retrieved the expected policy within the Top 5.",
+    "The unsupported weather control correctly returned fallback with no evidence.",
+    "The Safe Driving representative query exposed a retrieval ranking mismatch for investigation under COPL-290.",
+    "Manual CLI checks incurred noticeable startup latency because each independent process loaded the BAAI/bge-m3 embedding model. The repeatable verification script loads the model once for all checks."
+  ]
+}
