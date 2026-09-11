@@ -29,6 +29,16 @@ CORPUS_OUTPUT_DIRECTORY = Path("data/processed/corpus")
 CORPUS_RUN_REPORT_PATH = Path("data/corpus/corpus_processing_report.json")
 
 
+def clear_corpus_outputs(output_directory=CORPUS_OUTPUT_DIRECTORY):
+    """
+    Remove existing processed corpus JSON files before a full corpus refresh.
+    """
+    output_directory.mkdir(parents=True, exist_ok=True)
+
+    for corpus_file in output_directory.glob("*.json"):
+        corpus_file.unlink()
+
+
 def load_corpus_manifest(manifest_path=CORPUS_MANIFEST_PATH):
     """
     Load and validate the discovered Policy Library corpus manifest.
@@ -266,6 +276,8 @@ def main():
     print("----------------------------")
     print(f"Documents loaded from manifest: {len(documents)}")
     print(f"Processing inputs created: {len(processing_inputs)}")
+
+    clear_corpus_outputs()
 
     run_report = process_corpus(processing_inputs)
     save_corpus_run_report(run_report)
