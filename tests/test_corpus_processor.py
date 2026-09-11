@@ -1,8 +1,11 @@
+from tempfile import TemporaryDirectory
+from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
 
 from ingestion.corpus_processor import (
     build_processing_input,
+    clear_corpus_outputs,
     process_corpus,
 )
 from ingestion.policy_processor import AuthoritativeSourceAccessError
@@ -42,6 +45,23 @@ class BuildProcessingInputTests(TestCase):
         self.assertTrue(
             processing_input["output_file"].endswith("216.json")
         )
+
+
+class CorpusOutputCleanupTests(TestCase):
+    def test_clear_corpus_outputs_removes_existing_json_files(self):
+        with TemporaryDirectory() as temp_dir:
+            output_directory = Path(temp_dir)
+
+            stale_file = output_directory / "123.json"
+            retained_file = output_directory / "keep.txt"
+
+            stale_file.write_text("stale", encoding="utf-8")
+            retained_file.write_text("retain", encoding="utf-8")
+
+            clear_corpus_outputs(output_directory)
+
+            self.assertFalse(stale_file.exists())
+            self.assertTrue(retained_file.exists())
 
 
 class CorpusProcessingOutcomeTests(TestCase):
