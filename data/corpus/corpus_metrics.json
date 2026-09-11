@@ -1,0 +1,10 @@
+{
+  "recorded_at": "2026-09-11",
+  "qdrant_collection": "latrobe_policy_chunks",
+  "documents_discovered": 215,
+  "documents_processed": 214,
+  "documents_access_restricted": 1,
+  "documents_failed": 0,
+  "total_chunks": 3937,
+  "total_vectors_indexed": 3937
+}
