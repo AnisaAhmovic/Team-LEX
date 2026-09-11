@@ -1,0 +1,19 @@
+{
+  "reconciled_at": "2026-09-11",
+  "qdrant_collection": "latrobe_policy_chunks",
+  "documents_discovered": 215,
+  "documents_chunked": 214,
+  "documents_indexed": 214,
+  "documents_access_restricted": 1,
+  "discovered_not_indexed": [
+    {
+      "document_id": "268",
+      "policy_title": "Investment Policy",
+      "status": "Access Restricted"
+    }
+  ],
+  "chunked_not_indexed": [],
+  "indexed_not_chunked": [],
+  "unexpected_indexed": [],
+  "reconciliation_status": "Reconciled"
+}
