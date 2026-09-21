@@ -8,7 +8,9 @@ The original React component and styling implementation in `src/` was supplied b
 
 ## Current status
 
-This is a frontend prototype. Chatbot responses are temporary local placeholders until the React interface is connected to the Django backend and RAG pipeline.
+The chat calls `POST /api/answer/` and displays server-provided claim references, authoritative source links, section details, recorded currency and supporting excerpts. It never parses model-written links or HTML. The Vite development proxy forwards `/api` to `http://127.0.0.1:8000`. Start the Django backend and its local Qdrant/BGE-M3/Ollama dependencies before asking a live question.
+
+Questions and responses are logged locally for quality review. Avoid entering personal information. See [citation and audit documentation](../docs/S4-06-S4-10_CITATIONS_AND_AUDIT.md).
 
 ## Run locally
 
@@ -22,3 +24,6 @@ To create a production build:
 ```bash
 npm run build
 ```
+
+
+Check citation rendering and link safety with `npm run test:sources`. For a production deployment, configure the same-origin `/api` route to Django; the Vite development proxy is not part of the static build.

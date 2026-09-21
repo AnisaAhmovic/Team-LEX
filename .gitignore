@@ -11,3 +11,10 @@ qdrant_storage/
 # Frontend
 frontend/node_modules/
 frontend/dist/
+
+# Interaction records can contain sensitive free text; never commit them.
+var/
+*.sqlite3
+*.sqlite3-journal
+*.sqlite3-wal
+*.sqlite3-shm

@@ -72,15 +72,18 @@ class PolicyRetrieverTests(TestCase):
         self.assertEqual(result["status"], "supported")
         self.assertTrue(result["evidence_sufficient"])
         self.assertEqual(result["result_count"], 1)
-        self.assertEqual(
-            set(result["evidence"][0]),
+        self.assertTrue(
             {
                 "policy_text",
                 "policy_title",
                 "section",
                 "source_url",
                 "similarity_score",
-            },
+                "chunk_id",
+                "version",
+                "effective_date",
+                "rank",
+            }.issubset(result["evidence"][0]),
         )
         self.assertEqual(
             embedded_questions,
@@ -142,3 +145,4 @@ class PolicyRetrieverTests(TestCase):
             RetrievalUnavailableError, "Current policy evidence could not be retrieved"
         ):
             retriever.retrieve("What is the assessment policy?")
+
