@@ -48,9 +48,12 @@ def main() -> int:
         result = fallback_response(question, "retrieval_unavailable")
         exit_code = 3
 
+    # Candidate diagnostics are internal and are not supporting citations.
+    result = {key: value for key, value in result.items() if not key.startswith("_")}
     print(json.dumps(result, indent=None if args.compact else 2))
     return exit_code
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

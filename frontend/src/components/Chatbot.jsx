@@ -22,56 +22,42 @@ function Chatbot() {
     });
   }, [messages, isTyping]);
 
-  function getBotResponse(userMessage) {
-    const message = userMessage.toLowerCase();
-
-    if (message.includes("hello") || message.includes("hi")) {
-      return "Hello! 👋 How can I help you today?";
-    }
-
-    if (message.includes("lex")) {
-      return "I'm Lex AI, a prototype assistant for questions about La Trobe University policies.";
-    }
-
-    if (message.includes("help")) {
-      return "Sure! Ask me a question and I'll do my best to help.";
-    }
-
-    return "Thanks for your message! Once the Django backend is connected, I'll be able to provide a proper response.";
-  }
-
-  const handleSendMessage = (text) => {
+  const handleSendMessage = async (text) => {
+    if (isTyping || !text.trim()) return;
     const userMessage = {
-      id: Date.now(),
-      sender: "user",
-      message: text,
+      id: crypto.randomUUID(), sender: "user", message: text,
       time: getCurrentTime(),
     };
-
-    setMessages((previousMessages) => [
-      ...previousMessages,
-      userMessage,
-    ]);
-
+    setMessages((previous) => [...previous, userMessage]);
     setIsTyping(true);
-
-    // Temporary fake response.
-    // This will eventually be replaced with the Django API request.
-    setTimeout(() => {
-      const botMessage = {
-        id: Date.now() + 1,
-        sender: "bot",
-        message: getBotResponse(text),
-        time: getCurrentTime(),
-      };
-
-      setMessages((previousMessages) => [
-        ...previousMessages,
-        botMessage,
-      ]);
-
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 120000);
+    try {
+      const response = await fetch("/api/answer/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: text }),
+        signal: controller.signal,
+      });
+      const data = await response.json();
+      const supported = response.ok && data.status === "supported";
+      setMessages((previous) => [...previous, {
+        id: crypto.randomUUID(), sender: "bot", time: getCurrentTime(),
+        message: supported ? data.answer : (
+          response.ok ? data.message : "The policy service could not complete this request. Please try again."
+        ),
+        claims: supported ? data.claims : [],
+        sources: supported ? data.sources : [],
+      }]);
+    } catch {
+      setMessages((previous) => [...previous, {
+        id: crypto.randomUUID(), sender: "bot", time: getCurrentTime(),
+        message: "The policy service could not be reached. Please try again.",
+      }]);
+    } finally {
+      clearTimeout(timeout);
       setIsTyping(false);
-    }, 1000);
+    }
   };
 
   const clearChat = () => {
@@ -95,7 +81,7 @@ function Chatbot() {
             <h1>Lex AI</h1>
             <div className="online-status">
               <span className="online-dot"></span>
-              Online
+              Policy assistant
             </div>
           </div>
         </div>
@@ -103,6 +89,7 @@ function Chatbot() {
         <button
           className="clear-button"
           onClick={clearChat}
+          disabled={isTyping}
           title="Clear conversation"
         >
           Clear
@@ -113,6 +100,9 @@ function Chatbot() {
         {messages.map((message) => (
           <Message
             key={message.id}
+            messageId={message.id}
+            claims={message.claims}
+            sources={message.sources}
             message={message.message}
             sender={message.sender}
             time={message.time}
@@ -134,6 +124,8 @@ function Chatbot() {
         <div ref={messagesEndRef}></div>
       </main>
 
+      <p className="privacy-notice">Questions and responses are logged locally for quality review. Avoid sharing personal information.</p>
+
       <ChatInput
         onSend={handleSendMessage}
         disabled={isTyping}
@@ -150,3 +142,4 @@ function getCurrentTime() {
 }
 
 export default Chatbot;
+

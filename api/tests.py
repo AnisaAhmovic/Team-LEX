@@ -8,7 +8,12 @@ All Qdrant, BGE-M3 and Ollama calls are mocked so the tests run without
 any local services running — same approach used in the existing test suite.
 """
 
-from unittest.mock import MagicMock, patch
+import json
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
+
+from django.test import override_settings
 
 from django.urls import reverse
 from rest_framework.test import APITestCase
@@ -52,7 +57,10 @@ FALLBACK_RETRIEVAL = {
 }
 
 SAMPLE_GENERATION = {
-    "text": "Assessment feedback must be timely and constructive per Section 5.",
+    "text": json.dumps({"claims": [{
+        "text": "Assessment feedback must be timely and constructive.",
+        "support": [{"evidence_id": "E1", "quote": SAMPLE_EVIDENCE[0]["policy_text"]}],
+    }]}),
     "model": "qwen3:4b",
     "latency_seconds": 1.23,
     "done": True,
@@ -63,7 +71,17 @@ SAMPLE_GENERATION = {
 
 # ── /api/retrieve/ regression tests (Sprint 3 behaviour must be preserved) ────
 
-class PolicyEvidenceEndpointTests(APITestCase):
+class AuditIsolatedTestCase(APITestCase):
+    def setUp(self):
+        super().setUp()
+        temporary = TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        setting = override_settings(AUDIT_DB_PATH=Path(temporary.name) / "audit.sqlite3")
+        setting.enable()
+        self.addCleanup(setting.disable)
+
+
+class PolicyEvidenceEndpointTests(AuditIsolatedTestCase):
     @patch("api.views.get_policy_retriever")
     def test_returns_supported_evidence(self, get_retriever):
         get_retriever.return_value.retrieve.return_value = SUPPORTED_RETRIEVAL
@@ -111,7 +129,7 @@ class PolicyEvidenceEndpointTests(APITestCase):
 
 # ── /api/answer/ tests ────────────────────────────────────────────────────────
 
-class PolicyAnswerEndpointTests(APITestCase):
+class PolicyAnswerEndpointTests(AuditIsolatedTestCase):
 
     @patch("api.views.get_qwen_service")
     @patch("api.views.get_policy_retriever")
@@ -239,8 +257,8 @@ class PolicyAnswerEndpointTests(APITestCase):
 
     @patch("api.views.get_qwen_service")
     @patch("api.views.get_policy_retriever")
-    def test_sources_are_deduplicated(self, get_retriever, get_qwen):
-        """Two chunks from the same URL should produce only one source entry."""
+    def test_unused_selected_evidence_is_not_a_displayed_source(self, get_retriever, get_qwen):
+        """A selected chunk not used by any claim is not a supporting citation."""
         duplicate_evidence = SAMPLE_EVIDENCE + [
             {
                 **SAMPLE_EVIDENCE[0],
@@ -263,3 +281,4 @@ class PolicyAnswerEndpointTests(APITestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data["sources"]), 1)
+

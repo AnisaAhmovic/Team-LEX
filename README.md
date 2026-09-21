@@ -13,6 +13,8 @@ For local installation and run instructions, see [`docs/SETUP.md`](docs/SETUP.md
 
 For the Team LEX Git and pull request workflow, see [`docs/BRANCHING_STRATEGY.md`](docs/BRANCHING_STRATEGY.md).
 
+For Sprint 4 policy citations, audit records, privacy limitations and verification commands, see [`docs/S4-06-S4-10_CITATIONS_AND_AUDIT.md`](docs/S4-06-S4-10_CITATIONS_AND_AUDIT.md).
+
 The backend provides a development health endpoint at `http://127.0.0.1:8000/api/health/`. The React frontend is located in `frontend/`.
 
 ---
@@ -148,3 +150,4 @@ This repository serves as the shared codebase for the design, development and ev
 This repository has been developed for educational purposes as part of a university capstone project.
 
 Policy documents remain the intellectual property of La Trobe University. AI-generated responses are intended to assist with policy interpretation and must always be considered alongside the official policy documentation.
+

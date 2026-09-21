@@ -6,13 +6,23 @@ policy chunks, and returns only complete evidence above the configured
 similarity threshold.
 """
 
+import hashlib
 import math
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 from urllib.parse import urlparse
 
-from ingestion.embedding_config import EMBEDDING_DIMENSION, QDRANT_COLLECTION_NAME
+from ingestion.embedding_config import (
+    EMBEDDING_DIMENSION, EMBEDDING_MODEL_NAME, QDRANT_COLLECTION_NAME,
+)
 
+SELECTION_VERSION = "current-authoritative-threshold-v2"
+PROVENANCE_FIELDS = (
+    "chunk_id", "document_id", "policy_title", "section", "subsection",
+    "topic", "subtopic", "paragraph_start", "paragraph_end", "source_url",
+    "status_details_url", "status", "effective_date", "review_date",
+    "approval_date", "version",
+)
 TOP_K = 5
 DEFAULT_MIN_SIMILARITY_SCORE = 0.55
 MIN_QUESTION_LENGTH = 3
@@ -104,12 +114,19 @@ def _current_policy_filter():
 
 
 def _is_authoritative_url(value: str) -> bool:
-    parsed = urlparse(value)
-    hostname = (parsed.hostname or "").lower()
-    return (
-        parsed.scheme == "https"
-        and (hostname == "latrobe.edu.au" or hostname.endswith(".latrobe.edu.au"))
-    )
+    if not isinstance(value, str) or any(c.isspace() for c in value) or "\\" in value:
+        return False
+    try:
+        parsed = urlparse(value)
+        hostname = (parsed.hostname or "").lower()
+        return (
+            parsed.scheme == "https"
+            and (hostname == "latrobe.edu.au" or hostname.endswith(".latrobe.edu.au"))
+            and parsed.username is None and parsed.password is None
+            and parsed.port in (None, 443)
+        )
+    except ValueError:
+        return False
 
 
 def _text_field(payload: Mapping[str, Any], key: str) -> str | None:
@@ -151,14 +168,22 @@ class PolicyRetriever:
         embedding = self._embed_question(normalised_question)
         points = self._query_qdrant(embedding)
 
-        evidence = []
-        for point in points:
-            item = self._normalise_evidence(point)
+        evidence, candidates = [], []
+        seen = set()
+        for rank, point in enumerate(points[:self.top_k], start=1):
+            item, candidate = self._evaluate_point(point, rank)
             if item is not None:
-                evidence.append(item)
+                identity = (item.get("chunk_id"), candidate["text_sha256"], item["source_url"])
+                if identity in seen:
+                    candidate.update(eligible=False, exclusion_reason="duplicate_evidence")
+                else:
+                    seen.add(identity)
+                    evidence.append(item)
+            candidates.append(candidate)
 
+        trace = {"config": self.audit_config(), "candidates": candidates}
         if not evidence:
-            return fallback_response(normalised_question, "insufficient_evidence")
+            return {**fallback_response(normalised_question, "insufficient_evidence"), "_trace": trace}
 
         return {
             "status": "supported",
@@ -167,6 +192,19 @@ class PolicyRetriever:
             "minimum_similarity_score": self.min_similarity_score,
             "result_count": len(evidence),
             "evidence": evidence,
+            "_trace": trace,
+        }
+
+    def audit_config(self):
+        """Explicit safe configuration, never connection URLs or environment dumps."""
+        return {
+            "selection_version": SELECTION_VERSION,
+            "top_k": self.top_k,
+            "minimum_similarity_score": self.min_similarity_score,
+            "current_status_filter": CURRENT_POLICY_STATUS,
+            "collection_name": self.collection_name,
+            "embedding_model": EMBEDDING_MODEL_NAME,
+            "embedding_dimension": EMBEDDING_DIMENSION,
         }
 
     def _embed_question(self, question: str) -> list[float]:
@@ -220,40 +258,62 @@ class PolicyRetriever:
             ) from exc
 
     def _normalise_evidence(self, point: Any) -> dict[str, Any] | None:
-        if isinstance(point, Mapping):
-            raw_score = point.get("score")
-            payload = point.get("payload")
-        else:
-            raw_score = getattr(point, "score", None)
-            payload = getattr(point, "payload", None)
+        # Kept for callers that normalise an individual point.
+        return self._evaluate_point(point, 1)[0]
 
-        if not isinstance(payload, Mapping):
-            return None
-
+    def _evaluate_point(self, point: Any, rank: int):
+        getter = point.get if isinstance(point, Mapping) else lambda k: getattr(point, k, None)
+        payload = getter("payload")
+        payload = payload if isinstance(payload, Mapping) else {}
         try:
-            score = float(raw_score)
+            score = float(getter("score"))
+            score = score if math.isfinite(score) else None
         except (TypeError, ValueError):
-            return None
-        if not math.isfinite(score) or score < self.min_similarity_score:
-            return None
-
-        status = _text_field(payload, "status")
+            score = None
+        # Only scalar provenance is retained, never arbitrary payload fields.
+        metadata = {}
+        for field in PROVENANCE_FIELDS:
+            value = payload.get(field)
+            if isinstance(value, str):
+                value = value.strip() or None
+            elif not isinstance(value, (int, float)) or isinstance(value, bool):
+                value = None
+            elif isinstance(value, float) and not math.isfinite(value):
+                value = None
+            metadata[field] = value
+        # Some corpus documents start at h2 rather than h1.
+        metadata["section"] = next(
+            (_text_field(payload, key) for key in ("section", "subsection", "topic", "subtopic")
+             if _text_field(payload, key)), None,
+        )
         policy_text = _text_field(payload, "text")
-        policy_title = _text_field(payload, "policy_title")
-        section = _text_field(payload, "section")
-        source_url = _text_field(payload, "source_url")
-
-        if status is None or status.casefold() != CURRENT_POLICY_STATUS.casefold():
-            return None
-        if not all((policy_text, policy_title, section, source_url)):
-            return None
-        if not _is_authoritative_url(source_url):
-            return None
-
-        return {
-            "policy_text": policy_text,
-            "policy_title": policy_title,
-            "section": section,
-            "source_url": source_url,
-            "similarity_score": round(score, 6),
+        point_id = getter("id")
+        candidate = {
+            "rank": rank, "point_id": str(point_id) if point_id is not None else None,
+            **metadata, "similarity_score": score,
+            "text_sha256": hashlib.sha256(policy_text.encode()).hexdigest() if policy_text else None,
+            "eligible": False, "exclusion_reason": None,
         }
+        reason = None
+        if score is None:
+            reason = "invalid_score"
+        elif score < self.min_similarity_score:
+            reason = "below_threshold"
+        elif str(metadata["status"]).casefold() != CURRENT_POLICY_STATUS.casefold():
+            reason = "not_current"
+        elif not all((policy_text, _text_field(payload, "policy_title"), metadata["section"], _text_field(payload, "source_url"))):
+            reason = "missing_provenance"
+        elif not _is_authoritative_url(metadata["source_url"]):
+            reason = "untrusted_source_url"
+        if reason:
+            candidate["exclusion_reason"] = reason
+            return None, candidate
+        # An optional details link is displayed only if it is authoritative too.
+        if not _is_authoritative_url(metadata["status_details_url"]):
+            metadata["status_details_url"] = None
+            candidate["status_details_url"] = None
+        candidate["eligible"] = True
+        return {
+            **metadata, "rank": rank, "point_id": candidate["point_id"],
+            "policy_text": policy_text, "similarity_score": score,
+        }, candidate

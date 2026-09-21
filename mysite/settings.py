@@ -115,3 +115,8 @@ CORS_ALLOWED_ORIGINS = [
     ).split(",")
     if origin.strip()
 ]
+
+
+# S4-10: local prototype audit storage. Never expose this directory via HTTP.
+AUDIT_DB_PATH = BASE_DIR / "var" / "audit" / "interactions.sqlite3"
+AUDIT_RETENTION_DAYS = 30

@@ -60,7 +60,7 @@ class QwenService:
         self.timeout_seconds = timeout_seconds
         self.keep_alive = keep_alive
 
-    def generate(self, prompt, system=None, think=False):
+    def generate(self, prompt, system=None, think=False, response_format=None, options=None):
         """
         Submit a prompt to the configured Qwen3 model and return the
         response.
@@ -71,6 +71,8 @@ class QwenService:
             think: Whether to enable Qwen3's thinking mode. Left off by
                 default for lower latency on straightforward generation
                 tasks; enable for prompts that need multi-step reasoning.
+            response_format: Optional Ollama JSON schema or "json" format.
+            options: Optional inference settings, such as temperature and seed.
 
         Returns:
             dict with keys: text, model, latency_seconds, done,
@@ -93,6 +95,10 @@ class QwenService:
             "think": think,
             "keep_alive": self.keep_alive,
         }
+        if response_format is not None:
+            payload["format"] = response_format
+        if options is not None:
+            payload["options"] = options
         if system:
             payload["system"] = system
 
@@ -132,7 +138,7 @@ class QwenService:
         except ValueError as exc:
             raise LLMResponseError("Ollama response was not valid JSON.") from exc
 
-        if "response" not in data:
+        if not isinstance(data, dict) or not isinstance(data.get("response"), str):
             raise LLMResponseError(f"Unexpected Ollama response shape: {data}")
 
         return {
@@ -140,6 +146,7 @@ class QwenService:
             "model": data.get("model", self.model),
             "latency_seconds": round(latency_seconds, 3),
             "done": data.get("done", True),
+            "done_reason": data.get("done_reason"),
             "prompt_eval_count": data.get("prompt_eval_count"),
             "eval_count": data.get("eval_count"),
         }
@@ -158,3 +165,4 @@ def fallback_response(prompt, reason):
         "reason": reason,
         "message": "Generation is temporarily unavailable. Please try again shortly.",
     }
+

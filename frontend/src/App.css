@@ -382,3 +382,14 @@ input {
     max-width: 82%;
   }
 }
+
+
+.policy-sources { margin-top: 1rem; border-top: 1px solid #ccc; padding-top: 0.75rem; font-size: 0.875rem; }
+.policy-sources ul { padding-left: 1.25rem; }
+.policy-sources li { margin-bottom: 0.75rem; overflow-wrap: anywhere; }
+.policy-sources a, .claim-citation { color: #184f90; text-decoration: underline; }
+.claim-citation { margin-right: 0.25rem; }
+.source-currency { margin-top: 0.25rem; }
+.policy-sources blockquote { margin: 0.5rem 0; padding-left: 0.75rem; border-left: 2px solid #777; white-space: pre-wrap; }
+.policy-sources summary { cursor: pointer; }
+.privacy-notice { font-size: 0.75rem; margin: 0.5rem 1rem; color: #555; }
