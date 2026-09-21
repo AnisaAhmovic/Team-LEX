@@ -65,6 +65,7 @@ def _record_retrieval(record, result):
     if trace.get("config"):
         record["retrieval"]["config"] = trace["config"]
     record["retrieval"]["candidates"] = trace.get("candidates", [])
+    record["retrieval"]["query_scope"] = trace.get("query_scope", {})
     record["selection"]["excluded"] = [
         {"rank": c["rank"], "chunk_id": c.get("chunk_id"), "reason": c["exclusion_reason"]}
         for c in trace.get("candidates", []) if not c["eligible"]
@@ -115,7 +116,7 @@ def _policy_request(request, generate):
             "attempted": True, "provider": "ollama", "model": service.model,
             "model_digest": None,  # Ollama /generate does not return an immutable model digest.
             "prompt_version": PROMPT_VERSION, "think": False,
-            "options": GENERATION_OPTIONS, "response_format": "lex-claims-v1",
+            "options": GENERATION_OPTIONS, "response_format": PROMPT_VERSION,
         })
         generation = service.generate(
             build_prompt(result["question"], selected), system=SYSTEM_PROMPT,
