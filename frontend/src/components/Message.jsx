@@ -9,12 +9,36 @@ function authoritativeUrl(value) {
   }
 }
 
-function Message({ message, sender, time, messageId, claims = [], sources = [] }) {
+function Message({ message, sender, time, messageId, claims = [], sources = [], type, escalation }) {
   const isBot = sender === "bot";
+
+  // Pick the style for the bubble. Fallbacks and errors look different from
+  // real answers so nobody mistakes them for policy advice.
+  let bubbleClass = "message";
+  if (isBot) {
+    bubbleClass = bubbleClass + " bot-message";
+  } else {
+    bubbleClass = bubbleClass + " user-message";
+  }
+  if (type === "fallback") {
+    bubbleClass = bubbleClass + " fallback-message";
+  }
+  if (type === "error") {
+    bubbleClass = bubbleClass + " error-message";
+  }
+
+  // Only show the Policy Library link if it really is a La Trobe link
+  let showEscalation = false;
+  if (type === "fallback" && escalation && authoritativeUrl(escalation.url)) {
+    showEscalation = true;
+  }
+
   return (
     <div className={`message-row ${isBot ? "bot-row" : "user-row"}`}>
       {isBot && <div className="bot-avatar">🤖</div>}
-      <div className={`message ${isBot ? "bot-message" : "user-message"}`}>
+      <div className={bubbleClass}>
+        {type === "fallback" && <strong className="message-label">No policy answer found</strong>}
+        {type === "error" && <strong className="message-label">Something went wrong. This is not a policy answer.</strong>}
         {isBot && claims.length > 0 ? claims.map((claim) => (
           <p key={claim.claim_id}>
             {claim.text}{" "}
@@ -53,6 +77,12 @@ function Message({ message, sender, time, messageId, claims = [], sources = [] }
               ))}
             </ul>
           </section>
+        )}
+        {showEscalation && (
+          <p className="escalation">
+            {escalation.message}{" "}
+            <a href={escalation.url} target="_blank" rel="noopener noreferrer">Open the La Trobe Policy Library</a>
+          </p>
         )}
         {time && <span className="message-time">{time}</span>}
       </div>
