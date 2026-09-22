@@ -13,7 +13,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 from ingestion.embedding_config import (
-    EMBEDDING_DIMENSION, EMBEDDING_MODEL_NAME, QDRANT_COLLECTION_NAME,
+    EMBEDDING_DEVICE, EMBEDDING_DIMENSION, EMBEDDING_MODEL_NAME, QDRANT_COLLECTION_NAME,
 )
 from retrieval.query_scope import HEADING_FIELDS, QUERY_SCOPE_VERSION, apply_scope, resolve_scope
 
@@ -36,6 +36,9 @@ FALLBACK_MESSAGE = (
     "to answer that question. I have not provided an unsupported answer."
 )
 FALLBACK_MESSAGES = {
+    "generation_unavailable": (
+        "Answer generation is temporarily unavailable. Please try again shortly."
+    ),
     "unverifiable_generation": (
         "I retrieved policy evidence, but could not verify the generated answer against it. "
         "Check the official policy or try rephrasing your question."
@@ -213,6 +216,7 @@ class PolicyRetriever:
             "current_status_filter": CURRENT_POLICY_STATUS,
             "collection_name": self.collection_name,
             "embedding_model": EMBEDDING_MODEL_NAME,
+            "embedding_device": EMBEDDING_DEVICE,
             "embedding_dimension": EMBEDDING_DIMENSION,
         }
 

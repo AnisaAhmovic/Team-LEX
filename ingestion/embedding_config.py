@@ -19,6 +19,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 EMBEDDING_MODEL_NAME = "BAAI/bge-m3"
+# Explicit CPU execution avoids device-dependent query/index divergence.
+EMBEDDING_DEVICE = "cpu"
 EMBEDDING_MODEL_PROVIDER = "sentence-transformers"
 EMBEDDING_DIMENSION = 1024
 DISTANCE_METRIC = "Cosine"
@@ -76,6 +78,7 @@ def get_config():
     return {
         "embedding_model_name": EMBEDDING_MODEL_NAME,
         "embedding_model_provider": EMBEDDING_MODEL_PROVIDER,
+        "embedding_device": EMBEDDING_DEVICE,
         "embedding_dimension": EMBEDDING_DIMENSION,
         "distance_metric": DISTANCE_METRIC,
         "max_sequence_length": MAX_SEQUENCE_LENGTH,
@@ -109,3 +112,4 @@ if __name__ == "__main__":
     output_path = record_config()
     print(f"Embedding configuration recorded to {output_path}")
     print(json.dumps(get_config(), indent=2))
+

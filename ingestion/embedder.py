@@ -6,10 +6,9 @@ later (e.g. embedding a user's question at query time) without needing
 Qdrant-specific code.
 """
 
-from sentence_transformers import SentenceTransformer
-
 from ingestion.embedding_config import (
     EMBEDDING_MODEL_NAME,
+    EMBEDDING_DEVICE,
     NORMALIZE_EMBEDDINGS,
 )
 
@@ -27,8 +26,10 @@ def load_model():
     """
     global _model
     if _model is None:
-        print(f"Loading embedding model: {EMBEDDING_MODEL_NAME} ...")
-        _model = SentenceTransformer(EMBEDDING_MODEL_NAME)
+        from sentence_transformers import SentenceTransformer
+
+        print(f"Loading embedding model: {EMBEDDING_MODEL_NAME} on {EMBEDDING_DEVICE} ...")
+        _model = SentenceTransformer(EMBEDDING_MODEL_NAME, device=EMBEDDING_DEVICE)
         print("Model loaded.")
     return _model
 
@@ -51,3 +52,4 @@ def embed_texts(texts, batch_size=16):
 def embed_text(text):
     """Embed a single string and return one dense vector."""
     return embed_texts([text])[0]
+
