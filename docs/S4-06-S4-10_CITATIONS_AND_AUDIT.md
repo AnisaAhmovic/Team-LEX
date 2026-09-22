@@ -198,3 +198,16 @@ The existing index can be used for the next retest; no threshold reduction or
 re-index is required for this verified chunk. CPU execution may be slower.
 Restart Django, repeat the Purpose question and inspect the new audit. A supported
 answer with verified citations still requires live Qwen validation.
+
+## Verbatim quote choices (22 September 2026)
+
+After CPU retrieval passed, a local replay showed Qwen replacing `La Trobe` with
+`La: Trobe` inside a supporting quote. The existing exact-match validator correctly
+rejected this output. Prompt version `lex-claims-v3` supplies server-derived
+allowed_quotes (whitespace-normalised context and sentence excerpts), and the
+output schema constrains quotes to that finite enum. Model-generated URLs, metadata
+and invented quotes remain disallowed. The server still checks each quote against
+its referenced evidence ID, so selecting another chunk's quote is rejected.
+The API source format is unchanged. This prevents this typo when the generation
+backend honours the enum; validation remains mandatory if it does not. Exact quotes
+still do not prove semantic entailment. Live Qwen retesting remains required.

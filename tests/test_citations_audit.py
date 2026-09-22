@@ -17,7 +17,7 @@ from rest_framework.test import APIClient
 from api.audit import AuditStore, new_record, sanitise_record
 from api.citations import (
     CitationValidationError, MAX_CHUNK_CHARS, SOURCE_FIELDS,
-    build_cited_answer, build_prompt, select_context,
+    build_cited_answer, build_prompt, select_context, generation_schema, quote_options,
 )
 from llm import LLMConnectionError, QwenService
 from retrieval import PolicyRetriever
@@ -69,6 +69,35 @@ class CitationTests(TestCase):
         self.assertIn('"policy_title": "Assessment Policy"', prompt)
         self.assertIn(self.evidence[0]["section"], prompt)
         self.assertNotIn('"source_url"', prompt)
+
+    def test_generated_quote_typo_is_excluded_and_still_rejected(self):
+        exact = "This Policy provides the principles for assuring the quality of student assessment at La Trobe."
+        context = select_context([{**self.evidence[0], "policy_text": exact}])
+        typo = exact.replace("La Trobe", "La: Trobe")
+        schema = generation_schema(context)
+        quotes = schema["properties"]["claims"]["items"]["properties"]["support"]["items"]["properties"]["quote"]["enum"]
+        self.assertIn(exact, quotes)
+        self.assertNotIn(typo, quotes)
+        self.assertIn(exact, build_prompt("What is the purpose?", context))
+        with self.assertRaisesRegex(CitationValidationError, "quote_outside_selected_context"):
+            build_cited_answer(model_text(("E1", typo)), context)
+        answer, _ = build_cited_answer(model_text(("E1", exact)), context)
+        self.assertEqual(answer["claims"][0]["support"][0]["quote"], exact)
+
+    def test_quote_choices_are_bounded_to_each_supplied_context(self):
+        context = select_context([
+            {**self.evidence[0], "policy_text": "Students receive timely feedback. Assessment must be fair. " * 30},
+            {**self.evidence[0], "policy_text": "Researchers obtain ethics approval before research begins."},
+        ])
+        for chunk in context:
+            for quote in quote_options(chunk):
+                self.assertIn(quote, " ".join(chunk["context_text"].split()))
+                self.assertLessEqual(len(quote), MAX_CHUNK_CHARS)
+        second_quote = quote_options(context[1])[0]
+        with self.assertRaisesRegex(CitationValidationError, "quote_outside_selected_context"):
+            build_cited_answer(model_text(("E1", second_quote)), context)
+        answer, _ = build_cited_answer(model_text(("E1", quote_options(context[0])[1]), ("E2", second_quote)), context)
+        self.assertEqual(len(answer["claims"]), 2)
 
     def test_known_policy_title_in_a_supported_claim_is_accepted(self):
         for claim_text in ("The Assessment Policy requires timely feedback.",
@@ -336,7 +365,7 @@ class InteractionAuditTests(SimpleTestCase):
         self.assertEqual(response.data["status"], "supported")
         self.assertEqual(record["retrieval"]["query_scope"], scope)
         self.assertEqual(record["generation"]["validation"], "accepted")
-        self.assertEqual(record["generation"]["prompt_version"], "lex-claims-v2")
+        self.assertEqual(record["generation"]["prompt_version"], "lex-claims-v3")
 
     def test_specific_attribution_rejection_is_audited_without_raw_model_text(self):
         value = json.loads(model_text(("E1", point().payload["text"])))
