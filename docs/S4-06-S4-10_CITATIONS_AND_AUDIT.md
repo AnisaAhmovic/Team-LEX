@@ -8,7 +8,9 @@ Implements **S4-06** and **S4-10** from the supplied Sprint 4 backlog. This exte
 
 The retrieval query still requests exactly five current candidates. Post-query selection excludes low/non-finite scores, non-current content, incomplete provenance, untrusted URLs and duplicate evidence, recording a reason for each exclusion. Documents beginning at h2 can use their actual subsection heading. Unknown optional metadata stays null; no date, title, clause, version or URL is generated to fill a gap.
 
-The answer pipeline freezes up to five eligible chunks, each capped at 800 characters. Qwen receives request-local IDs and those exact text snippets, plus the question. It returns JSON claims with evidence IDs and supporting quotations. The API rejects unknown IDs, missing support, invented quotations, quotations outside the bounded context, model-written URLs/reference markers, extra source fields and incomplete generation. An empty claims array means abstention. Invalid output produces a safe fallback with no answer or citations.
+For explicitly named documents, retrieval resolves full titles against a catalogue of current titles/headings read from the same Qdrant collection. It scopes the vector query to those titles. An explicit question about the purpose, scope or definitions also scopes to matching indexed headings when every named document has that heading. Multiple named documents remain in the query. General questions retain collection-wide semantic search. This uses Qdrant payload filters, preserves the original similarity scores and 0.55 threshold, and needs no re-embedding. The catalogue is cached per retriever; restart the backend after refreshing the index. Catalogue records are lookup metadata, not extra supporting candidates. Only the returned ranked Top-5 can become evidence. The resolved scope is recorded in `retrieval.query_scope`.
+
+The answer pipeline freezes up to five eligible chunks, each capped at 800 characters. Qwen receives request-local IDs, retrieved titles/headings and those exact text snippets, plus the question. Titles/headings identify the documents; the output schema still has no source metadata fields. It returns JSON claims with evidence IDs and supporting quotations. A named policy in a claim must match the metadata of evidence supporting that claim. The API rejects unknown IDs, missing support, invented quotations, quotations outside the bounded context, model-written URLs/reference markers, extra source fields and incomplete generation. An empty claims array means abstention. Invalid output produces a safe fallback with no answer or citations.
 
 The server builds sources exclusively from metadata for evidence actually cited by a validated claim. A selected chunk which the model did not use is not a supporting source. Different sections, paragraph ranges or versions of one URL remain distinct. Identical source metadata can be grouped without losing internal chunk mappings. A claim can refer to multiple policies.
 
@@ -81,6 +83,7 @@ Records use schema `lex-interaction-v1` and are written for both policy endpoint
 | `interaction_id`, `timestamp_utc`, `endpoint` | Correlate one request and its returned ID, without identifying a person |
 | `question` | Normalised question, redacted and bounded to 500 characters |
 | `retrieval.outcome`, `retrieval.config` | Retrieval result, top-k, threshold, current-status filter, embedding identity/dimension, collection and selection version |
+| `retrieval.query_scope` | Scope version, matched indexed titles, requested overview section and exact heading filters applied before ranking |
 | `retrieval.candidates[]` | All returned Top-5 candidates, original order/rank and score, chunk/point/document IDs, source/currency metadata, full-text hash, eligibility and exclusion reason |
 | `selection.selected_context[]` | Exact bounded context supplied to generation, evidence IDs, chunk IDs, metadata, hashes and truncation flags |
 | `selection.excluded[]` | Candidate IDs/ranks excluded by evidence rules or the context limit, with reasons |
@@ -93,7 +96,9 @@ Records use schema `lex-interaction-v1` and are written for both policy endpoint
 
 Selected-context hashes describe the pre-redaction snippets. If a snippet was redacted, the stored text deliberately differs and the privacy field records that fact. Rejected raw model output is not persisted; its fixed validation reason is retained. Accepted generated claims and the resulting answer are retained in `response`.
 
-`model` records the actual tag reported by Ollama. `/api/generate` does not provide an immutable weights digest, so `model_digest` is explicitly null. This trail supports review, not bit-for-bit inference replay. Prompt version `lex-claims-v1`, selection version `current-authoritative-threshold-v2`, temperature 0, seed 0, context limit and inference options are recorded. See [Ollama's generation API](https://docs.ollama.com/api/generate) for the schema and options fields.
+`model` records the actual tag reported by Ollama. `/api/generate` does not provide an immutable weights digest, so `model_digest` is explicitly null. This trail supports review, not bit-for-bit inference replay. Prompt version `lex-claims-v2`, selection version `current-authoritative-threshold-v3`, scope version `indexed-title-section-v1`, temperature 0, seed 0, context limit and inference options are recorded. See [Ollama's generation API](https://docs.ollama.com/api/generate) for the schema and options fields.
+
+Citation-text failures have distinct fixed validation codes: `generated_url`, `generated_reference_marker`, `generated_section_reference`, `generated_source_list` and `unverified_policy_title`. Raw rejected model text is still not persisted. The public message for `unverifiable_generation` says that retrieved evidence was found but the generated answer could not be verified; it does not misreport this as a missing index.
 
 ## Storage, access and privacy
 
@@ -111,7 +116,7 @@ Use Python 3.12+ and the existing local setup. These tests do not download BGE-M
 
 ```bash
 python -m pip install -r requirements.txt -r requirements-llm.txt qdrant-client==1.12.1
-SECRET_KEY=local-tests-only python manage.py test api tests.test_policy_retriever tests.test_retrieval_qdrant tests.test_citations_audit
+SECRET_KEY=local-tests-only python manage.py test api tests.test_policy_retriever tests.test_retrieval_qdrant tests.test_citations_audit tests.test_query_scope
 npm --prefix frontend install
 npm --prefix frontend run test:sources
 npm --prefix frontend run build
@@ -135,7 +140,19 @@ For ordinary interactions, `python inspect_audit.py --id <returned-interaction-i
 python inspect_audit.py --purge-expired --retention-days 30
 ```
 
-For a live smoke test, start the indexed local retrieval stack, `ollama` with the configured Qwen model and Django (`python manage.py runserver`), then start the frontend. Ask a supported policy question and an unrelated question, follow the displayed links, and inspect their returned interaction IDs locally. The full corpus/index setup remains in the existing COPL-183/COPL-292 guides.
+For compact diagnostics, run `python inspect_audit.py --limit 1 --summary`. This reads existing records without opening Qdrant and can run alongside the backend. Omit `--summary` to inspect the exact stored context, response and citations.
+
+For a live smoke test, start the indexed local retrieval stack, `ollama` with the configured Qwen model and Django (`python manage.py runserver --noreload`), then start the frontend. Ask a supported policy question and an unrelated question, follow the displayed links, and inspect their returned interaction IDs locally. The full corpus/index setup remains in the existing COPL-183/COPL-292 guides.
+
+## Live-test follow-up, 22 September 2026
+
+The supplied local interaction for "What is the purpose of the Assessment Policy?" had five candidates above 0.55, completed Qwen generation, and then `generated_citation_text` / `unverifiable_generation`. Its stored Top-5 omitted `216-2`, the Purpose section. The record establishes the failing stage but does not contain the rejected answer, so the precise offending string cannot be recovered.
+
+A separate reproduction using a valid purpose quotation and the genuine title "Assessment Policy" confirmed a validator false positive. The follow-up accepts a title only when backed by that claim's cited metadata, provides document identity in the prompt, scopes explicit title/section questions using indexed metadata, and records more specific failure diagnostics. Invented titles, titles belonging only to another claim, URLs, manual references and source fields are still rejected.
+
+63 backend tests passed, including the attribution regression, multi-source attribution, scope pagination and real in-memory Qdrant tests for purpose retrieval, current status and unchanged threshold/exclusion behaviour. A valid Assessment Policy purpose claim was also checked against the repository's real `216-2` metadata. These are deterministic checks, not a live BGE-M3/Qwen pass. The follow-up must still be retested on the local model setup.
+
+Retest the same question first. The expected source is Assessment Policy, Section 2 - Purpose, with the authoritative `view.php?id=216` URL and a quote about assuring assessment quality. Inspect the new audit record for `query_scope`, the actual candidate scores, selected chunk `216-2`, generation validation and returned sources. A low score or model abstention must still produce a fallback. Then test Research Human Ethics Procedure, a question naming both policies, an unrelated question, and an unavailable Ollama service. Verify every displayed claim against its actual quotation and official source before marking the live checks complete.
 
 ## Verification recorded on 21 September 2026
 

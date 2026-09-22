@@ -62,11 +62,54 @@ class CitationTests(TestCase):
         self.assertEqual(result["claims"][0]["source_ids"], ["S1"])
         self.assertTrue(result["answer"].endswith("[S1]"))
 
-    def test_prompt_contains_handles_and_text_not_citation_metadata(self):
+    def test_prompt_identifies_evidence_without_asking_for_source_objects(self):
         prompt = build_prompt("What does the policy say?", self.context)
         self.assertIn('"evidence_id": "E1"', prompt)
         self.assertNotIn(self.evidence[0]["source_url"], prompt)
-        self.assertNotIn('"policy_title"', prompt)
+        self.assertIn('"policy_title": "Assessment Policy"', prompt)
+        self.assertIn(self.evidence[0]["section"], prompt)
+        self.assertNotIn('"source_url"', prompt)
+
+    def test_known_policy_title_in_a_supported_claim_is_accepted(self):
+        for claim_text in ("The Assessment Policy requires timely feedback.",
+                           "Under Assessment Policy, feedback is timely.",
+                           "This Policy requires timely feedback."):
+            value = json.loads(model_text(("E1", self.quote)))
+            value["claims"][0]["text"] = claim_text
+            with self.subTest(text=claim_text):
+                result, _ = build_cited_answer(json.dumps(value), self.context)
+                self.assertEqual(result["claims"][0]["text"], claim_text)
+                self.assertEqual(result["sources"][0]["policy_title"], "Assessment Policy")
+
+    def test_titles_from_unused_or_other_claims_evidence_are_not_attributions(self):
+        evidence = [self.evidence[0], {**self.evidence[0], "policy_title": "Research Human Ethics Procedure"}]
+        context = select_context(evidence)
+        for claim_text in ("The Research Human Ethics Procedure requires feedback.",
+                           "The Fictional Assessment Policy requires feedback."):
+            value = json.loads(model_text(("E1", self.quote), ("E2", self.quote)))
+            value["claims"][0]["text"] = claim_text
+            with self.subTest(text=claim_text), self.assertRaisesRegex(CitationValidationError, "unverified_policy_title"):
+                build_cited_answer(json.dumps(value), context)
+
+    def test_one_claim_may_name_both_policies_it_actually_cites(self):
+        second = {**self.evidence[0], "policy_title": "Research Human Ethics Procedure"}
+        value = {"claims": [{"text": "The Assessment Policy and Research Human Ethics Procedure require this.",
+                            "support": [{"evidence_id": "E1", "quote": self.quote},
+                                        {"evidence_id": "E2", "quote": self.quote}]}]}
+        result, _ = build_cited_answer(json.dumps(value), select_context([self.evidence[0], second]))
+        self.assertEqual(len(result["sources"]), 2)
+
+    def test_citation_text_rejections_have_distinct_safe_reason_codes(self):
+        cases = {"See https://example.test": "generated_url",
+                 "See [E1]": "generated_reference_marker",
+                 "See Section 2": "generated_section_reference",
+                 "Sources: Assessment Policy": "generated_source_list",
+                 "The Fictional Policy says so.": "unverified_policy_title"}
+        for claim_text, reason in cases.items():
+            value = json.loads(model_text(("E1", self.quote)))
+            value["claims"][0]["text"] = claim_text
+            with self.subTest(text=claim_text), self.assertRaisesRegex(CitationValidationError, reason):
+                build_cited_answer(json.dumps(value), self.context)
 
     def test_multiple_sections_of_one_url_remain_distinct(self):
         evidence = [self.evidence[0], {**self.evidence[0], "section": "Section 6", "chunk_id": "216-2"}]
@@ -277,6 +320,31 @@ class InteractionAuditTests(SimpleTestCase):
         self.assertEqual(record["generation"]["validation"], "unknown_evidence")
         self.assertIsNone(response.data["answer"])
         self.assertEqual(response.data["sources"], [])
+        self.assertIn("could not verify", response.data["message"])
+        self.assertNotIn("could not find", response.data["message"])
+
+    def test_named_policy_claim_and_query_scope_can_be_reconstructed(self):
+        base = retrieve([point()])
+        result = base.retrieve("What is the purpose of the Assessment Policy?")
+        scope = {"policy_titles": ["Assessment Policy"], "requested_section": "purpose",
+                 "heading_filters": {"section": ["Section 2 - Purpose"]}}
+        result["_trace"]["query_scope"] = scope
+        retriever = SimpleNamespace(retrieve=lambda _: result, audit_config=base.audit_config)
+        value = json.loads(model_text(("E1", point().payload["text"])))
+        value["claims"][0]["text"] = "The Assessment Policy requires timely feedback."
+        response, record = self.request(retriever, json.dumps(value))
+        self.assertEqual(response.data["status"], "supported")
+        self.assertEqual(record["retrieval"]["query_scope"], scope)
+        self.assertEqual(record["generation"]["validation"], "accepted")
+        self.assertEqual(record["generation"]["prompt_version"], "lex-claims-v2")
+
+    def test_specific_attribution_rejection_is_audited_without_raw_model_text(self):
+        value = json.loads(model_text(("E1", point().payload["text"])))
+        value["claims"][0]["text"] = "The Fictional Policy says this."
+        response, record = self.request(retrieve([point()]), json.dumps(value))
+        self.assertEqual(response.data["fallback_reason"], "unverifiable_generation")
+        self.assertEqual(record["generation"]["validation"], "unverified_policy_title")
+        self.assertNotIn("Fictional", json.dumps(record))
 
     def test_model_abstention_is_a_fallback(self):
         response, record = self.request(retrieve([point()]), '{"claims":[]}')

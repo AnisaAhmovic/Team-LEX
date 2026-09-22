@@ -15,8 +15,9 @@ from urllib.parse import urlparse
 from ingestion.embedding_config import (
     EMBEDDING_DIMENSION, EMBEDDING_MODEL_NAME, QDRANT_COLLECTION_NAME,
 )
+from retrieval.query_scope import HEADING_FIELDS, QUERY_SCOPE_VERSION, apply_scope, resolve_scope
 
-SELECTION_VERSION = "current-authoritative-threshold-v2"
+SELECTION_VERSION = "current-authoritative-threshold-v3"
 PROVENANCE_FIELDS = (
     "chunk_id", "document_id", "policy_title", "section", "subsection",
     "topic", "subtopic", "paragraph_start", "paragraph_end", "source_url",
@@ -34,6 +35,12 @@ FALLBACK_MESSAGE = (
     "I could not find enough current, authoritative La Trobe policy evidence "
     "to answer that question. I have not provided an unsupported answer."
 )
+FALLBACK_MESSAGES = {
+    "unverifiable_generation": (
+        "I retrieved policy evidence, but could not verify the generated answer against it. "
+        "Check the official policy or try rephrasing your question."
+    ),
+}
 ESCALATION_MESSAGE = (
     "Check the official La Trobe Policy Library or contact the relevant "
     "University office for clarification."
@@ -78,7 +85,7 @@ def fallback_response(question: Any, reason: str) -> dict[str, Any]:
         "question": safe_question,
         "evidence_sufficient": False,
         "evidence": [],
-        "message": FALLBACK_MESSAGE,
+        "message": FALLBACK_MESSAGES.get(reason, FALLBACK_MESSAGE),
         "fallback_reason": reason,
         "escalation": {
             "message": ESCALATION_MESSAGE,
@@ -156,6 +163,7 @@ class PolicyRetriever:
             raise ValueError(f"Policy retrieval must query exactly {TOP_K} results.")
 
         self._client = client
+        self._catalogue = None
         self._client_factory = client_factory or _default_client_factory
         self._embedder = embedder or _default_embedder
         self.collection_name = collection_name
@@ -166,7 +174,7 @@ class PolicyRetriever:
         """Return supported policy evidence or a safe fallback response."""
         normalised_question = validate_question(question)
         embedding = self._embed_question(normalised_question)
-        points = self._query_qdrant(embedding)
+        points, query_scope = self._query_qdrant(embedding, normalised_question)
 
         evidence, candidates = [], []
         seen = set()
@@ -181,7 +189,7 @@ class PolicyRetriever:
                     evidence.append(item)
             candidates.append(candidate)
 
-        trace = {"config": self.audit_config(), "candidates": candidates}
+        trace = {"config": self.audit_config(), "candidates": candidates, "query_scope": query_scope}
         if not evidence:
             return {**fallback_response(normalised_question, "insufficient_evidence"), "_trace": trace}
 
@@ -199,6 +207,7 @@ class PolicyRetriever:
         """Explicit safe configuration, never connection URLs or environment dumps."""
         return {
             "selection_version": SELECTION_VERSION,
+            "query_scope_version": QUERY_SCOPE_VERSION,
             "top_k": self.top_k,
             "minimum_similarity_score": self.min_similarity_score,
             "current_status_filter": CURRENT_POLICY_STATUS,
@@ -225,10 +234,36 @@ class PolicyRetriever:
             self._client = self._client_factory()
         return self._client
 
-    def _query_qdrant(self, embedding: list[float]) -> list[Any]:
+    def _load_catalogue(self, client):
+        """Cache current titles/headings from this index until the backend restarts."""
+        if self._catalogue is None:
+            catalogue, offset = [], None
+            # Retain compatibility with injected search-only clients.
+            if not hasattr(client, "scroll"):
+                return []
+            while True:
+                records, offset = client.scroll(
+                    collection_name=self.collection_name, scroll_filter=_current_policy_filter(),
+                    limit=256, offset=offset,
+                    with_payload=["policy_title", *HEADING_FIELDS], with_vectors=False,
+                )
+                for record in records:
+                    payload = record.payload or {}
+                    title = _text_field(payload, "policy_title")
+                    if title:
+                        catalogue.append({"policy_title": title, **{
+                            field: _text_field(payload, field) for field in HEADING_FIELDS
+                        }})
+                if offset is None:
+                    break
+            self._catalogue = catalogue
+        return self._catalogue
+
+    def _query_qdrant(self, embedding: list[float], question: str) -> tuple[list[Any], dict]:
         try:
             client = self._get_client()
-            current_filter = _current_policy_filter()
+            scope = resolve_scope(question, self._load_catalogue(client))
+            current_filter = apply_scope(_current_policy_filter(), scope)
 
             if hasattr(client, "query_points"):
                 response = client.query_points(
@@ -239,7 +274,7 @@ class PolicyRetriever:
                     with_payload=True,
                     with_vectors=False,
                 )
-                return list(response.points)
+                return list(response.points), scope
 
             # Compatibility with older Qdrant clients used by some team setups.
             return list(
@@ -251,7 +286,7 @@ class PolicyRetriever:
                     with_payload=True,
                     with_vectors=False,
                 )
-            )
+            ), scope
         except Exception as exc:
             raise RetrievalUnavailableError(
                 "Current policy evidence could not be retrieved."
