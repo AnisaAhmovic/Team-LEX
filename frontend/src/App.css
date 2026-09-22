@@ -419,3 +419,34 @@ input {
   color: #184f90;
   text-decoration: underline;
 }
+
+/* Task 9: AI disclaimer. Blue = information, so it doesn't look like a
+   fallback (amber) or an error (red). */
+.disclaimer {
+  margin: 8px 16px 0 16px;
+  padding: 10px 14px;
+  background: #eff6ff;
+  border: 1px solid #93c5fd;
+  border-radius: 10px;
+  color: #1f2937;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.disclaimer p {
+  margin: 0;
+}
+
+.disclaimer a {
+  color: #184f90;
+  text-decoration: underline;
+}
+
+/* Smaller screens: less padding so the messages still have room */
+@media (max-width: 700px) {
+  .disclaimer {
+    margin: 6px 10px 0 10px;
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+}
