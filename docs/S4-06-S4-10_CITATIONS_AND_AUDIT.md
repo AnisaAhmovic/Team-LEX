@@ -211,3 +211,46 @@ its referenced evidence ID, so selecting another chunk's quote is rejected.
 The API source format is unchanged. This prevents this typo when the generation
 backend honours the enum; validation remains mandatory if it does not. Exact quotes
 still do not prove semantic entailment. Live Qwen retesting remains required.
+
+## Representative live verification, 22 September 2026
+
+Evidence supplied by the tester from their Mac, using Qwen3 4B, BGE-M3 on CPU,
+threshold 0.55 and prompt lex-claims-v3 at commit 12ea60c. These are actual
+application interactions, separate from the mocked automated tests.
+
+| Interaction ID | Scenario | Observed result |
+| --- | --- | --- |
+| 38899691-1a3e-486a-81a2-57c1c9bc3e6f | Assessment Policy purpose | Supported; 216-2 selected at 0.582859; accepted generation; one source |
+| 6c00aa81-0ef1-4ecd-a120-8e9eb0c4754b | Research Human Ethics Procedure purpose | Supported; 112-2 selected at 0.654803; accepted generation; one source |
+| 08438949-1d9b-4c45-849e-29bb3bd3551c | Both purposes | Supported; 112-2 and 216-2 selected at 0.634262 and 0.586431; two claims with respective sources |
+| 7ff3fbaa-d225-4bf3-92bf-0bb64f7047bd | Chocolate cake question | All five candidates excluded below threshold (0.371825 to 0.397546); no generation or sources |
+| b8d414c6-9bfb-4594-afb9-de758a692d4f | Ollama unavailable | Retrieval supported with selected 216-2; generation attempted; generation_unavailable error, HTTP 502; null answer and empty claims/sources |
+
+Chat screenshots showed separate answers/source objects, title/section/paragraph
+metadata, recorded currency, supporting excerpts, and correct per-claim source
+links for the multi-policy response. The Assessment Policy link was opened by
+the tester: its current official page showed the cited Purpose text and review
+date. The Research Human Ethics Procedure official page was independently
+opened on the same day and its title, Purpose paragraphs and review date matched
+the displayed citation (https://policies.latrobe.edu.au/document/view.php?id=112).
+
+The failure record was inspected in full: it retained the question, timestamp,
+rank, score, source metadata, CPU/model/threshold configuration, selected passage,
+hashes, generation settings, error stage/code and empty returned answer/citations.
+Supported/fallback audit summaries were read back and compared to screenshots.
+Original records remain in the tester's local SQLite database; this document is
+a results summary, not a copy of that database.
+
+The failure exercise exposed misleading API message text about insufficient
+evidence despite successful retrieval. The API now says answer generation is
+temporarily unavailable; its existing regression test checks the same message
+in the API and audit. The frontend already displayed a service-failure message.
+This wording-only follow-up is covered by automated testing and has not been
+retested live. All 69 backend tests pass after the correction.
+
+Limitations: these representative cases do not establish full-corpus groundedness
+or performance. Exact quotes do not prove every paraphrase follows from them.
+The human-ethics supporting excerpt is truncated at the 800-character context
+limit; the shown supporting sentence is present. Model digest remains null; the
+model tag and generation configuration are available, not an immutable model
+revision. Best-effort redaction is not a guarantee of anonymisation.

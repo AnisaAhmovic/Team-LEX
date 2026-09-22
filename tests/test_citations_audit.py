@@ -329,6 +329,8 @@ class InteractionAuditTests(SimpleTestCase):
         self.assertEqual(response.status_code, 502)
         self.assertEqual(record["outcome"], "error")
         self.assertEqual(record["error"]["stage"], "generation")
+        self.assertEqual(response.data["message"], "Answer generation is temporarily unavailable. Please try again shortly.")
+        self.assertEqual(record["response"]["message"], response.data["message"])
         self.assertEqual(len(record["selection"]["selected_context"]), 1)
         self.assertNotIn("do-not-log", json.dumps(record))
         self.assertEqual(response.data["sources"], [])

@@ -36,6 +36,9 @@ FALLBACK_MESSAGE = (
     "to answer that question. I have not provided an unsupported answer."
 )
 FALLBACK_MESSAGES = {
+    "generation_unavailable": (
+        "Answer generation is temporarily unavailable. Please try again shortly."
+    ),
     "unverifiable_generation": (
         "I retrieved policy evidence, but could not verify the generated answer against it. "
         "Check the official policy or try rephrasing your question."
