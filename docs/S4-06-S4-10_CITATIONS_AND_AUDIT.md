@@ -181,3 +181,20 @@ The following authoritative view and details pages were opened and compared with
 | S4-10 logging/privacy documentation | This guide and frontend notice |
 
 Task requirement references supplied in the backlog: S4-06, FR6/FR7, NFR2/NFR6/NFR9, UC7; S4-10, FR12/FR18/FR19, NFR11, UC4. This mapping does not claim that these broader requirements are fully satisfied outside the two tasks. Future guardrail branches should use the same audited response path.
+
+## CPU embedding retest (22 September 2026)
+
+The live scoped Assessment Policy Purpose query found chunk `216-2` but scored
+0.263078, below the unchanged 0.55 threshold. Generation was not attempted.
+A user-run CPU diagnostic against that same stored vector scored 0.582859;
+re-embedding its payload on CPU also scored 0.582859. Stored/fresh vector cosine
+was approximately 1.0. This validates that one stored vector against CPU output,
+not the entire index. The prior automatically selected device was not recorded,
+so an MPS-specific root cause is suspected, not proven.
+
+The shared index/query embedder now explicitly constructs BGE-M3 on CPU.
+Configuration records and retrieval audit configuration include embedding_device.
+The existing index can be used for the next retest; no threshold reduction or
+re-index is required for this verified chunk. CPU execution may be slower.
+Restart Django, repeat the Purpose question and inspect the new audit. A supported
+answer with verified citations still requires live Qwen validation.
