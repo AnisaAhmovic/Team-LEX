@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import ChatInput from "./ChatInput";
+import Disclaimer from "./Disclaimer";
 import { makeBotReply, makeConnectionErrorReply } from "../botReply";
 
 function Chatbot() {
@@ -128,6 +129,9 @@ function Chatbot() {
 
         <div ref={messagesEndRef}></div>
       </main>
+
+      {/* Outside the message list so it never scrolls away */}
+      <Disclaimer />
 
       <p className="privacy-notice">Questions and responses are logged locally for quality review. Avoid sharing personal information.</p>
 
