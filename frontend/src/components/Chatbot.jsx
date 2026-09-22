@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import ChatInput from "./ChatInput";
+import { makeBotReply, makeConnectionErrorReply } from "../botReply";
 
 function Chatbot() {
   const [messages, setMessages] = useState([
@@ -40,20 +41,22 @@ function Chatbot() {
         signal: controller.signal,
       });
       const data = await response.json();
-      const supported = response.ok && data.status === "supported";
-      setMessages((previous) => [...previous, {
-        id: crypto.randomUUID(), sender: "bot", time: getCurrentTime(),
-        message: supported ? data.answer : (
-          response.ok ? data.message : "The policy service could not complete this request. Please try again."
-        ),
-        claims: supported ? data.claims : [],
-        sources: supported ? data.sources : [],
-      }]);
+
+      // Work out if this is an answer, a fallback or an error (see botReply.js)
+      const botMessage = makeBotReply(response.ok, response.status, data);
+      botMessage.id = crypto.randomUUID();
+      botMessage.sender = "bot";
+      botMessage.time = getCurrentTime();
+
+      setMessages((previous) => [...previous, botMessage]);
     } catch {
-      setMessages((previous) => [...previous, {
-        id: crypto.randomUUID(), sender: "bot", time: getCurrentTime(),
-        message: "The policy service could not be reached. Please try again.",
-      }]);
+      // We couldn't reach Django at all, or it didn't send back JSON
+      const botMessage = makeConnectionErrorReply();
+      botMessage.id = crypto.randomUUID();
+      botMessage.sender = "bot";
+      botMessage.time = getCurrentTime();
+
+      setMessages((previous) => [...previous, botMessage]);
     } finally {
       clearTimeout(timeout);
       setIsTyping(false);
@@ -103,6 +106,8 @@ function Chatbot() {
             messageId={message.id}
             claims={message.claims}
             sources={message.sources}
+            type={message.type}
+            escalation={message.escalation}
             message={message.message}
             sender={message.sender}
             time={message.time}
