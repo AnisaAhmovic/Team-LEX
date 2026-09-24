@@ -70,6 +70,27 @@ class CitationTests(TestCase):
         self.assertIn(self.evidence[0]["section"], prompt)
         self.assertNotIn('"source_url"', prompt)
 
+    def test_paraphrased_question_preserves_the_same_evidence_contract(self):
+        """A paraphrased question uses the same selected authoritative evidence."""
+        original = "What does the policy say?"
+        paraphrase = "Can you explain what this policy requires?"
+
+        original_prompt = build_prompt(original, self.context)
+        paraphrase_prompt = build_prompt(paraphrase, self.context)
+        original_schema = generation_schema(self.context)
+        paraphrase_schema = generation_schema(self.context)
+
+        self.assertIn(original, original_prompt)
+        self.assertIn(paraphrase, paraphrase_prompt)
+        self.assertIn('"evidence_id": "E1"', paraphrase_prompt)
+        self.assertEqual(original_schema, paraphrase_schema)
+
+        allowed_quotes = (
+            paraphrase_schema["properties"]["claims"]["items"]["properties"]["support"]
+            ["items"]["properties"]["quote"]["enum"]
+        )
+        self.assertIn(self.quote, allowed_quotes)
+
     def test_partial_evidence_does_not_create_support_for_missing_facts(self):
         """Partial evidence exposes only quotes actually present in selected context."""
         context = select_context([{
