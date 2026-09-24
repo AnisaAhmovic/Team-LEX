@@ -33,7 +33,7 @@ function Chatbot() {
     setMessages((previous) => [...previous, userMessage]);
     setIsTyping(true);
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 120000);
+    const timeout = setTimeout(() => controller.abort(), 195000);
     try {
       const response = await fetch("/api/answer/", {
         method: "POST",
