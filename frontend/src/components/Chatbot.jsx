@@ -1,19 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import ChatInput from "./ChatInput";
 import Disclaimer from "./Disclaimer";
+import LexBotIcon from "./LexBotIcon";
 import { makeBotReply, makeConnectionErrorReply } from "../botReply";
 
 function Chatbot() {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      sender: "bot",
-      message: "Hello! 👋 I'm Lex AI. How can I help you with La Trobe University policies?",
-      time: getCurrentTime(),
-    },
-  ]);
-
+  const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
 
   const messagesEndRef = useRef(null);
@@ -26,14 +19,20 @@ function Chatbot() {
 
   const handleSendMessage = async (text) => {
     if (isTyping || !text.trim()) return;
+
     const userMessage = {
-      id: crypto.randomUUID(), sender: "user", message: text,
+      id: crypto.randomUUID(),
+      sender: "user",
+      message: text,
       time: getCurrentTime(),
     };
+
     setMessages((previous) => [...previous, userMessage]);
     setIsTyping(true);
+
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 195000);
+
     try {
       const response = await fetch("/api/answer/", {
         method: "POST",
@@ -41,6 +40,7 @@ function Chatbot() {
         body: JSON.stringify({ question: text }),
         signal: controller.signal,
       });
+
       const data = await response.json();
 
       // Work out if this is an answer, a fallback or an error (see botReply.js)
@@ -65,27 +65,25 @@ function Chatbot() {
   };
 
   const clearChat = () => {
-    setMessages([
-      {
-        id: Date.now(),
-        sender: "bot",
-        message: "Chat cleared. How can I help you?",
-        time: getCurrentTime(),
-      },
-    ]);
+    setMessages([]);
   };
+
+  const isWelcomeState = messages.length === 0 && !isTyping;
 
   return (
     <div className="chatbot">
       <header className="chat-header">
         <div className="chat-header-left">
-          <div className="header-avatar">🤖</div>
+          <div className="header-avatar" aria-hidden="true">
+            <LexBotIcon />
+          </div>
 
-          <div>
-            <h1>Lex AI</h1>
+          <div className="product-identity">
+            <h1>LEX AI</h1>
+            <p className="product-subtitle">La Trobe Policy Assistant</p>
             <div className="online-status">
               <span className="online-dot"></span>
-              Policy assistant
+              Ready
             </div>
           </div>
         </div>
@@ -93,14 +91,46 @@ function Chatbot() {
         <button
           className="clear-button"
           onClick={clearChat}
-          disabled={isTyping}
+          disabled={isTyping || messages.length === 0}
           title="Clear conversation"
         >
           Clear
         </button>
       </header>
 
-      <main className="messages-container">
+      <main className={`messages-container ${isWelcomeState ? "welcome-mode" : ""}`}>
+        {isWelcomeState && (
+          <section className="welcome-state" aria-labelledby="welcome-heading">
+            <div className="welcome-bot" aria-hidden="true">
+              <LexBotIcon />
+            </div>
+
+            <h2 id="welcome-heading">How can I help with La Trobe policy?</h2>
+
+            <p className="welcome-intro">
+              Ask a question about University policy and LEX AI will find
+              relevant information and show you the sources used.
+            </p>
+
+            <div className="example-prompts" aria-label="Example policy questions">
+              <div className="example-prompt">
+                <span className="example-label">University vehicles</span>
+                <span>What are the requirements for driving a University vehicle?</span>
+              </div>
+
+              <div className="example-prompt">
+                <span className="example-label">Workplace behaviour</span>
+                <span>What does the policy say about workplace behaviour?</span>
+              </div>
+
+              <div className="example-prompt">
+                <span className="example-label">Health &amp; safety</span>
+                <span>What are my health and safety responsibilities?</span>
+              </div>
+            </div>
+          </section>
+        )}
+
         {messages.map((message) => (
           <Message
             key={message.id}
@@ -117,9 +147,11 @@ function Chatbot() {
 
         {isTyping && (
           <div className="message-row bot-row">
-            <div className="bot-avatar">🤖</div>
+            <div className="bot-avatar" aria-hidden="true">
+              <LexBotIcon />
+            </div>
 
-            <div className="typing-indicator">
+            <div className="typing-indicator" aria-label="LEX AI is processing your question">
               <span></span>
               <span></span>
               <span></span>
@@ -133,7 +165,10 @@ function Chatbot() {
       {/* Outside the message list so it never scrolls away */}
       <Disclaimer />
 
-      <p className="privacy-notice">Questions and responses are logged locally for quality review. Avoid sharing personal information.</p>
+      <p className="privacy-notice">
+        Questions and responses are logged locally for quality review. Avoid
+        sharing personal information.
+      </p>
 
       <ChatInput
         onSend={handleSendMessage}
@@ -151,4 +186,3 @@ function getCurrentTime() {
 }
 
 export default Chatbot;
-

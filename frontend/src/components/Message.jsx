@@ -1,3 +1,5 @@
+import LexBotIcon from "./LexBotIcon";
+
 function authoritativeUrl(value) {
   try {
     const url = new URL(value);
@@ -35,7 +37,7 @@ function Message({ message, sender, time, messageId, claims = [], sources = [], 
 
   return (
     <div className={`message-row ${isBot ? "bot-row" : "user-row"}`}>
-      {isBot && <div className="bot-avatar">🤖</div>}
+      {isBot && <div className="bot-avatar" aria-hidden="true"><LexBotIcon /></div>}
       <div className={bubbleClass}>
         {type === "fallback" && <strong className="message-label">No policy answer found</strong>}
         {type === "error" && <strong className="message-label">Something went wrong. This is not a policy answer.</strong>}
