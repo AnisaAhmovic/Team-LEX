@@ -6,7 +6,7 @@
 
 body {
   font-family:
-    Inter,
+    "DM Sans",
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
@@ -78,7 +78,7 @@ input {
   align-items: center;
   justify-content: center;
 
-  background: #eef2ff;
+  background: #f3f4f6;
   border-radius: 50%;
 
   font-size: 22px;
@@ -173,7 +173,7 @@ input {
   align-items: center;
   justify-content: center;
 
-  background: #eef2ff;
+  background: #f3f4f6;
   border-radius: 50%;
 
   font-size: 16px;
@@ -205,7 +205,7 @@ input {
 }
 
 .user-message {
-  background: #4f46e5;
+  background: #e2231b;
 
   color: white;
 
@@ -308,9 +308,9 @@ input {
 }
 
 .chat-input-container input:focus {
-  border-color: #6366f1;
+  border-color: #e2231b;
 
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 3px rgba(226, 35, 27, 0.1);
 }
 
 .chat-input-container input::placeholder {
@@ -324,7 +324,7 @@ input {
 
   border-radius: 12px;
 
-  background: #4f46e5;
+  background: #e2231b;
 
   color: white;
 
@@ -448,5 +448,378 @@ input {
     margin: 6px 10px 0 10px;
     padding: 8px 10px;
     font-size: 0.8rem;
+  }
+}
+
+/* ============================================================
+   S5-02 final UX refinement
+   LEX AI product identity, welcome state and interaction polish
+   ============================================================ */
+
+:root {
+  --lex-red: #e2231b;
+  --lex-red-dark: #bd1d17;
+  --lex-charcoal: #171717;
+  --lex-text: #1f2937;
+  --lex-muted: #6b7280;
+  --lex-line: #e5e7eb;
+  --lex-soft: #f7f7f8;
+}
+
+/* Product header */
+
+.chat-header {
+  min-height: 96px;
+  padding: 18px 26px;
+  border-bottom: 1px solid var(--lex-line);
+}
+
+.chat-header-left {
+  gap: 15px;
+}
+
+.header-avatar {
+  width: 56px;
+  height: 56px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(17, 24, 39, 0.07);
+}
+
+.header-avatar .lex-bot-icon {
+  width: 39px;
+  height: 39px;
+}
+
+.product-identity {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 10px;
+  align-items: center;
+}
+
+.chat-header h1 {
+  grid-column: 1;
+  font-size: 22px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  color: var(--lex-charcoal);
+}
+
+.product-subtitle {
+  grid-column: 1 / -1;
+  margin-top: 1px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--lex-muted);
+}
+
+.online-status {
+  grid-column: 2;
+  grid-row: 1;
+  margin-top: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.online-dot {
+  width: 7px;
+  height: 7px;
+}
+
+.clear-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* LEX AI robot */
+
+.lex-bot-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.lex-bot-head,
+.lex-bot-ear {
+  fill: var(--lex-charcoal);
+}
+
+.lex-bot-face {
+  fill: white;
+}
+
+.lex-bot-eye,
+.lex-bot-accent {
+  fill: var(--lex-red);
+}
+
+.lex-bot-antenna,
+.lex-bot-smile,
+.lex-bot-neck,
+.lex-bot-base {
+  fill: none;
+  stroke: var(--lex-charcoal);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Conversation and welcome state */
+
+.messages-container {
+  padding: 26px 28px;
+  background: linear-gradient(180deg, #fafafa 0%, #f7f7f8 100%);
+}
+
+.messages-container.welcome-mode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-state {
+  width: min(100%, 700px);
+  margin: auto;
+  padding: 16px 12px 20px;
+  text-align: center;
+}
+
+.welcome-bot {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 15px;
+  padding: 12px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  box-shadow: 0 5px 18px rgba(17, 24, 39, 0.07);
+}
+
+.welcome-state h2 {
+  color: var(--lex-charcoal);
+  font-size: 25px;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.welcome-intro {
+  max-width: 570px;
+  margin: 10px auto 22px;
+  color: #5b6472;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.example-prompts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  text-align: left;
+}
+
+.example-prompt {
+  min-width: 0;
+  min-height: 104px;
+  padding: 15px 16px;
+  background: white;
+  border: 1px solid #e1e4e8;
+  border-radius: 12px;
+  color: #374151;
+  font-size: 13px;
+  line-height: 1.45;
+  box-shadow: 0 1px 2px rgba(17, 24, 39, 0.03);
+}
+
+.example-label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--lex-red);
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+/* Bot avatars in conversation */
+
+.bot-avatar {
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  background: white;
+  border: 1px solid #e5e7eb;
+}
+
+/* Input area */
+
+.chat-input-container {
+  padding: 13px 18px 17px;
+  gap: 10px;
+  border-top: 0;
+}
+
+.chat-input-container input {
+  min-height: 48px;
+  padding: 13px 16px;
+  background: #fafafa;
+  border: 1px solid #cfd4dc;
+  border-radius: 12px;
+}
+
+.chat-input-container input:focus {
+  background: white;
+}
+
+.chat-input-container button {
+  width: 50px;
+  min-height: 48px;
+  background: var(--lex-red);
+}
+
+.chat-input-container button:hover:not(:disabled) {
+  background: var(--lex-red-dark);
+  transform: translateY(-1px);
+}
+
+.chat-input-container button:disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+}
+
+/* Responsible-use area */
+
+.disclaimer {
+  margin: 10px 18px 0;
+}
+
+.privacy-notice {
+  margin: 7px 20px 0;
+  color: #6b7280;
+  text-align: center;
+}
+
+/* Responsive refinement */
+
+@media (max-width: 700px) {
+  .chat-header {
+    min-height: 82px;
+    padding: 13px 14px;
+  }
+
+  .header-avatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  .header-avatar .lex-bot-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .chat-header h1 {
+    font-size: 19px;
+  }
+
+  .product-subtitle {
+    font-size: 12px;
+  }
+
+  .messages-container {
+    padding: 18px 14px;
+  }
+
+  .welcome-state {
+    padding: 8px 0 14px;
+  }
+
+  .welcome-bot {
+    width: 58px;
+    height: 58px;
+    padding: 10px;
+    margin-bottom: 12px;
+  }
+
+  .welcome-state h2 {
+    font-size: 21px;
+  }
+
+  .welcome-intro {
+    margin-bottom: 16px;
+  }
+
+  .example-prompts {
+    grid-template-columns: 1fr;
+  }
+
+  .example-prompt {
+    min-height: auto;
+  }
+}
+
+/* S5-02: Keep the complete chatbot usable at normal browser zoom. */
+.chatbot {
+  height: min(700px, calc(100vh - 48px));
+  min-height: 560px;
+}
+
+@media (max-height: 760px) {
+  .chat-header {
+    height: 82px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .messages-container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .welcome-state {
+    gap: 14px;
+  }
+
+  .welcome-bot {
+    width: 58px;
+    height: 58px;
+  }
+
+  .welcome-state h2 {
+    margin: 2px 0 0;
+  }
+
+  .welcome-intro {
+    margin-bottom: 2px;
+  }
+
+  .example-prompt {
+    padding: 12px 14px;
+  }
+}
+
+
+/* S5-02: Welcome screen should fit without an internal conversation scrollbar. */
+.messages-container.welcome-mode {
+  overflow-y: hidden;
+}
+
+@media (max-height: 760px) {
+  .welcome-state {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+
+  .welcome-bot {
+    margin-bottom: 8px;
+  }
+
+  .welcome-intro {
+    margin-top: 7px;
+  }
+
+  .example-prompt {
+    min-height: 88px;
   }
 }

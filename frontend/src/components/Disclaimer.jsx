@@ -4,8 +4,6 @@
 // Chatbot.jsx puts this outside the scrolling message list, so it stays on
 // screen before the first question and after every answer.
 //
-// DRAFT WORDING - the team/client still needs to approve it before release.
-
 const POLICY_LIBRARY_URL = "https://policies.latrobe.edu.au/";
 
 function Disclaimer() {
