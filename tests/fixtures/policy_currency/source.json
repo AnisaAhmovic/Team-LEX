@@ -1,0 +1,16 @@
+{
+  "captured_at_utc": "2026-09-29T07:55:55.141473+00:00",
+  "document_id": "216",
+  "files": {
+    "baseline.html": {
+      "url": "https://policies.latrobe.edu.au/document/view.php?id=216",
+      "final_url": "https://policies.latrobe.edu.au/document/view.php?id=216",
+      "sha256": "70fa318f7bc6bf1815c4f1030b7100420f9ea227b65809d58b5888e108187647"
+    },
+    "status.html": {
+      "url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=216",
+      "final_url": "https://policies.latrobe.edu.au/document/status-and-details.php?id=216",
+      "sha256": "c7d04040b041aeee662e90e7d372505186ff016df8dff770b768d4fdae721ef6"
+    }
+  }
+}

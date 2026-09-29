@@ -1,0 +1,59 @@
+
+Retrieving policy from: https://policies.latrobe.edu.au/document/view.php?id=216
+Policy successfully processed.
+Policy title: Assessment Policy
+HTTP status: 200
+Clean content characters: 6320
+Structured output saved to: docs/evidence/S5-06/semantic-run/baseline.json
+
+Retrieving policy from: https://policies.latrobe.edu.au/document/view.php?id=216
+Policy successfully processed.
+Policy title: Assessment Policy
+HTTP status: 200
+Clean content characters: 6172
+Structured output saved to: docs/evidence/S5-06/semantic-run/revised.json
+Creating collection 'latrobe_policy_chunks' ...
+Loaded 8 chunks from baseline_chunks.json
+Loading embedding model: BAAI/bge-m3 on cpu ...
+Model loaded.
+
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:15<00:00, 15.56s/it]
+Batches: 100%|██████████| 1/1 [00:15<00:00, 15.56s/it]
+Indexed 8/8 chunks
+
+Done. Collection 'latrobe_policy_chunks' now holds 8 points.
+Embedding configuration recorded to docs/evidence/S5-06/semantic-run/result.json
+Using existing collection 'latrobe_policy_chunks'.
+Deleting existing points for document_id='216' ...
+Loaded 7 chunks from revised_chunks.json
+
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:13<00:00, 13.82s/it]
+Batches: 100%|██████████| 1/1 [00:13<00:00, 13.82s/it]
+Indexed 7/7 chunks
+
+Done. Collection 'latrobe_policy_chunks' now holds 8 points.
+Embedding configuration recorded to docs/evidence/S5-06/semantic-run/result.json
+Using existing collection 'latrobe_policy_chunks'.
+Deleting existing points for document_id='216' ...
+Loaded 7 chunks from revised_chunks.json
+
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:13<00:00, 13.31s/it]
+Batches: 100%|██████████| 1/1 [00:13<00:00, 13.31s/it]
+Indexed 7/7 chunks
+
+Done. Collection 'latrobe_policy_chunks' now holds 8 points.
+Embedding configuration recorded to docs/evidence/S5-06/semantic-run/result.json
+Using existing collection 'latrobe_policy_chunks'.
+Loaded 7 chunks from revised_chunks.json
+
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:13<00:00, 13.72s/it]
+Batches: 100%|██████████| 1/1 [00:13<00:00, 13.72s/it]
+Indexed 7/7 chunks
+
+Done. Collection 'latrobe_policy_chunks' now holds 8 points.
+Embedding configuration recorded to docs/evidence/S5-06/semantic-run/result.json
+S5-06 PASS: 25 checks. Evidence: docs/evidence/S5-06/semantic-run/result.json

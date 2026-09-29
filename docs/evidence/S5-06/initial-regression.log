@@ -1,0 +1,66 @@
+test_clear_chunk_outputs_removes_only_json_files (tests.test_policy_chunker.ChunkOutputTests.test_clear_chunk_outputs_removes_only_json_files) ... ok
+test_corpus_files_are_sorted_by_numeric_document_id (tests.test_policy_chunker.CorpusDiscoveryTests.test_corpus_files_are_sorted_by_numeric_document_id) ... ok
+test_discovers_complete_processed_corpus (tests.test_policy_chunker.CorpusDiscoveryTests.test_discovers_complete_processed_corpus) ... FAIL
+test_missing_corpus_raises_clear_error (tests.test_policy_chunker.CorpusDiscoveryTests.test_missing_corpus_raises_clear_error) ... ok
+test_chunk_ids_are_unique_and_deterministic (tests.test_policy_chunker.PolicyChunkingTests.test_chunk_ids_are_unique_and_deterministic) ... ok
+test_chunk_policy_preserves_document_identity (tests.test_policy_chunker.PolicyChunkingTests.test_chunk_policy_preserves_document_identity) ... ok
+test_chunks_preserve_required_retrieval_metadata (tests.test_policy_chunker.PolicyChunkingTests.test_chunks_preserve_required_retrieval_metadata) ... ok
+test_delete_document_removes_only_target_document (tests.test_qdrant_indexer.QdrantIndexerTests.test_delete_document_removes_only_target_document) ... ok
+test_index_chunks_writes_expected_payload (tests.test_qdrant_indexer.QdrantIndexerTests.test_index_chunks_writes_expected_payload) ... ok
+test_reindexing_same_chunk_does_not_create_duplicate (tests.test_qdrant_indexer.QdrantIndexerTests.test_reindexing_same_chunk_does_not_create_duplicate) ... ok
+test_embedding_dimension_mismatch_is_not_treated_as_evidence (tests.test_policy_retriever.PolicyRetrieverTests.test_embedding_dimension_mismatch_is_not_treated_as_evidence) ... ok
+test_post_query_guardrails_reject_non_current_or_untrusted_evidence (tests.test_policy_retriever.PolicyRetrieverTests.test_post_query_guardrails_reject_non_current_or_untrusted_evidence) ... ok
+test_qdrant_failure_is_hidden_behind_safe_service_error (tests.test_policy_retriever.PolicyRetrieverTests.test_qdrant_failure_is_hidden_behind_safe_service_error) ... ok
+test_supported_question_returns_complete_current_policy_evidence (tests.test_policy_retriever.PolicyRetrieverTests.test_supported_question_returns_complete_current_policy_evidence) ... ok
+test_unsupported_question_returns_safe_fallback_below_threshold (tests.test_policy_retriever.PolicyRetrieverTests.test_unsupported_question_returns_safe_fallback_below_threshold) ... ok
+test_normalises_a_natural_language_question (tests.test_policy_retriever.QuestionValidationTests.test_normalises_a_natural_language_question) ... ok
+test_rejects_excessively_long_questions (tests.test_policy_retriever.QuestionValidationTests.test_rejects_excessively_long_questions) ... ok
+test_rejects_missing_or_non_text_questions (tests.test_policy_retriever.QuestionValidationTests.test_rejects_missing_or_non_text_questions) ... ok
+test_real_qdrant_query_filters_current_content_and_limits_results_to_five (tests.test_retrieval_qdrant.RealQdrantRetrievalTests.test_real_qdrant_query_filters_current_content_and_limits_results_to_five) ... ok
+test_preserves_discovered_identity_and_provenance (tests.test_corpus_processor.BuildProcessingInputTests.test_preserves_discovered_identity_and_provenance) ... ok
+test_clear_corpus_outputs_removes_existing_json_files (tests.test_corpus_processor.CorpusOutputCleanupTests.test_clear_corpus_outputs_removes_existing_json_files) ... ok
+test_empty_corpus_returns_zero_outcome_summary (tests.test_corpus_processor.CorpusProcessingOutcomeTests.test_empty_corpus_returns_zero_outcome_summary) ... ok
+test_processing_continues_after_access_restricted_document (tests.test_corpus_processor.CorpusProcessingOutcomeTests.test_processing_continues_after_access_restricted_document) ... ok
+test_processing_continues_after_individual_document_failure (tests.test_corpus_processor.CorpusProcessingOutcomeTests.test_processing_continues_after_individual_document_failure) ... ok
+test_records_access_restricted_outcome_without_losing_manifest_data (tests.test_corpus_processor.CorpusProcessingOutcomeTests.test_records_access_restricted_outcome_without_losing_manifest_data) ... ok
+test_records_successful_processing_outcome (tests.test_corpus_processor.CorpusProcessingOutcomeTests.test_records_successful_processing_outcome) ... ok
+test_records_unexpected_processing_failure_as_failed (tests.test_corpus_processor.CorpusProcessingOutcomeTests.test_records_unexpected_processing_failure_as_failed) ... ok
+
+======================================================================
+FAIL: test_discovers_complete_processed_corpus (tests.test_policy_chunker.CorpusDiscoveryTests.test_discovers_complete_processed_corpus)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/63f0ced33991/Team-LEX/tests/test_policy_chunker.py", line 29, in test_discovers_complete_processed_corpus
+    self.assertEqual(len(corpus_files), 214)
+AssertionError: 1 != 214
+
+----------------------------------------------------------------------
+Ran 27 tests in 0.009s
+
+FAILED (failures=1)
+Creating collection 'latrobe_policy_chunks' ...
+Indexed 3/3 chunks
+Deleting existing points for document_id='216' ...
+Creating collection 'latrobe_policy_chunks' ...
+Indexed 1/1 chunks
+Creating collection 'latrobe_policy_chunks' ...
+Indexed 1/1 chunks
+Indexed 1/1 chunks
+
+[1/2] Processing document 268
+Document 268 access restricted: Authoritative source access restricted or redirected outside the Policy Library for document 268. Final host: login.microsoftonline.com
+
+[2/2] Processing document 216
+
+[1/2] Processing document 268
+Document 268 failed: ValueError: Test processing failure.
+
+[2/2] Processing document 216
+
+[1/1] Processing document 268
+Document 268 access restricted: Authoritative source access restricted or redirected outside the Policy Library for document 268. Final host: login.microsoftonline.com
+
+[1/1] Processing document 216
+
+[1/1] Processing document 216
+Document 216 failed: ValueError: Test processing failure.
