@@ -74,6 +74,8 @@ _POLICY_CONSTRAINT_PATTERNS = {
         r"\bprohibited\b",
         r"\bnot\s+permitted\b",
         r"\bnot\s+allowed\b",
+        r"\bcannot\b",
+        r"\bcan't\b",
     ),
     "mandatory": (
         r"\bmust\b",
@@ -90,6 +92,9 @@ _POLICY_CONSTRAINT_PATTERNS = {
     "approval_authorisation": (
         r"\bapproval\b",
         r"\bapproved\b",
+        r"\bapprove\b",
+        r"\bapproves\b",
+        r"\bapproving\b",
         r"\bauthorisation\b",
         r"\bauthorization\b",
         r"\bauthorised\b",
