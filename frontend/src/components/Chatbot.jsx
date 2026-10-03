@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import ChatInput from "./ChatInput";
 import Disclaimer from "./Disclaimer";
@@ -31,7 +31,7 @@ function Chatbot() {
     setIsTyping(true);
 
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 195000);
+    const timeout = setTimeout(() => controller.abort(), 240000);
 
     try {
       const response = await fetch("/api/answer/", {
