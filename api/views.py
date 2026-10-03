@@ -15,7 +15,8 @@ from api.audit import AuditStore, new_record
 from api.citations import (
     CitationValidationError, GENERATION_OPTIONS, MAX_CHUNK_CHARS,
     MAX_EVIDENCE_CHUNKS, PROMPT_VERSION, SYSTEM_PROMPT,
-    build_cited_answer, build_prompt, generation_schema, select_context,
+    build_cited_answer, build_prompt,
+    generation_schema, select_context,
 )
 
 logger = logging.getLogger(__name__)
@@ -153,8 +154,8 @@ def _policy_request(request, generate):
         record["retrieval"]["outcome"] = "error"
         record["error"] = {"stage": stage, "code": "retrieval_unavailable"}
         return _respond(record, _fallback(question, "retrieval_unavailable"), 503)
-    except LLMServiceError:
-        record["error"] = {"stage": stage, "code": "generation_unavailable"}
+    except LLMServiceError as exc:
+        record["error"] = {"stage": stage, "code": "generation_unavailable", "type": type(exc).__name__}
         return _respond(record, _fallback(question, "generation_unavailable"), 502)
     except CitationValidationError as exc:
         # Reasons are fixed codes owned by api.citations, never generated text.
