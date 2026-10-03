@@ -67,6 +67,12 @@ class PolicyConstraintTests(SimpleTestCase):
             "Even if a person has the appropriate authority, they must not approve their own recommendation.",
         )
 
+    def test_cannot_approve_preserves_procurement_prohibition(self):
+        self.assertPreserved(
+            "No, you cannot approve your own procurement even if you have the right delegation.",
+            "Even if an Authorised Signatory has the appropriate delegation, they must not approve their own recommendation in relation to a procurement activity.",
+        )
+
     def test_genuine_if_condition_cannot_be_removed(self):
         self.assertRejected(
             "A person must obtain approval.",
