@@ -142,8 +142,17 @@ def _claim_texts(claims):
     return texts
 
 
-def _is_open_what_requirement(requirement):
-    """Return True only for the bounded OPEN 'what' requirement shape."""
+def _requirement_type(requirement):
+    if not isinstance(requirement, dict):
+        return ""
+
+    return str(
+        requirement.get("requirement_type") or ""
+    ).casefold().strip()
+
+
+def _is_definition_requirement(requirement):
+    """Return True only for an explicitly classified DEFINITION requirement."""
     if not isinstance(requirement, dict):
         return False
 
@@ -151,7 +160,33 @@ def _is_open_what_requirement(requirement):
     owner = str(requirement.get("owner") or "").casefold().strip()
     gap = str(requirement.get("gap") or "").casefold().strip()
 
-    return kind == "open" and bool(owner) and gap == "what"
+    return (
+        kind == "open"
+        and bool(owner)
+        and gap == "what"
+        and _requirement_type(requirement) == "definition"
+    )
+
+
+def _is_open_what_requirement(requirement):
+    """
+    Return True only for the bounded verbal OPEN 'what' requirement shape.
+
+    Explicit DEFINITION requirements use their own fulfilment contract.
+    """
+    if not isinstance(requirement, dict):
+        return False
+
+    kind = str(requirement.get("kind") or "").casefold().strip()
+    owner = str(requirement.get("owner") or "").casefold().strip()
+    gap = str(requirement.get("gap") or "").casefold().strip()
+
+    return (
+        kind == "open"
+        and bool(owner)
+        and gap == "what"
+        and _requirement_type(requirement) != "definition"
+    )
 
 
 def analyse_requirement_coverage_inputs(question, claims):
@@ -328,6 +363,39 @@ def _duration_fulfilled(claim_texts):
     )
 
 
+def _definition_fulfilled(requirement, analyses):
+    """
+    Require the requested nominal owner to participate as the subject of a
+    bounded copular nominal definition in an already-validated claim.
+    """
+    owner = str(requirement.get("owner") or "").casefold().strip()
+
+    for analysis in analyses:
+        if not isinstance(analysis, dict):
+            continue
+
+        observations = analysis.get("definition_observations")
+
+        if not isinstance(observations, list):
+            continue
+
+        for observation in observations:
+            if not isinstance(observation, dict):
+                continue
+
+            observed_owner = str(
+                observation.get("owner") or ""
+            ).casefold().strip()
+
+            if (
+                observed_owner == owner
+                and observation.get("copular_definition") is True
+            ):
+                return True
+
+    return False
+
+
 def validate_requirement_coverage(requirements, claims, analyses=None):
     """
     Validate the currently enforceable subset of extracted requirements.
@@ -355,10 +423,19 @@ def validate_requirement_coverage(requirements, claims, analyses=None):
         else None
     )
 
+    definition_indexes = {
+        index
+        for index, requirement in enumerate(requirements)
+        if _is_definition_requirement(requirement)
+    }
+
     open_what_indexes = [
         index
         for index, requirement in enumerate(requirements)
-        if _is_open_what_requirement(requirement)
+        if (
+            _is_open_what_requirement(requirement)
+            and index not in definition_indexes
+        )
     ]
 
     owner_counts = {}
@@ -417,6 +494,22 @@ def validate_requirement_coverage(requirements, claims, analyses=None):
                 "covered": covered,
             })
 
+        elif index in definition_indexes:
+            covered = _definition_fulfilled(
+                requirement,
+                analyses,
+            )
+
+            item.update({
+                "requirement_type": "definition",
+                "coverage_status": (
+                    "covered"
+                    if covered
+                    else "uncovered"
+                ),
+                "covered": covered,
+            })
+
         elif index in enforceable_open_what_indexes:
             covered = _open_what_fulfilled(
                 requirement,
@@ -439,9 +532,13 @@ def validate_requirement_coverage(requirements, claims, analyses=None):
                     "duration"
                     if _is_duration_requirement(requirement)
                     else (
-                        "open_what"
-                        if _is_open_what_requirement(requirement)
-                        else "unsupported"
+                        "definition"
+                        if _is_definition_requirement(requirement)
+                        else (
+                            "open_what"
+                            if _is_open_what_requirement(requirement)
+                            else "unsupported"
+                        )
                     )
                 ),
                 "coverage_status": "unknown",

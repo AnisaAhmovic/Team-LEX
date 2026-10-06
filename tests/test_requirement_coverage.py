@@ -1,4 +1,4 @@
-﻿"""S5-04 RCV linguistic-boundary and bounded coverage regression tests."""
+"""S5-04 RCV linguistic-boundary and bounded coverage regression tests."""
 
 from django.test import SimpleTestCase
 
@@ -310,6 +310,171 @@ class RequirementCoverageTests(SimpleTestCase):
             "unknown",
         )
 
+    def test_nominal_copular_definition_real_boundary(self):
+        question = "What is an inspection?"
+
+        positive_claim = {
+            "text": (
+                "An inspection is an examination of the workplace to "
+                "check for hazards and seek assurance that operational "
+                "safety standards are being maintained."
+            )
+        }
+
+        negative_claim = {
+            "text": (
+                "Inspections are conducted by La Trobe University."
+            )
+        }
+
+        combined_claims = [
+            positive_claim,
+            negative_claim,
+        ]
+
+        requirements, analyses = analyse_requirement_coverage_inputs(
+            question,
+            combined_claims,
+        )
+
+        self.assertEqual(len(requirements), 1, requirements)
+        self.assertEqual(
+            requirements[0].get("requirement_type"),
+            "definition",
+            requirements,
+        )
+        self.assertEqual(
+            requirements[0].get("owner"),
+            "inspection",
+            requirements,
+        )
+
+        self.assertEqual(len(analyses), 2, analyses)
+
+        complete, details = validate_requirement_coverage(
+            requirements,
+            [positive_claim],
+            analyses=[analyses[0]],
+        )
+
+        self.assertTrue(complete, details)
+        self.assertEqual(details["status"], "complete")
+        self.assertEqual(details["covered_count"], 1)
+        self.assertEqual(details["unknown_count"], 0)
+        self.assertEqual(details["enforced_count"], 1)
+        self.assertEqual(
+            details["requirements"][0]["requirement_type"],
+            "definition",
+        )
+        self.assertEqual(
+            details["requirements"][0]["coverage_status"],
+            "covered",
+        )
+
+        complete, details = validate_requirement_coverage(
+            requirements,
+            [negative_claim],
+            analyses=[analyses[1]],
+        )
+
+        self.assertFalse(complete, details)
+        self.assertEqual(details["status"], "incomplete")
+        self.assertEqual(details["covered_count"], 0)
+        self.assertEqual(details["unknown_count"], 0)
+        self.assertEqual(details["enforced_count"], 1)
+        self.assertEqual(
+            details["requirements"][0]["requirement_type"],
+            "definition",
+        )
+        self.assertEqual(
+            details["requirements"][0]["coverage_status"],
+            "uncovered",
+        )
+    def test_definition_with_nominal_copular_answer_is_covered(self):
+        requirement = {
+            "kind": "OPEN",
+            "owner": "inspection",
+            "gap": "what",
+            "requirement_type": "definition",
+        }
+
+        text = (
+            "An inspection is an examination of the workplace to check for "
+            "hazards and seek assurance that operational safety standards "
+            "are being maintained."
+        )
+
+        analyses = [
+            {
+                "text": text,
+                "observations": [],
+                "definition_observations": [
+                    {
+                        "owner": "inspection",
+                        "predicate_relation": "root",
+                        "copular_definition": True,
+                    }
+                ],
+            }
+        ]
+
+        complete, details = validate_requirement_coverage(
+            [requirement],
+            [{"text": text}],
+            analyses=analyses,
+        )
+
+        self.assertTrue(complete, details)
+        self.assertEqual(details["status"], "complete")
+        self.assertEqual(details["covered_count"], 1)
+        self.assertEqual(details["unknown_count"], 0)
+        self.assertEqual(details["enforced_count"], 1)
+        self.assertEqual(
+            details["requirements"][0]["requirement_type"],
+            "definition",
+        )
+        self.assertEqual(
+            details["requirements"][0]["coverage_status"],
+            "covered",
+        )
+
+    def test_definition_without_definitional_relationship_is_uncovered(self):
+        requirement = {
+            "kind": "OPEN",
+            "owner": "inspection",
+            "gap": "what",
+            "requirement_type": "definition",
+        }
+
+        text = "Inspections are conducted by La Trobe University."
+
+        analyses = [
+            {
+                "text": text,
+                "observations": [],
+                "definition_observations": [],
+            }
+        ]
+
+        complete, details = validate_requirement_coverage(
+            [requirement],
+            [{"text": text}],
+            analyses=analyses,
+        )
+
+        self.assertFalse(complete, details)
+        self.assertEqual(details["status"], "incomplete")
+        self.assertEqual(details["covered_count"], 0)
+        self.assertEqual(details["unknown_count"], 0)
+        self.assertEqual(details["enforced_count"], 1)
+        self.assertEqual(
+            details["requirements"][0]["requirement_type"],
+            "definition",
+        )
+        self.assertEqual(
+            details["requirements"][0]["coverage_status"],
+            "uncovered",
+        )
     def test_open_what_with_explicit_object_is_covered(self):
         text = "Staff must avoid premature disclosure of research results."
 

@@ -1,4 +1,4 @@
-﻿"""
+"""
 Isolated runtime bridge for the validated RCV-03E-18H extractor.
 
 This module is executed by the dedicated .rcv_stanza_venv interpreter.
@@ -76,6 +76,50 @@ def load_validated_extractor():
     return nlp, extractor
 
 
+def _nominal_copular_definition_owner(sentence):
+    """
+    Return the owner lemma for the bounded simple nominal-copular
+    definition-question shape, otherwise None.
+
+    This preserves linguistic evidence already established by the RCV
+    extractor family without changing the frozen extractor itself.
+    """
+    for word in sentence.words:
+        if (
+            word.upos != "PRON"
+            or str(word.lemma or "").casefold().strip() != "what"
+            or word.deprel not in {"root", "conj"}
+        ):
+            continue
+
+        children = [
+            child
+            for child in sentence.words
+            if child.head == word.id
+        ]
+
+        if not any(child.deprel == "cop" for child in children):
+            continue
+
+        nominal_subjects = [
+            child
+            for child in children
+            if (
+                child.deprel.startswith("nsubj")
+                and child.upos in {"NOUN", "PROPN"}
+            )
+        ]
+
+        if len(nominal_subjects) == 1:
+            return str(
+                nominal_subjects[0].lemma
+                or nominal_subjects[0].text
+                or ""
+            ).casefold().strip()
+
+    return None
+
+
 def extract_question(question, nlp, extractor):
     question = str(question or "").strip()
 
@@ -83,13 +127,25 @@ def extract_question(question, nlp, extractor):
         return []
 
     requirements = []
-
     doc = nlp(question)
 
     for sentence in doc.sentences:
-        requirements.extend(
-            extractor(sentence)
-        )
+        sentence_requirements = list(extractor(sentence))
+        definition_owner = _nominal_copular_definition_owner(sentence)
+
+        for requirement in sentence_requirements:
+            item = dict(requirement)
+
+            if (
+                definition_owner
+                and str(item.get("kind") or "").casefold().strip() == "open"
+                and str(item.get("owner") or "").casefold().strip()
+                    == definition_owner
+                and str(item.get("gap") or "").casefold().strip() == "what"
+            ):
+                item["requirement_type"] = "definition"
+
+            requirements.append(item)
 
     return requirements
 
@@ -151,9 +207,62 @@ def analyse_claims(texts, owners, nlp):
                         "answer_present": bool(answer_relations),
                     })
 
+        definition_observations = []
+
+        if claim_text:
+            for sentence in doc.sentences:
+                for subject in sentence.words:
+                    subject_lemma = str(
+                        subject.lemma or ""
+                    ).casefold().strip()
+
+                    if (
+                        subject_lemma not in normalised_owners
+                        or subject.upos not in {"NOUN", "PROPN"}
+                        or subject.deprel != "nsubj"
+                    ):
+                        continue
+
+                    predicate = next(
+                        (
+                            word
+                            for word in sentence.words
+                            if word.id == subject.head
+                        ),
+                        None,
+                    )
+
+                    if predicate is None:
+                        continue
+
+                    predicate_children = [
+                        child
+                        for child in sentence.words
+                        if child.head == predicate.id
+                    ]
+
+                    has_copula = any(
+                        child.deprel == "cop"
+                        and str(
+                            child.lemma or ""
+                        ).casefold().strip() == "be"
+                        for child in predicate_children
+                    )
+
+                    if (
+                        has_copula
+                        and predicate.upos in {"NOUN", "PROPN"}
+                    ):
+                        definition_observations.append({
+                            "owner": subject_lemma,
+                            "predicate_relation": predicate.deprel,
+                            "copular_definition": True,
+                        })
+
         analyses.append({
             "text": claim_text,
             "observations": observations,
+            "definition_observations": definition_observations,
         })
 
     return analyses
