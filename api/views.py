@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from retrieval import PolicyRetriever, QuestionValidationError, RetrievalUnavailableError, fallback_response
 from llm import QwenService, LLMServiceError
 from api.audit import AuditStore, new_record
+from api.requirement_coverage import analyse_requirement_coverage_inputs, validate_requirement_coverage
 from api.citations import (
     CitationValidationError, GENERATION_OPTIONS, MAX_CHUNK_CHARS,
     MAX_EVIDENCE_CHUNKS, PROMPT_VERSION, SYSTEM_PROMPT,
@@ -136,6 +137,24 @@ def _policy_request(request, generate):
         if not answer["claims"]:
             record["generation"]["validation"] = "model_abstained"
             return _respond(record, _fallback(question, "generation_insufficient_evidence"))
+        stage = "requirement_coverage"
+        requirements, analyses = analyse_requirement_coverage_inputs(
+            question,
+            answer["claims"],
+        )
+        coverage_complete, coverage = validate_requirement_coverage(
+            requirements,
+            answer["claims"],
+            analyses=analyses,
+        )
+
+        if not coverage_complete:
+            record["generation"]["validation"] = "requirement_coverage_incomplete"
+            return _respond(
+                record,
+                _fallback(question, "generation_insufficient_evidence"),
+            )
+
         record["generation"]["validation"] = "accepted"
         return _respond(record, {
             "status": "supported", "question": result["question"], **answer,
@@ -161,9 +180,13 @@ def _policy_request(request, generate):
         # Reasons are fixed codes owned by api.citations, never generated text.
         record["generation"]["validation"] = str(exc)
         return _respond(record, _fallback(question, "unverifiable_generation"))
-    except Exception:
+    except Exception as exc:
         # Unexpected service failures still have a record, without exception text.
-        record["error"] = {"stage": stage, "code": "internal_error"}
+        record["error"] = {
+            "stage": stage,
+            "code": "internal_error",
+            "type": type(exc).__name__,
+        }
         return _respond(record, _fallback(question, "internal_error"), 500)
 
 
