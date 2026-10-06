@@ -456,10 +456,10 @@ def _semantic_claim_text(text, supporting_chunks):
         flags=re.I,
     ).strip()
 def build_cited_answer(generated_text, selected):
-    """Reject untraceable output; build all displayed source metadata on the server.
+    """Reject untraceable or unsupported output; build source metadata server-side.
 
-    Exact quote checking verifies provenance, not semantic entailment. A reviewer
-    must still check whether each paraphrase is actually supported by its quote.
+    Exact quote checking verifies provenance. Layered semantic groundedness,
+    attribution and constraint validation verify claim support before acceptance.
     """
     if not isinstance(generated_text, str) or len(generated_text) > 30000:
         raise CitationValidationError("invalid_generation")
@@ -528,10 +528,29 @@ def build_cited_answer(generated_text, selected):
 
         semantic_text = _semantic_claim_text(text, supporting_chunks)
         trusted_context = _trusted_semantic_context(supporting_chunks)
+        interpretive_units = []
+        for chunk in dict.fromkeys(chunk["evidence_id"] for chunk in supporting_chunks):
+            supporting_chunk = by_id[chunk]
+            context_without_anchors = _normalise_space(supporting_chunk["context_text"])
+            for reference in (
+                by_support_id[support_id]
+                for support_id in support
+                if by_support_id[support_id]["evidence_id"] == chunk
+            ):
+                context_without_anchors = context_without_anchors.replace(
+                    _normalise_space(reference["quote"]),
+                    " ",
+                    1,
+                )
+            context_without_anchors = _normalise_space(context_without_anchors)
+            if context_without_anchors:
+                interpretive_units.append(context_without_anchors)
+        interpretive_context = " ".join(interpretive_units)
         semantically_supported, semantic_diagnostics = is_semantically_supported(
             semantic_text,
             supporting_quotes,
             trusted_context=trusted_context,
+            interpretive_context=interpretive_context or None,
         )
         if not semantically_supported:
             print(

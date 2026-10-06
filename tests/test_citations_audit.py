@@ -69,6 +69,72 @@ class CitationTests(TestCase):
         self.context = select_context(self.evidence)
         self.quote = self.context[0]["context_text"]
 
+    def test_semantic_support_uses_local_policy_context_without_replacing_cited_anchor(self):
+        """A cited sentence may use its own policy unit to resolve an antecedent."""
+        policy_unit = (
+            "(28) A delay in public disclosure of Exploitable IP may be required for "
+            "a reasonable period to allow the University to assess and protect the IP. "
+            "Normally the period of any such delay will not exceed three months."
+        )
+        evidence = [{
+            **self.evidence[0],
+            "chunk_id": "ip-28",
+            "policy_title": "Intellectual Property Policy",
+            "policy_text": policy_unit,
+        }]
+        context = select_context(evidence)
+        duration_quote = next(
+            quote
+            for quote in quote_options(context[0])
+            if "will not exceed three months" in quote
+        )
+        generated = model_text(
+            (
+                "A delay in public disclosure of Exploitable IP will normally not exceed three months.",
+                support_id(context, "E1", duration_quote),
+            )
+        )
+
+        result, _ = build_cited_answer(generated, context)
+
+        self.assertEqual(
+            result["claims"][0]["text"],
+            "A delay in public disclosure of Exploitable IP will normally not exceed three months.",
+        )
+
+
+    def test_multiple_support_context_cannot_substitute_for_cited_anchors(self):
+        """Surrounding context from cited evidence must not replace the cited anchors."""
+        first_anchor = "The University will review the matter."
+        second_anchor = "The matter will be recorded."
+        unsupported_proposition = "Staff must report incidents immediately."
+
+        context = select_context([
+            {
+                **self.evidence[0],
+                "chunk_id": "incident-1",
+                "policy_text": f"{unsupported_proposition} {first_anchor}",
+            },
+            {
+                **self.evidence[0],
+                "chunk_id": "incident-2",
+                "policy_text": second_anchor,
+            },
+        ])
+
+        value = {
+            "claims": [{
+                "text": unsupported_proposition,
+                "support": [
+                    support_id(context, "E1", first_anchor),
+                    support_id(context, "E2", second_anchor),
+                ],
+            }]
+        }
+
+        with self.assertRaisesRegex(CitationValidationError, "unsupported_claim"):
+            build_cited_answer(json.dumps(value), context)
+
     def test_numbered_policy_paragraphs_are_preserved_as_units(self):
         """Numbered policy paragraphs remain intact for evidence selection."""
         policy_text = (
@@ -1053,16 +1119,18 @@ class InteractionAuditTests(SimpleTestCase):
         return response, AuditStore(self.path).read(response.data.get("interaction_id"))[0]
 
     def test_supported_request_can_be_reconstructed_without_private_trace_in_response(self):
+        question = "Is feedback on assessment tasks timely?"
         retriever = retrieve([point(), point(2, score=0.1)])
         quote = point().payload["text"]
-        context = select_context(retriever.retrieve("What does the policy say?")["evidence"])
+        context = select_context(retriever.retrieve(question)["evidence"])
         response, record = self.request(
             retriever,
             model_text((quote, support_id(context, "E1", quote))),
+            question=question,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["status"], "supported")
-        self.assertEqual(record["question"], "What does the policy say?")
+        self.assertEqual(record["question"], question)
         self.assertEqual(len(record["retrieval"]["candidates"]), 2)
         self.assertEqual(record["selection"]["excluded"][0]["reason"], "below_threshold")
         self.assertEqual(record["selection"]["selected_context"][0]["context_text"], quote)
@@ -1119,10 +1187,11 @@ class InteractionAuditTests(SimpleTestCase):
         self.assertNotIn("could not find", response.data["message"])
 
     def test_named_policy_claim_and_query_scope_can_be_reconstructed(self):
+        question = "Is feedback on assessment tasks timely under the Assessment Policy?"
         base = retrieve([point()])
-        result = base.retrieve("What is the purpose of the Assessment Policy?")
-        scope = {"policy_titles": ["Assessment Policy"], "requested_section": "purpose",
-                 "heading_filters": {"section": ["Section 2 - Purpose"]}}
+        result = base.retrieve(question)
+        scope = {"policy_titles": ["Assessment Policy"], "requested_section": None,
+                 "heading_filters": {"section": ["Section 5 - Policy Statement"]}}
         result["_trace"]["query_scope"] = scope
         retriever = SimpleNamespace(retrieve=lambda _: result, audit_config=base.audit_config)
         quote = point().payload["text"]
@@ -1131,7 +1200,11 @@ class InteractionAuditTests(SimpleTestCase):
             (quote, support_id(context, "E1", quote))
         ))
         value["claims"][0]["text"] = "Under Assessment Policy, feedback is timely."
-        response, record = self.request(retriever, json.dumps(value))
+        response, record = self.request(
+            retriever,
+            json.dumps(value),
+            question=question,
+        )
         self.assertEqual(response.data["status"], "supported")
         self.assertEqual(record["retrieval"]["query_scope"], scope)
         self.assertEqual(record["generation"]["validation"], "accepted")

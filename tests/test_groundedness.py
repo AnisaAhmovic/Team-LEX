@@ -146,3 +146,35 @@ class SemanticGroundednessTests(SimpleTestCase):
         )
 
         self.assertFalse(supported, probabilities)
+    def test_interpretive_context_can_resolve_support_antecedent(self):
+        """Local policy context may resolve an antecedent in the cited support."""
+        from api.groundedness import is_semantically_supported
+
+        supported, probabilities = is_semantically_supported(
+            "A delay in public disclosure of Exploitable IP will normally not exceed three months.",
+            [
+                "Normally the period of any such delay will not exceed three months."
+            ],
+            interpretive_context=(
+                "A delay in public disclosure of Exploitable IP may be required for "
+                "a reasonable period to allow the University to assess and protect the IP."
+            ),
+        )
+
+        self.assertTrue(supported, probabilities)
+
+    def test_interpretive_context_cannot_substitute_for_cited_support(self):
+        """Context must not independently supply a proposition absent from cited support."""
+        from api.groundedness import is_semantically_supported
+
+        supported, probabilities = is_semantically_supported(
+            "Staff must report incidents immediately.",
+            [
+                "The University will review the matter."
+            ],
+            interpretive_context=(
+                "Staff must report incidents immediately."
+            ),
+        )
+
+        self.assertFalse(supported, probabilities)
