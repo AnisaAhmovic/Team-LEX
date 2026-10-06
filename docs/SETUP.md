@@ -193,3 +193,35 @@ From `frontend/`, run:
 ```bash
 npm install
 ```
+
+## Requirement Coverage Validator (RCV) runtime
+
+The Requirement Coverage Validator uses a separate Python environment so its validated linguistic dependency set remains isolated from the main Team LEX backend environment.
+
+Validated RCV runtime:
+
+- Python 3.13.15
+- Stanza 1.15.0
+- dependencies pinned in `requirements-rcv.txt`
+- local environment directory: `.rcv_stanza_venv/`
+
+Do not commit `.rcv_stanza_venv/`.
+
+Windows PowerShell:
+
+```powershell
+py -3.13 -m venv .rcv_stanza_venv
+.\.rcv_stanza_venv\Scripts\python.exe -m pip install --upgrade pip
+.\.rcv_stanza_venv\Scripts\python.exe -m pip install -r requirements-rcv.txt
+```
+
+Verify the isolated runtime:
+
+```powershell
+.\.rcv_stanza_venv\Scripts\python.exe --version
+.\.rcv_stanza_venv\Scripts\python.exe -c "import stanza; print(stanza.__version__)"
+```
+
+The validated versions are Python 3.13.15 and Stanza 1.15.0.
+
+The Django backend invokes the production RCV through `api/requirement_coverage.py` and `rcv_runtime_bridge.py`. The isolated RCV environment must exist at the repository root before using the answer-generation path.
