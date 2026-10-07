@@ -823,3 +823,23 @@ input {
     min-height: 88px;
   }
 }
+
+/* S5-04 M3: server-verified assurance results for supported answers */
+.answer-checks {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #f9fafb;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.answer-checks > strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.answer-check {
+  margin-top: 2px;
+}

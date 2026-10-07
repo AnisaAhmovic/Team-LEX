@@ -15,6 +15,8 @@ try {
   const { makeBotReply, makeConnectionErrorReply } = await server.ssrLoadModule("/src/botReply.js");
   const { default: Message } = await server.ssrLoadModule("/src/components/Message.jsx");
 
+  let html;
+
   // --- Test 1: a supported answer keeps its answer, claims and sources ---
   const answer = makeBotReply(true, 200, {
     status: "supported",
@@ -25,7 +27,104 @@ try {
   assert.equal(answer.type, "answer");
   assert.equal(answer.sources.length, 1);
   console.log("1. supported answer ........... ok");
+  // --- M3: supported answers expose server-owned assurance results ---
+  const assuredAnswer = makeBotReply(true, 200, {
+    status: "supported",
+    answer: "Students normally receive feedback within 15 business days.",
+    claims: [{
+      claim_id: "C1",
+      text: "Students normally receive feedback within 15 business days.",
+      source_ids: ["S1"],
+      support: [],
+    }],
+    sources: [{
+      source_id: "S1",
+      policy_title: "Assessment Standards",
+      section: "Section 6",
+      source_url: "https://policies.latrobe.edu.au/document/view.php?id=363",
+    }],
+    assurance: {
+      question_coverage: {
+        covered: 2,
+        enforced: 2,
+        unknown: 0,
+        percentage: 100,
+      },
+      supported_by_current_policy: true,
+      policy_conditions_preserved: true,
+      sources_verified: true,
+    },
+  });
 
+  assert.equal(assuredAnswer.assurance.question_coverage.percentage, 100);
+
+  html = renderToStaticMarkup(React.createElement(Message, {
+    sender: "bot",
+    messageId: "assured",
+    ...assuredAnswer,
+  }));
+
+  assert.ok(html.includes("Answer checks"), "supported answer should show assurance panel");
+  assert.ok(html.includes("Question coverage"), "assurance panel should identify question coverage");
+  assert.ok(html.includes("100%"), "fully assessed coverage should show percentage");
+  assert.ok(html.includes("2 of 2 verified requirements addressed"), "coverage denominator should be explicit");
+  assert.ok(html.includes("Supported by current policy"), "policy support should be visible");
+  assert.ok(html.includes("Policy conditions preserved"), "constraint preservation should be visible");
+  assert.ok(html.includes("Sources verified"), "source verification should be visible");
+
+  // Unknown requirements must never be hidden behind a reassuring percentage.
+  const partiallyAssessed = {
+    ...assuredAnswer,
+    assurance: {
+      ...assuredAnswer.assurance,
+      question_coverage: {
+        covered: 2,
+        enforced: 2,
+        unknown: 1,
+        percentage: null,
+      },
+    },
+  };
+
+  html = renderToStaticMarkup(React.createElement(Message, {
+    sender: "bot",
+    messageId: "partial",
+    ...partiallyAssessed,
+  }));
+
+  assert.ok(!html.includes("100%"), "unknown requirements must suppress coverage percentage");
+  assert.ok(html.includes("2 verified requirements addressed"), "verified count should remain visible");
+  assert.ok(html.includes("1 not automatically assessed"), "unknown requirement must be disclosed");
+
+
+  // A requirement that RCV cannot automatically enforce must not look failed.
+  const notEnforcedAnswer = {
+    ...assuredAnswer,
+    assurance: {
+      ...assuredAnswer.assurance,
+      question_coverage: {
+        covered: 0,
+        enforced: 0,
+        unknown: 1,
+        percentage: null,
+      },
+    },
+  };
+
+  html = renderToStaticMarkup(React.createElement(Message, {
+    sender: "bot",
+    messageId: "not-enforced",
+    ...notEnforcedAnswer,
+  }));
+
+  assert.ok(
+    html.includes("Requirement not automatically assessed"),
+    "not-enforced requirement should be described as not automatically assessed"
+  );
+  assert.ok(
+    !html.includes("0 verified requirements addressed"),
+    "not-enforced requirement must not look like failed question coverage"
+  );
   // --- Test 2: not enough evidence is a fallback and keeps the escalation link ---
   const fallbackData = {
     status: "fallback",
@@ -37,7 +136,7 @@ try {
   assert.equal(fallback.type, "fallback");
   assert.equal(fallback.escalation.url, "https://policies.latrobe.edu.au/");
 
-  let html = renderToStaticMarkup(React.createElement(Message, { sender: "bot", messageId: "f", ...fallback }));
+  html = renderToStaticMarkup(React.createElement(Message, { sender: "bot", messageId: "f", ...fallback }));
   assert.ok(html.includes("fallback-message"), "fallback should have its own style");
   assert.ok(html.includes("No policy answer found"), "fallback should be labelled");
   assert.ok(html.includes('href="https://policies.latrobe.edu.au/"'), "escalation link should be shown");
@@ -82,3 +181,4 @@ try {
 } finally {
   await server.close();
 }
+

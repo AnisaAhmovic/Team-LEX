@@ -11,7 +11,7 @@ function authoritativeUrl(value) {
   }
 }
 
-function Message({ message, sender, time, messageId, claims = [], sources = [], type, escalation }) {
+function Message({ message, sender, time, messageId, claims = [], sources = [], type, escalation, assurance }) {
   const isBot = sender === "bot";
 
   // Pick the style for the bubble. Fallbacks and errors look different from
@@ -49,6 +49,41 @@ function Message({ message, sender, time, messageId, claims = [], sources = [], 
             ))}
           </p>
         )) : <p>{message}</p>}
+        {isBot && type === "answer" && assurance && (
+          <section className="answer-checks" aria-label="Answer checks">
+            <strong>Answer checks <span aria-hidden="true">{"\u2713"}</span></strong>
+
+            <div className="answer-check">
+              <span aria-hidden="true">{"\u2713"}</span>{" "}
+              <strong>Question coverage:</strong>{" "}
+              {assurance.question_coverage?.percentage != null ? (
+                <>
+                  <strong>{assurance.question_coverage.percentage}%</strong>
+                  {" \u2014 "}
+                  {assurance.question_coverage.covered} of {assurance.question_coverage.enforced} verified requirements addressed
+                </>
+              ) : assurance.question_coverage?.enforced === 0 ? (
+                <>Requirement not automatically assessed</>
+              ) : (
+                <>
+                  {assurance.question_coverage?.covered ?? 0} verified requirements addressed
+                  {assurance.question_coverage?.unknown > 0 &&
+                    <>{" \u00B7 "}{assurance.question_coverage.unknown} not automatically assessed</>}
+                </>
+              )}
+            </div>
+
+            {assurance.supported_by_current_policy && (
+              <div className="answer-check"><span aria-hidden="true">{"\u2713"}</span> Supported by current policy</div>
+            )}
+            {assurance.policy_conditions_preserved && (
+              <div className="answer-check"><span aria-hidden="true">{"\u2713"}</span> Policy conditions preserved</div>
+            )}
+            {assurance.sources_verified && (
+              <div className="answer-check"><span aria-hidden="true">{"\u2713"}</span> Sources verified</div>
+            )}
+          </section>
+        )}
         {isBot && sources.length > 0 && (
           <section className="policy-sources" aria-label="Policy sources">
             <strong>Sources</strong>
