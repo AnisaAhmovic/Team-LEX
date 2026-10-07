@@ -1,4 +1,4 @@
-"""S5-04 RCV linguistic-boundary and bounded coverage regression tests."""
+﻿"""S5-04 RCV linguistic-boundary and bounded coverage regression tests."""
 
 from django.test import SimpleTestCase
 
@@ -308,6 +308,240 @@ class RequirementCoverageTests(SimpleTestCase):
         self.assertEqual(
             details["requirements"][0]["coverage_status"],
             "unknown",
+        )
+
+    def test_conditional_action_fulfilment_real_boundary(self):
+        """A qualified conditional action requires the same fixed condition."""
+        question = (
+            "What should happen if feedback on an assessment task is delayed?"
+        )
+
+        cases = [
+            (
+                "positive_same_condition",
+                "If feedback on an assessment task is delayed, staff must notify students.",
+                True,
+            ),
+            (
+                "positive_reordered",
+                "Staff must notify students if feedback on an assessment task is delayed.",
+                True,
+            ),
+            (
+                "timing_only",
+                "Feedback should normally be provided within 15 business days.",
+                False,
+            ),
+            (
+                "wrong_condition",
+                "If a student submits an assessment late, a penalty applies.",
+                False,
+            ),
+            (
+                "related_wrong_condition",
+                "If an assessment task is submitted late, staff may apply a penalty.",
+                False,
+            ),
+            (
+                "condition_only",
+                "Feedback on an assessment task may be delayed.",
+                False,
+            ),
+        ]
+
+        claims = [
+            {"text": claim_text}
+            for _label, claim_text, _expected in cases
+        ]
+
+        requirements, analyses = analyse_requirement_coverage_inputs(
+            question,
+            claims,
+        )
+
+        self.assertEqual(len(requirements), 1, requirements)
+        self.assertEqual(
+            requirements[0].get("requirement_type"),
+            "conditional_action",
+        )
+        self.assertEqual(len(analyses), len(cases), analyses)
+
+        for index, (label, claim_text, expected_covered) in enumerate(cases):
+            with self.subTest(label=label):
+                complete, report = validate_requirement_coverage(
+                    requirements,
+                    [{"text": claim_text}],
+                    [analyses[index]],
+                )
+
+                self.assertEqual(
+                    len(report["requirements"]),
+                    1,
+                    report,
+                )
+
+                requirement_result = report["requirements"][0]
+
+                self.assertEqual(
+                    requirement_result.get("requirement_type"),
+                    "conditional_action",
+                )
+                self.assertEqual(
+                    requirement_result.get("coverage_status"),
+                    "covered" if expected_covered else "uncovered",
+                )
+                self.assertEqual(
+                    requirement_result.get("covered"),
+                    expected_covered,
+                )
+                self.assertEqual(
+                    complete,
+                    expected_covered,
+                )
+
+
+    def test_conditional_action_question_real_boundary(self):
+        """An OPEN-WHAT governing an if-marked advcl is conditional action."""
+        question = (
+            "What should happen if feedback on an assessment task is delayed?"
+        )
+
+        requirements, _analyses = analyse_requirement_coverage_inputs(
+            question,
+            [],
+        )
+
+        self.assertEqual(len(requirements), 1, requirements)
+        self.assertEqual(
+            requirements[0].get("kind"),
+            "OPEN",
+            requirements,
+        )
+        self.assertEqual(
+            requirements[0].get("owner"),
+            "happen",
+            requirements,
+        )
+        self.assertEqual(
+            requirements[0].get("gap"),
+            "what",
+            requirements,
+        )
+        self.assertEqual(
+            requirements[0].get("requirement_type"),
+            "conditional_action",
+            requirements,
+        )
+
+        ordinary_requirements, _ordinary_analyses = (
+            analyse_requirement_coverage_inputs(
+                "What does the Assessment Policy provide?",
+                [],
+            )
+        )
+
+        self.assertEqual(
+            len(ordinary_requirements),
+            1,
+            ordinary_requirements,
+        )
+        self.assertIsNone(
+            ordinary_requirements[0].get("requirement_type"),
+            ordinary_requirements,
+        )
+    def test_nominal_copular_purpose_real_boundary(self):
+        question = "What is the purpose of the Assessment Policy?"
+
+        positive_claim = {
+            "text": (
+                "The purpose of the Assessment Policy is to provide the "
+                "principles for assuring the quality of student assessment "
+                "at La Trobe."
+            )
+        }
+
+        non_purpose_claim = {
+            "text": (
+                "The Assessment Policy provides principles for assuring "
+                "the quality of student assessment at La Trobe."
+            )
+        }
+
+        purpose_mention_claim = {
+            "text": (
+                "The purpose of the Assessment Policy was discussed by "
+                "the University."
+            )
+        }
+
+        combined_claims = [
+            positive_claim,
+            non_purpose_claim,
+            purpose_mention_claim,
+        ]
+
+        requirements, analyses = analyse_requirement_coverage_inputs(
+            question,
+            combined_claims,
+        )
+
+        self.assertEqual(len(requirements), 1, requirements)
+        self.assertEqual(
+            requirements[0].get("requirement_type"),
+            "purpose",
+            requirements,
+        )
+        self.assertEqual(
+            requirements[0].get("owner"),
+            "purpose",
+            requirements,
+        )
+        self.assertEqual(len(analyses), 3, analyses)
+
+        complete, details = validate_requirement_coverage(
+            requirements,
+            [positive_claim],
+            analyses=[analyses[0]],
+        )
+
+        self.assertTrue(complete, details)
+        self.assertEqual(details["status"], "complete")
+        self.assertEqual(details["covered_count"], 1)
+        self.assertEqual(details["unknown_count"], 0)
+        self.assertEqual(details["enforced_count"], 1)
+        self.assertEqual(
+            details["requirements"][0]["requirement_type"],
+            "purpose",
+        )
+        self.assertEqual(
+            details["requirements"][0]["coverage_status"],
+            "covered",
+        )
+
+        complete, details = validate_requirement_coverage(
+            requirements,
+            [non_purpose_claim],
+            analyses=[analyses[1]],
+        )
+
+        self.assertFalse(complete, details)
+        self.assertEqual(details["status"], "incomplete")
+        self.assertEqual(
+            details["requirements"][0]["coverage_status"],
+            "uncovered",
+        )
+
+        complete, details = validate_requirement_coverage(
+            requirements,
+            [purpose_mention_claim],
+            analyses=[analyses[2]],
+        )
+
+        self.assertFalse(complete, details)
+        self.assertEqual(details["status"], "incomplete")
+        self.assertEqual(
+            details["requirements"][0]["coverage_status"],
+            "uncovered",
         )
 
     def test_nominal_copular_definition_real_boundary(self):

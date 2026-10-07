@@ -99,7 +99,10 @@ def _policy_request(request, generate):
 
         stage = "selection"
         evidence = result.get("evidence", [])
-        selected = select_context(evidence)
+        selected = select_context(
+            evidence,
+            question=result["question"],
+        )
         record["selection"].update({
             "mode": "rag_context", "prompt_version": PROMPT_VERSION,
             "max_chunks": MAX_EVIDENCE_CHUNKS, "max_chunk_chars": MAX_CHUNK_CHARS,
@@ -121,7 +124,11 @@ def _policy_request(request, generate):
             "options": GENERATION_OPTIONS, "response_format": PROMPT_VERSION,
         })
         generation = service.generate(
-            build_prompt(result["question"], selected), system=SYSTEM_PROMPT,
+            build_prompt(
+                result["question"],
+                selected,
+                query_scope=result.get("_trace", {}).get("query_scope"),
+            ), system=SYSTEM_PROMPT,
             response_format=generation_schema(selected), options=GENERATION_OPTIONS,
         )
         record["generation"].update({key: generation.get(key) for key in (
