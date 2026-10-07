@@ -74,6 +74,30 @@ def _record_retrieval(record, result):
     ]
 
 
+def _build_assurance(coverage):
+    """Expose successful validation outcomes without overstating unknown coverage."""
+    covered = coverage.get("covered_count", 0)
+    enforced = coverage.get("enforced_count", 0)
+    unknown = coverage.get("unknown_count", 0)
+
+    coverage_percentage = (
+        round((covered / enforced) * 100)
+        if enforced > 0 and unknown == 0
+        else None
+    )
+
+    return {
+        "question_coverage": {
+            "covered": covered,
+            "enforced": enforced,
+            "unknown": unknown,
+            "percentage": coverage_percentage,
+        },
+        "supported_by_current_policy": True,
+        "policy_conditions_preserved": True,
+        "sources_verified": True,
+    }
+
 def _policy_request(request, generate):
     record = new_record("answer" if generate else "retrieve")
     question, stage = None, "validation"
@@ -163,9 +187,12 @@ def _policy_request(request, generate):
             )
 
         record["generation"]["validation"] = "accepted"
+
+        assurance = _build_assurance(coverage)
+
         return _respond(record, {
             "status": "supported", "question": result["question"], **answer,
-            "evidence_sufficient": True, "model": generation.get("model"),
+            "evidence_sufficient": True, "assurance": assurance, "model": generation.get("model"),
             "latency_seconds": generation.get("latency_seconds"),
         })
     except (ParseError, UnsupportedMediaType):

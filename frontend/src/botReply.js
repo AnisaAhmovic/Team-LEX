@@ -18,6 +18,7 @@ export function makeBotReply(ok, httpStatus, data) {
       message: data.answer,
       claims: data.claims,
       sources: data.sources,
+      assurance: data.assurance,
     };
   }
 
