@@ -99,19 +99,19 @@ def _policy_request(request, generate):
 
         stage = "selection"
         evidence = result.get("evidence", [])
+        candidate_pool_size = len(evidence)
         selected = select_context(
             evidence,
+            max_evidence_chunks=candidate_pool_size,
             question=result["question"],
         )
         record["selection"].update({
             "mode": "rag_context", "prompt_version": PROMPT_VERSION,
-            "max_chunks": MAX_EVIDENCE_CHUNKS, "max_chunk_chars": MAX_CHUNK_CHARS,
+            "candidate_pool_size": candidate_pool_size,
+            "max_chunks": candidate_pool_size,
+            "max_chunk_chars": MAX_CHUNK_CHARS,
             "selected_context": [{k: v for k, v in c.items() if k != "policy_text"} for c in selected],
         })
-        record["selection"]["excluded"].extend(
-            {"rank": c.get("rank"), "chunk_id": c.get("chunk_id"), "reason": "context_limit"}
-            for c in evidence[MAX_EVIDENCE_CHUNKS:]
-        )
         if not selected:
             return _respond(record, _fallback(question, "insufficient_evidence"))
 

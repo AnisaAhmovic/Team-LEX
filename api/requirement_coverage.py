@@ -46,9 +46,14 @@ _TIME_UNITS = (
     "week|weeks|month|months|year|years"
 )
 
+_QUALIFIED_DAY_UNITS = (
+    "business\\s+day|business\\s+days|"
+    "calendar\\s+day|calendar\\s+days"
+)
+
 _DURATION_VALUE = re.compile(
     rf"\b(?:\d+|{_NUMBER_WORDS})\s+"
-    rf"(?:{_TIME_UNITS})\b",
+    rf"(?:{_TIME_UNITS}|{_QUALIFIED_DAY_UNITS})\b",
     re.IGNORECASE,
 )
 

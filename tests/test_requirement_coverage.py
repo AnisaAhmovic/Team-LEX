@@ -267,6 +267,109 @@ class RequirementCoverageTests(SimpleTestCase):
         self.assertTrue(complete, details)
         self.assertEqual(details["status"], "complete")
 
+    def test_canonical_duration_forms_are_accepted(self):
+        """Protect numeric/word-number and singular/plural duration forms."""
+        requirements = [
+            {
+                "kind": "OPEN",
+                "owner": "last",
+                "gap": "how long",
+            },
+        ]
+
+        cases = (
+            "The period lasts 1 month.",
+            "The period lasts one month.",
+            "The period lasts 2 weeks.",
+            "The period lasts two weeks.",
+            "The period lasts 15 days.",
+            "The period lasts fifteen days.",
+            "The period lasts 3 months.",
+            "The period lasts three months.",
+        )
+
+        for text in cases:
+            with self.subTest(text=text):
+                complete, details = validate_requirement_coverage(
+                    requirements,
+                    [{"text": text}],
+                    analyses=[],
+                )
+
+                self.assertTrue(complete, details)
+                self.assertEqual(details["status"], "complete")
+                self.assertEqual(
+                    details["requirements"][0]["coverage_status"],
+                    "covered",
+                )
+
+    def test_qualified_day_durations_are_accepted(self):
+        """Business/calendar days are explicit bounded durations."""
+        requirements = [
+            {
+                "kind": "OPEN",
+                "owner": "have",
+                "gap": "how long",
+            },
+        ]
+
+        cases = (
+            "The response will be provided within 1 business day.",
+            "The response will be provided within one business day.",
+            "Students normally receive feedback within 15 business days.",
+            "Students normally receive feedback within fifteen business days.",
+            "The request must be made within 1 calendar day.",
+            "The request must be made within one calendar day.",
+            "The request must be made within 10 calendar days.",
+            "The request must be made within ten calendar days.",
+        )
+
+        for text in cases:
+            with self.subTest(text=text):
+                complete, details = validate_requirement_coverage(
+                    requirements,
+                    [{"text": text}],
+                    analyses=[],
+                )
+
+                self.assertTrue(complete, details)
+                self.assertEqual(details["status"], "complete")
+                self.assertEqual(
+                    details["requirements"][0]["coverage_status"],
+                    "covered",
+                )
+
+    def test_qualified_day_duration_requires_explicit_number(self):
+        """A qualified unit alone must not satisfy a duration requirement."""
+        requirements = [
+            {
+                "kind": "OPEN",
+                "owner": "have",
+                "gap": "how long",
+            },
+        ]
+
+        cases = (
+            "The response will be provided within business days.",
+            "The request must be made within calendar days.",
+            "The response will be provided within days.",
+        )
+
+        for text in cases:
+            with self.subTest(text=text):
+                complete, details = validate_requirement_coverage(
+                    requirements,
+                    [{"text": text}],
+                    analyses=[],
+                )
+
+                self.assertFalse(complete, details)
+                self.assertEqual(details["status"], "incomplete")
+                self.assertEqual(
+                    details["requirements"][0]["coverage_status"],
+                    "uncovered",
+                )
+
     def test_vague_duration_language_is_not_accepted(self):
         requirements = [
             {

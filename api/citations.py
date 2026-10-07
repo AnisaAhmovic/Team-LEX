@@ -5,6 +5,7 @@ import json
 import re
 
 from retrieval.policy_retriever import _is_authoritative_url
+from retrieval.query_representation import relevance_terms
 from api.groundedness import is_semantically_supported, preserves_policy_constraints
 
 PROMPT_VERSION = "lex-claims-v6"
@@ -37,28 +38,9 @@ class CitationValidationError(ValueError):
     """Generated text has not met the evidence reference contract."""
 
 
-_RELEVANCE_STOPWORDS = {
-    "a", "an", "and", "are", "as", "at", "be", "been", "by", "for",
-    "from", "has", "how", "in", "is", "it", "of", "on", "or", "the",
-    "their", "to", "what", "which", "with",
-}
-
-
 def _relevance_terms(text):
     """Return normalized content terms used by the transparent relevance scorer."""
-    terms = []
-    for token in re.findall(r"[A-Za-z]+", text.lower()):
-        if token in _RELEVANCE_STOPWORDS:
-            continue
-
-        if token.endswith("ies") and len(token) > 4:
-            token = token[:-3] + "y"
-        elif token.endswith("s") and len(token) > 4:
-            token = token[:-1]
-
-        terms.append(token)
-
-    return set(terms)
+    return relevance_terms(text)
 
 
 def extract_question_concepts(question):

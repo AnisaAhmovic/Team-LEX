@@ -15,6 +15,7 @@ from urllib.parse import urlparse
 from ingestion.embedding_config import (
     EMBEDDING_DEVICE, EMBEDDING_DIMENSION, EMBEDDING_MODEL_NAME, QDRANT_COLLECTION_NAME,
 )
+from retrieval.query_representation import secondary_query_representation
 from retrieval.query_scope import HEADING_FIELDS, QUERY_SCOPE_VERSION, apply_scope, resolve_scope
 
 SELECTION_VERSION = "current-authoritative-threshold-v3"
@@ -176,25 +177,95 @@ class PolicyRetriever:
     def retrieve(self, question: Any) -> dict[str, Any]:
         """Return supported policy evidence or a safe fallback response."""
         normalised_question = validate_question(question)
-        embedding = self._embed_question(normalised_question)
-        points, query_scope = self._query_qdrant(embedding, normalised_question)
+
+        original_embedding = self._embed_question(normalised_question)
+        secondary_question = secondary_query_representation(normalised_question)
+        secondary_embedding = self._embed_question(secondary_question)
+
+        client = self._get_client()
+        query_scope = resolve_scope(
+            normalised_question,
+            self._load_catalogue(client),
+        )
+        current_filter = apply_scope(_current_policy_filter(), query_scope)
+
+        discovery_paths = (
+            (
+                "original",
+                self._query_qdrant_with_filter(
+                    original_embedding,
+                    current_filter,
+                    client=client,
+                ),
+            ),
+            (
+                "secondary",
+                self._query_qdrant_with_filter(
+                    secondary_embedding,
+                    current_filter,
+                    client=client,
+                ),
+            ),
+        )
 
         evidence, candidates = [], []
-        seen = set()
-        for rank, point in enumerate(points[:self.top_k], start=1):
-            item, candidate = self._evaluate_point(point, rank)
-            if item is not None:
-                identity = (item.get("chunk_id"), candidate["text_sha256"], item["source_url"])
-                if identity in seen:
-                    candidate.update(eligible=False, exclusion_reason="duplicate_evidence")
-                else:
-                    seen.add(identity)
-                    evidence.append(item)
-            candidates.append(candidate)
+        seen_evidence = set()
+        candidate_by_identity = {}
 
-        trace = {"config": self.audit_config(), "candidates": candidates, "query_scope": query_scope}
+        for discovery_source, points in discovery_paths:
+            for rank, point in enumerate(points[:self.top_k], start=1):
+                item, candidate = self._evaluate_point(point, rank)
+                candidate["discovery_source"] = discovery_source
+                candidate["discoveries"] = [
+                    {
+                        "source": discovery_source,
+                        "rank": rank,
+                        "similarity_score": candidate["similarity_score"],
+                    }
+                ]
+
+                identity = (
+                    candidate.get("chunk_id"),
+                    candidate["text_sha256"],
+                    candidate.get("source_url"),
+                )
+
+                existing_candidate = candidate_by_identity.get(identity)
+                if existing_candidate is not None:
+                    discoveries = existing_candidate["discoveries"]
+                    discoveries.extend(candidate["discoveries"])
+
+                    if candidate["eligible"] and not existing_candidate["eligible"]:
+                        candidate["discoveries"] = discoveries
+                        candidate_by_identity[identity] = candidate
+                        candidates[candidates.index(existing_candidate)] = candidate
+                else:
+                    candidate_by_identity[identity] = candidate
+                    candidates.append(candidate)
+
+                if item is not None:
+                    if identity not in seen_evidence:
+                        seen_evidence.add(identity)
+                        evidence.append(item)
+
+        trace = {
+            "config": self.audit_config(),
+            "candidates": candidates,
+            "query_scope": query_scope,
+            "retrieval_representations": {
+                "original": normalised_question,
+                "secondary": secondary_question,
+            },
+        }
+
         if not evidence:
-            return {**fallback_response(normalised_question, "insufficient_evidence"), "_trace": trace}
+            return {
+                **fallback_response(
+                    normalised_question,
+                    "insufficient_evidence",
+                ),
+                "_trace": trace,
+            }
 
         return {
             "status": "supported",
@@ -264,33 +335,59 @@ class PolicyRetriever:
         return self._catalogue
 
     def _query_qdrant(self, embedding: list[float], question: str) -> tuple[list[Any], dict]:
+        """Compatibility wrapper that resolves scope from the supplied question."""
         try:
             client = self._get_client()
             scope = resolve_scope(question, self._load_catalogue(client))
             current_filter = apply_scope(_current_policy_filter(), scope)
+            return (
+                self._query_qdrant_with_filter(
+                    embedding,
+                    current_filter,
+                    client=client,
+                ),
+                scope,
+            )
+        except RetrievalUnavailableError:
+            raise
+        except Exception as exc:
+            raise RetrievalUnavailableError(
+                "Current policy evidence could not be retrieved."
+            ) from exc
+
+    def _query_qdrant_with_filter(
+        self,
+        embedding: list[float],
+        query_filter,
+        *,
+        client=None,
+    ) -> list[Any]:
+        """Run one bounded Top-K search using an already verified query filter."""
+        try:
+            client = client or self._get_client()
 
             if hasattr(client, "query_points"):
                 response = client.query_points(
                     collection_name=self.collection_name,
                     query=embedding,
-                    query_filter=current_filter,
+                    query_filter=query_filter,
                     limit=self.top_k,
                     with_payload=True,
                     with_vectors=False,
                 )
-                return list(response.points), scope
+                return list(response.points)
 
             # Compatibility with older Qdrant clients used by some team setups.
             return list(
                 client.search(
                     collection_name=self.collection_name,
                     query_vector=embedding,
-                    query_filter=current_filter,
+                    query_filter=query_filter,
                     limit=self.top_k,
                     with_payload=True,
                     with_vectors=False,
                 )
-            ), scope
+            )
         except Exception as exc:
             raise RetrievalUnavailableError(
                 "Current policy evidence could not be retrieved."

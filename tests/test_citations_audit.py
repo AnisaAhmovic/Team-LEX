@@ -1175,10 +1175,24 @@ class ProvenanceTests(TestCase):
         result = retrieve([point(section=None, subsection="Part A - Purpose")]).retrieve("What is its purpose?")
         self.assertEqual(result["evidence"][0]["section"], "Part A - Purpose")
 
-    def test_duplicate_candidates_are_excluded(self):
+    def test_duplicate_candidate_observations_are_reconciled_by_evidence_identity(self):
         result = retrieve([point(), point()]).retrieve("What does the policy say?")
+
         self.assertEqual(len(result["evidence"]), 1)
-        self.assertEqual(result["_trace"]["candidates"][1]["exclusion_reason"], "duplicate_evidence")
+
+        candidates = result["_trace"]["candidates"]
+        self.assertEqual(len(candidates), 1)
+        self.assertTrue(candidates[0]["eligible"])
+        self.assertIsNone(candidates[0]["exclusion_reason"])
+        self.assertEqual(
+            candidates[0]["discoveries"],
+            [
+                {"source": "original", "rank": 1, "similarity_score": 0.82},
+                {"source": "original", "rank": 2, "similarity_score": 0.82},
+                {"source": "secondary", "rank": 1, "similarity_score": 0.82},
+                {"source": "secondary", "rank": 2, "similarity_score": 0.82},
+            ],
+        )
 
     def test_malformed_credentialled_and_lookalike_urls_are_excluded(self):
         for url in ("https://policies.latrobe.edu.au.evil.test", "https://user:secret@latrobe.edu.au", "http://latrobe.edu.au", "https://[broken", "https://latrobe.edu.au:bad", "https://evil.test@latrobe.edu.au"):
@@ -1286,6 +1300,79 @@ class InteractionAuditTests(SimpleTestCase):
         if return_service:
             return response, record, service
         return response, record
+
+    def test_api_allows_bq32_to_consider_complete_retrieved_candidate_pool(self):
+        """BQ-36: dual-discovery candidates must reach question-aware selection."""
+        question = "When am I supposed to get feedback on my assessment?"
+
+        original_points = [
+            point(
+                index=index,
+                point_id=f"candidate-{index}",
+                text=f"({index}) Candidate policy evidence {index}.",
+            )
+            for index in range(1, 6)
+        ]
+
+        recovered_point = point(
+            index=6,
+            point_id="candidate-6",
+            text="(6) Recovered candidate policy evidence.",
+        )
+
+        # Model the production dual-discovery architecture:
+        # original Top-5 plus a secondary Top-5 containing four duplicates
+        # and one newly recovered eligible candidate.
+        client = FakeClient(
+            responses=[
+                original_points,
+                [
+                    original_points[0],
+                    original_points[1],
+                    original_points[2],
+                    original_points[3],
+                    recovered_point,
+                ],
+            ],
+        )
+        retriever = PolicyRetriever(
+            client=client,
+            embedder=lambda _: embedding(),
+        )
+
+        observed = {}
+
+        def observing_select_context(
+            evidence,
+            question=None,
+            **kwargs,
+        ):
+            observed["evidence_count"] = len(evidence)
+            observed["max_evidence_chunks"] = kwargs.get("max_evidence_chunks")
+            observed["question"] = question
+
+            # This test verifies the runtime integration boundary only.
+            # Keep the returned context deterministic and independent of BGE-M3.
+            return select_context(
+                evidence,
+                question=None,
+                **kwargs,
+            )
+
+        with patch(
+            "api.views.select_context",
+            side_effect=observing_select_context,
+        ):
+            response, record = self.request(
+                retriever,
+                '{"claims": []}',
+                question=question,
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(observed["evidence_count"], 6)
+        self.assertEqual(observed["max_evidence_chunks"], 6)
+        self.assertEqual(observed["question"], question)
 
     def test_api_passes_original_question_to_evidence_selection(self):
         """S5-04-BQ-32: runtime API propagates the user question into evidence selection."""
