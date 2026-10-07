@@ -31,7 +31,7 @@ function Chatbot() {
     setIsTyping(true);
 
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 240000);
+    const timeout = setTimeout(() => controller.abort(), 360000);
 
     try {
       const response = await fetch("/api/answer/", {
