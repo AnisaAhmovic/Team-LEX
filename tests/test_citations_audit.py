@@ -63,11 +63,156 @@ def generation(text):
     return {"text": text, "model": "qwen3:4b", "done": True, "latency_seconds": 0.01}
 
 
+class QuestionAwareEvidenceSelectionTests(TestCase):
+    """S5-04-BQ-32: question-aware evidence-unit selection mechanics."""
+
+    @patch(
+        "api.citations._semantic_unit_scores",
+        return_value=[0.20, 0.90],
+    )
+    def test_higher_semantic_relevance_can_override_retrieval_order(
+        self,
+        mock_scores,
+    ):
+        evidence = [
+            {
+                "chunk_id": "rank-1",
+                "policy_title": "Earlier Retrieved Policy",
+                "policy_text": "(1) Earlier retrieved but lower-relevance evidence.",
+            },
+            {
+                "chunk_id": "rank-5",
+                "policy_title": "Later Retrieved Policy",
+                "policy_text": "(18) Later retrieved but higher-relevance evidence.",
+            },
+        ]
+
+        selected = select_context(
+            evidence,
+            question="Which evidence is most relevant?",
+            max_context_chars=55,
+        )
+
+        selected_text = " ".join(
+            item["context_text"]
+            for item in selected
+        )
+
+        self.assertIn("higher-relevance evidence", selected_text)
+        self.assertNotIn("lower-relevance evidence", selected_text)
+        mock_scores.assert_called_once()
+
+    @patch(
+        "api.citations._semantic_unit_scores",
+        return_value=[0.90, 0.80],
+    )
+    def test_question_aware_selection_respects_context_bound(
+        self,
+        mock_scores,
+    ):
+        evidence = [
+            {
+                "chunk_id": "first",
+                "policy_title": "First Policy",
+                "policy_text": "(1) " + ("A" * 60),
+            },
+            {
+                "chunk_id": "second",
+                "policy_title": "Second Policy",
+                "policy_text": "(2) " + ("B" * 60),
+            },
+        ]
+
+        selected = select_context(
+            evidence,
+            question="Which evidence applies?",
+            max_context_chars=70,
+        )
+
+        selected_chars = sum(
+            len(item["context_text"])
+            for item in selected
+        )
+
+        self.assertLessEqual(selected_chars, 70)
+        self.assertEqual(len(selected), 1)
+        mock_scores.assert_called_once()
+
+
 class CitationTests(TestCase):
     def setUp(self):
         self.evidence = retrieve([point()]).retrieve("What does the policy say?")["evidence"]
         self.context = select_context(self.evidence)
         self.quote = self.context[0]["context_text"]
+
+    def test_semantic_support_uses_local_policy_context_without_replacing_cited_anchor(self):
+        """A cited sentence may use its own policy unit to resolve an antecedent."""
+        policy_unit = (
+            "(28) A delay in public disclosure of Exploitable IP may be required for "
+            "a reasonable period to allow the University to assess and protect the IP. "
+            "Normally the period of any such delay will not exceed three months."
+        )
+        evidence = [{
+            **self.evidence[0],
+            "chunk_id": "ip-28",
+            "policy_title": "Intellectual Property Policy",
+            "policy_text": policy_unit,
+        }]
+        context = select_context(evidence)
+        duration_quote = next(
+            quote
+            for quote in quote_options(context[0])
+            if "will not exceed three months" in quote
+        )
+        generated = model_text(
+            (
+                "A delay in public disclosure of Exploitable IP will normally not exceed three months.",
+                support_id(context, "E1", duration_quote),
+            )
+        )
+
+        result, _ = build_cited_answer(generated, context)
+
+        self.assertEqual(
+            result["claims"][0]["text"],
+            "A delay in public disclosure of Exploitable IP will normally not exceed three months.",
+        )
+
+
+    def test_multiple_support_context_cannot_substitute_for_cited_anchors(self):
+        """Surrounding context from cited evidence must not replace the cited anchors."""
+        first_anchor = "The University will review the matter."
+        second_anchor = "The matter will be recorded."
+        unsupported_proposition = "Staff must report incidents immediately."
+
+        context = select_context([
+            {
+                **self.evidence[0],
+                "chunk_id": "incident-1",
+                "policy_text": f"{unsupported_proposition} {first_anchor}",
+            },
+            {
+                **self.evidence[0],
+                "chunk_id": "incident-2",
+                "policy_text": second_anchor,
+            },
+        ])
+
+        value = {
+            "claims": [{
+                "text": unsupported_proposition,
+                "support": [
+                    support_id(context, "E1", first_anchor),
+                    support_id(context, "E2", second_anchor),
+                ],
+            }]
+        }
+
+        result, links = build_cited_answer(json.dumps(value), context)
+
+        self.assertEqual(result["claims"], [])
+        self.assertIsNone(result["answer"])
+        self.assertEqual(links, [])
 
     def test_numbered_policy_paragraphs_are_preserved_as_units(self):
         """Numbered policy paragraphs remain intact for evidence selection."""
@@ -473,6 +618,58 @@ class CitationTests(TestCase):
         self.assertNotIn("penalty", " ".join(support_quotes).lower())
         self.assertIn('Return {"claims": []} if insufficient.', prompt)
 
+    def test_supported_claim_survives_semantically_unsupported_sibling(self):
+        """A valid claim survives when a separate well-formed claim lacks semantic support."""
+        supported = "Feedback on assessment tasks is timely and constructive."
+        unsupported_anchor = (
+            "Audit: is the systematic and independent examination of documents or process "
+            "to ascertain a true and fair view of the risk controls under review."
+        )
+
+        context = select_context([
+            {
+                **self.evidence[0],
+                "chunk_id": "feedback-1",
+                "policy_text": supported,
+            },
+            {
+                **self.evidence[0],
+                "chunk_id": "audit-1",
+                "policy_text": unsupported_anchor,
+            },
+        ])
+
+        value = {
+            "claims": [
+                {
+                    "text": supported,
+                    "support": [
+                        support_id(context, "E1", supported),
+                    ],
+                },
+                {
+                    "text": (
+                        "A road safety audit is the systematic and independent examination "
+                        "of documents or process to ascertain a true and fair view of the "
+                        "risk controls under review."
+                    ),
+                    "support": [
+                        support_id(context, "E2", unsupported_anchor),
+                    ],
+                },
+            ]
+        }
+
+        result, links = build_cited_answer(json.dumps(value), context)
+
+        self.assertEqual(len(result["claims"]), 1)
+        self.assertEqual(result["claims"][0]["text"], supported)
+        self.assertNotIn("road safety", result["answer"].lower())
+        self.assertEqual(
+            {link["evidence_id"] for link in links},
+            {"E1"},
+        )
+
     def test_claim_cannot_add_unsupported_subject_qualifier(self):
         """A cited quote cannot support a materially narrower invented subject."""
         exact = (
@@ -497,11 +694,11 @@ class CitationTests(TestCase):
             }]
         }
 
-        with self.assertRaisesRegex(
-            CitationValidationError,
-            "unsupported_claim",
-        ):
-            build_cited_answer(json.dumps(value), context)
+        result, links = build_cited_answer(json.dumps(value), context)
+
+        self.assertEqual(result["claims"], [])
+        self.assertIsNone(result["answer"])
+        self.assertEqual(links, [])
 
     def test_secondary_document_absent_from_exact_support_is_rejected(self):
         """A model-written secondary document name must be present in exact support."""
@@ -978,10 +1175,24 @@ class ProvenanceTests(TestCase):
         result = retrieve([point(section=None, subsection="Part A - Purpose")]).retrieve("What is its purpose?")
         self.assertEqual(result["evidence"][0]["section"], "Part A - Purpose")
 
-    def test_duplicate_candidates_are_excluded(self):
+    def test_duplicate_candidate_observations_are_reconciled_by_evidence_identity(self):
         result = retrieve([point(), point()]).retrieve("What does the policy say?")
+
         self.assertEqual(len(result["evidence"]), 1)
-        self.assertEqual(result["_trace"]["candidates"][1]["exclusion_reason"], "duplicate_evidence")
+
+        candidates = result["_trace"]["candidates"]
+        self.assertEqual(len(candidates), 1)
+        self.assertTrue(candidates[0]["eligible"])
+        self.assertIsNone(candidates[0]["exclusion_reason"])
+        self.assertEqual(
+            candidates[0]["discoveries"],
+            [
+                {"source": "original", "rank": 1, "similarity_score": 0.82},
+                {"source": "original", "rank": 2, "similarity_score": 0.82},
+                {"source": "secondary", "rank": 1, "similarity_score": 0.82},
+                {"source": "secondary", "rank": 2, "similarity_score": 0.82},
+            ],
+        )
 
     def test_malformed_credentialled_and_lookalike_urls_are_excluded(self):
         for url in ("https://policies.latrobe.edu.au.evil.test", "https://user:secret@latrobe.edu.au", "http://latrobe.edu.au", "https://[broken", "https://latrobe.edu.au:bad", "https://evil.test@latrobe.edu.au"):
@@ -1034,6 +1245,41 @@ class AuditStoreTests(TestCase):
         self.assertEqual(self.store.read()[0]["outcome"], "supported")
 
 
+
+class QueryScopePromptContractTests(SimpleTestCase):
+    def test_verified_structural_query_scope_is_preserved_in_generation_prompt(self):
+        question = "What is the purpose of the Assessment Policy?"
+        retriever = retrieve([point()])
+        context = select_context(retriever.retrieve(question)["evidence"])
+        scope = {
+            "policy_titles": ["Assessment Policy"],
+            "requested_section": "purpose",
+            "heading_filters": {"section": ["Section 2 - Purpose"]},
+        }
+
+        prompt = build_prompt(
+            question,
+            context,
+            query_scope=scope,
+        )
+
+        self.assertIn('"requested_section": "purpose"', prompt)
+        self.assertIn('"policy_titles": ["Assessment Policy"]', prompt)
+        self.assertIn('"section": ["Section 2 - Purpose"]', prompt)
+
+    def test_absent_query_scope_preserves_existing_prompt_contract(self):
+        question = "What does the policy say?"
+        retriever = retrieve([point()])
+        context = select_context(retriever.retrieve(question)["evidence"])
+
+        prompt = build_prompt(question, context)
+
+        self.assertNotIn('"query_scope"', prompt)
+        self.assertIn('"question": "What does the policy say?"', prompt)
+        self.assertIn('"evidence"', prompt)
+
+
+
 class InteractionAuditTests(SimpleTestCase):
     def setUp(self):
         temporary = TemporaryDirectory()
@@ -1044,25 +1290,151 @@ class InteractionAuditTests(SimpleTestCase):
         self.addCleanup(settings.disable)
         self.client = APIClient()
 
-    def request(self, retriever, text=None, error=None, question="What does the policy say?", endpoint="answer"):
+    def request(self, retriever, text=None, error=None, question="What does the policy say?", endpoint="answer", return_service=False):
         with patch("api.views.get_policy_retriever", return_value=retriever), patch("api.views.get_qwen_service") as service:
             service.return_value.model = "qwen3:4b"
             service.return_value.generate.return_value = generation(text or "")
             service.return_value.generate.side_effect = error
             response = self.client.post(f"/api/{endpoint}/", {"question": question}, format="json", HTTP_AUTHORIZATION="Bearer never-log-this", HTTP_COOKIE="secret-session", REMOTE_ADDR="192.0.2.5")
-        return response, AuditStore(self.path).read(response.data.get("interaction_id"))[0]
+        record = AuditStore(self.path).read(response.data.get("interaction_id"))[0]
+        if return_service:
+            return response, record, service
+        return response, record
+
+    def test_api_allows_bq32_to_consider_complete_retrieved_candidate_pool(self):
+        """BQ-36: dual-discovery candidates must reach question-aware selection."""
+        question = "When am I supposed to get feedback on my assessment?"
+
+        original_points = [
+            point(
+                index=index,
+                point_id=f"candidate-{index}",
+                text=f"({index}) Candidate policy evidence {index}.",
+            )
+            for index in range(1, 6)
+        ]
+
+        recovered_point = point(
+            index=6,
+            point_id="candidate-6",
+            text="(6) Recovered candidate policy evidence.",
+        )
+
+        # Model the production dual-discovery architecture:
+        # original Top-5 plus a secondary Top-5 containing four duplicates
+        # and one newly recovered eligible candidate.
+        client = FakeClient(
+            responses=[
+                original_points,
+                [
+                    original_points[0],
+                    original_points[1],
+                    original_points[2],
+                    original_points[3],
+                    recovered_point,
+                ],
+            ],
+        )
+        retriever = PolicyRetriever(
+            client=client,
+            embedder=lambda _: embedding(),
+        )
+
+        observed = {}
+
+        def observing_select_context(
+            evidence,
+            question=None,
+            **kwargs,
+        ):
+            observed["evidence_count"] = len(evidence)
+            observed["max_evidence_chunks"] = kwargs.get("max_evidence_chunks")
+            observed["question"] = question
+
+            # This test verifies the runtime integration boundary only.
+            # Keep the returned context deterministic and independent of BGE-M3.
+            return select_context(
+                evidence,
+                question=None,
+                **kwargs,
+            )
+
+        with patch(
+            "api.views.select_context",
+            side_effect=observing_select_context,
+        ):
+            response, record = self.request(
+                retriever,
+                '{"claims": []}',
+                question=question,
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(observed["evidence_count"], 6)
+        self.assertEqual(observed["max_evidence_chunks"], 6)
+        self.assertEqual(observed["question"], question)
+
+    def test_api_passes_original_question_to_evidence_selection(self):
+        """S5-04-BQ-32: runtime API propagates the user question into evidence selection."""
+        question = "Which policy evidence is relevant to delayed feedback?"
+        retriever = retrieve([point()])
+        quote = point().payload["text"]
+
+        # Build the deterministic model response using the established
+        # no-question selection contract. The runtime selector call itself is
+        # wrapped below so we can verify question propagation independently
+        # of BGE-M3 model quality.
+        expected_context = select_context(
+            retriever.retrieve(question)["evidence"]
+        )
+
+        from api.citations import select_context as real_select_context
+
+        calls = []
+
+        def observing_select_context(
+            evidence,
+            question=None,
+            **kwargs,
+        ):
+            calls.append(question)
+            return real_select_context(
+                evidence,
+                question=None,
+                **kwargs,
+            )
+
+        with patch(
+            "api.views.select_context",
+            side_effect=observing_select_context,
+        ):
+            response, record = self.request(
+                retriever,
+                model_text((
+                    quote,
+                    support_id(expected_context, "E1", quote),
+                )),
+                question=question,
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(calls, [question])
+        self.assertEqual(record["question"], question)
+
 
     def test_supported_request_can_be_reconstructed_without_private_trace_in_response(self):
+        question = "Is feedback on assessment tasks timely?"
         retriever = retrieve([point(), point(2, score=0.1)])
         quote = point().payload["text"]
-        context = select_context(retriever.retrieve("What does the policy say?")["evidence"])
+        context = select_context(retriever.retrieve(question)["evidence"])
         response, record = self.request(
             retriever,
             model_text((quote, support_id(context, "E1", quote))),
+            question=question,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["status"], "supported")
-        self.assertEqual(record["question"], "What does the policy say?")
+        self.assertEqual(record["question"], question)
         self.assertEqual(len(record["retrieval"]["candidates"]), 2)
         self.assertEqual(record["selection"]["excluded"][0]["reason"], "below_threshold")
         self.assertEqual(record["selection"]["selected_context"][0]["context_text"], quote)
@@ -1119,10 +1491,11 @@ class InteractionAuditTests(SimpleTestCase):
         self.assertNotIn("could not find", response.data["message"])
 
     def test_named_policy_claim_and_query_scope_can_be_reconstructed(self):
+        question = "Is feedback on assessment tasks timely under the Assessment Policy?"
         base = retrieve([point()])
-        result = base.retrieve("What is the purpose of the Assessment Policy?")
-        scope = {"policy_titles": ["Assessment Policy"], "requested_section": "purpose",
-                 "heading_filters": {"section": ["Section 2 - Purpose"]}}
+        result = base.retrieve(question)
+        scope = {"policy_titles": ["Assessment Policy"], "requested_section": None,
+                 "heading_filters": {"section": ["Section 5 - Policy Statement"]}}
         result["_trace"]["query_scope"] = scope
         retriever = SimpleNamespace(retrieve=lambda _: result, audit_config=base.audit_config)
         quote = point().payload["text"]
@@ -1131,11 +1504,48 @@ class InteractionAuditTests(SimpleTestCase):
             (quote, support_id(context, "E1", quote))
         ))
         value["claims"][0]["text"] = "Under Assessment Policy, feedback is timely."
-        response, record = self.request(retriever, json.dumps(value))
+        response, record = self.request(
+            retriever,
+            json.dumps(value),
+            question=question,
+        )
         self.assertEqual(response.data["status"], "supported")
         self.assertEqual(record["retrieval"]["query_scope"], scope)
         self.assertEqual(record["generation"]["validation"], "accepted")
         self.assertEqual(record["generation"]["prompt_version"], "lex-claims-v6")
+
+    def test_verified_query_scope_is_passed_to_generation_prompt(self):
+        question = "What is the purpose of the Assessment Policy?"
+        base = retrieve([point()])
+        result = base.retrieve(question)
+        scope = {
+            "policy_titles": ["Assessment Policy"],
+            "requested_section": "purpose",
+            "heading_filters": {"section": ["Section 2 - Purpose"]},
+        }
+        result["_trace"]["query_scope"] = scope
+        retriever = SimpleNamespace(
+            retrieve=lambda _: result,
+            audit_config=base.audit_config,
+        )
+
+        quote = point().payload["text"]
+        context = select_context(result["evidence"])
+
+        response, record, service = self.request(
+            retriever,
+            model_text((quote, support_id(context, "E1", quote))),
+            question=question,
+            return_service=True,
+        )
+
+        prompt = service.return_value.generate.call_args.args[0]
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(record["retrieval"]["query_scope"], scope)
+        self.assertIn('"requested_section": "purpose"', prompt)
+        self.assertIn('"policy_titles": ["Assessment Policy"]', prompt)
+        self.assertIn('"section": ["Section 2 - Purpose"]', prompt)
 
     def test_specific_attribution_rejection_is_audited_without_raw_model_text(self):
         retriever = retrieve([point()])
@@ -1149,6 +1559,209 @@ class InteractionAuditTests(SimpleTestCase):
         self.assertEqual(response.data["fallback_reason"], "unverifiable_generation")
         self.assertEqual(record["generation"]["validation"], "unverified_policy_title")
         self.assertNotIn("Fictional", json.dumps(record))
+
+    def test_rcv_rejects_incomplete_remainder_after_unsupported_claim_is_filtered(self):
+        """RCV evaluates the original question against only claims that survive semantic validation."""
+        question = "Is feedback timely, and must staff report all incidents immediately?"
+        supported = "Feedback on assessment tasks is timely and constructive."
+        unsupported_anchor = "The University will review the matter."
+
+        retriever = retrieve([
+            point(
+                text=f"{supported} {unsupported_anchor}",
+            )
+        ])
+        context = select_context(retriever.retrieve(question)["evidence"])
+
+        value = {
+            "claims": [
+                {
+                    "text": supported,
+                    "support": [
+                        support_id(context, "E1", supported),
+                    ],
+                },
+                {
+                    "text": "Staff must report all incidents immediately.",
+                    "support": [
+                        support_id(context, "E1", unsupported_anchor),
+                    ],
+                },
+            ]
+        }
+
+        requirements = [
+            {"kind": "TEST", "owner": "feedback", "gap": "timely"},
+            {"kind": "TEST", "owner": "staff", "gap": "report incidents"},
+        ]
+        analyses = [{"text": supported}]
+
+        with patch(
+            "api.views.analyse_requirement_coverage_inputs",
+            return_value=(requirements, analyses),
+        ) as analyse, patch(
+            "api.views.validate_requirement_coverage",
+            return_value=(
+                False,
+                {
+                    "status": "incomplete",
+                    "requirement_count": 2,
+                    "covered_count": 1,
+                    "unknown_count": 0,
+                    "enforced_count": 2,
+                },
+            ),
+        ) as validate:
+            response, record = self.request(
+                retriever,
+                json.dumps(value),
+                question=question,
+            )
+
+        self.assertEqual(response.data["status"], "fallback")
+        self.assertEqual(
+            response.data["fallback_reason"],
+            "generation_insufficient_evidence",
+        )
+        self.assertIsNone(response.data["answer"])
+        self.assertEqual(response.data["sources"], [])
+
+        analyse.assert_called_once()
+        analyse_question, analyse_claims = analyse.call_args.args
+        self.assertEqual(analyse_question, question)
+        self.assertEqual(
+            [claim["text"] for claim in analyse_claims],
+            [supported],
+        )
+
+        validate.assert_called_once()
+        validate_requirements, validate_claims = validate.call_args.args[:2]
+        self.assertEqual(validate_requirements, requirements)
+        self.assertEqual(
+            [claim["text"] for claim in validate_claims],
+            [supported],
+        )
+        self.assertNotIn(
+            "Staff must report all incidents immediately.",
+            json.dumps(record),
+        )
+
+    def test_rcv_accepts_complete_remainder_after_unsupported_claim_is_filtered(self):
+        """A complete validated remainder may be returned after an unsupported sibling is removed."""
+        question = "Is feedback on assessment tasks timely?"
+        supported = "Feedback on assessment tasks is timely and constructive."
+        unsupported_anchor = "The University will review the matter."
+
+        retriever = retrieve([
+            point(
+                text=f"{supported} {unsupported_anchor}",
+            )
+        ])
+        context = select_context(retriever.retrieve(question)["evidence"])
+
+        value = {
+            "claims": [
+                {
+                    "text": supported,
+                    "support": [
+                        support_id(context, "E1", supported),
+                    ],
+                },
+                {
+                    "text": "Staff must report all incidents immediately.",
+                    "support": [
+                        support_id(context, "E1", unsupported_anchor),
+                    ],
+                },
+            ]
+        }
+
+        requirements = [
+            {"kind": "TEST", "owner": "feedback", "gap": "timely"},
+        ]
+        analyses = [{"text": supported}]
+
+        with patch(
+            "api.views.analyse_requirement_coverage_inputs",
+            return_value=(requirements, analyses),
+        ) as analyse, patch(
+            "api.views.validate_requirement_coverage",
+            return_value=(
+                True,
+                {
+                    "status": "complete",
+                    "requirement_count": 1,
+                    "covered_count": 1,
+                    "unknown_count": 0,
+                    "enforced_count": 1,
+                },
+            ),
+        ) as validate:
+            response, record = self.request(
+                retriever,
+                json.dumps(value),
+                question=question,
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["status"], "supported")
+        self.assertIn(supported, response.data["answer"])
+        self.assertIn("[S1]", response.data["answer"])
+        self.assertNotIn(
+            "Staff must report all incidents immediately.",
+            response.data["answer"],
+        )
+
+        analyse.assert_called_once()
+        analyse_question, analyse_claims = analyse.call_args.args
+        self.assertEqual(analyse_question, question)
+        self.assertEqual(
+            [claim["text"] for claim in analyse_claims],
+            [supported],
+        )
+
+        validate.assert_called_once()
+        validate_requirements, validate_claims = validate.call_args.args[:2]
+        self.assertEqual(validate_requirements, requirements)
+        self.assertEqual(
+            [claim["text"] for claim in validate_claims],
+            [supported],
+        )
+        self.assertNotIn(
+            "Staff must report all incidents immediately.",
+            json.dumps(record),
+        )
+
+    def test_semantically_unsupported_generation_is_a_safe_fallback(self):
+        """If every generated claim is rejected semantically, no answer reaches the user."""
+        retriever = retrieve([point()])
+        context = select_context(
+            retriever.retrieve("What does the policy say?")["evidence"]
+        )
+        quote = context[0]["context_text"]
+
+        value = {
+            "claims": [{
+                "text": "Staff must report all incidents immediately.",
+                "support": [
+                    support_id(context, "E1", quote),
+                ],
+            }]
+        }
+
+        response, record = self.request(retriever, json.dumps(value))
+
+        self.assertEqual(response.data["status"], "fallback")
+        self.assertEqual(
+            response.data["fallback_reason"],
+            "generation_insufficient_evidence",
+        )
+        self.assertIsNone(response.data["answer"])
+        self.assertEqual(response.data["sources"], [])
+        self.assertEqual(
+            record["generation"]["validation"],
+            "model_abstained",
+        )
 
     def test_model_abstention_is_a_fallback(self):
         response, record = self.request(retrieve([point()]), '{"claims":[]}')

@@ -53,18 +53,65 @@ def is_semantically_supported(
     claim,
     supporting_quotes,
     trusted_context=None,
+    interpretive_context=None,
 ):
-    """Accept only when entailment is the NLI model's strongest classification."""
-    probabilities = semantic_entailment(
+    """Accept direct entailment or contextual resolution without evidence substitution."""
+    direct_probabilities = semantic_entailment(
         claim,
         supporting_quotes,
         trusted_context=trusted_context,
     )
-    if "entailment" not in probabilities:
+    if "entailment" not in direct_probabilities:
         raise ValueError("NLI model did not return an entailment label")
 
-    predicted = max(probabilities, key=probabilities.get)
-    return predicted == "entailment", probabilities
+    direct_predicted = max(direct_probabilities, key=direct_probabilities.get)
+    if direct_predicted == "entailment" or interpretive_context is None:
+        return direct_predicted == "entailment", direct_probabilities
+
+    if not isinstance(interpretive_context, str) or not interpretive_context.strip():
+        raise ValueError(
+            "interpretive_context must be a non-empty string when supplied"
+        )
+
+    anchor_text = " ".join(quote.strip() for quote in supporting_quotes)
+    contextual_probabilities = semantic_entailment(
+        claim,
+        [f"{interpretive_context.strip()} {anchor_text}"],
+        trusted_context=trusted_context,
+    )
+    context_only_probabilities = semantic_entailment(
+        claim,
+        [interpretive_context.strip()],
+        trusted_context=trusted_context,
+    )
+
+    contextual_predicted = max(
+        contextual_probabilities,
+        key=contextual_probabilities.get,
+    )
+    context_only_predicted = max(
+        context_only_probabilities,
+        key=context_only_probabilities.get,
+    )
+
+    supported = (
+        contextual_predicted == "entailment"
+        and context_only_predicted != "entailment"
+    )
+
+    if supported:
+        mode = "contextual"
+    elif context_only_predicted == "entailment":
+        mode = "context_substitution_rejected"
+    else:
+        mode = "contextual_rejected"
+
+    return supported, {
+        "mode": mode,
+        "direct": direct_probabilities,
+        "context_plus_anchor": contextual_probabilities,
+        "context_only": context_only_probabilities,
+    }
 
 
 _POLICY_CONSTRAINT_PATTERNS = {

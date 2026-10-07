@@ -5,6 +5,7 @@ import json
 import re
 
 from retrieval.policy_retriever import _is_authoritative_url
+from retrieval.query_representation import relevance_terms
 from api.groundedness import is_semantically_supported, preserves_policy_constraints
 
 PROMPT_VERSION = "lex-claims-v6"
@@ -37,28 +38,9 @@ class CitationValidationError(ValueError):
     """Generated text has not met the evidence reference contract."""
 
 
-_RELEVANCE_STOPWORDS = {
-    "a", "an", "and", "are", "as", "at", "be", "been", "by", "for",
-    "from", "has", "how", "in", "is", "it", "of", "on", "or", "the",
-    "their", "to", "what", "which", "with",
-}
-
-
 def _relevance_terms(text):
     """Return normalized content terms used by the transparent relevance scorer."""
-    terms = []
-    for token in re.findall(r"[A-Za-z]+", text.lower()):
-        if token in _RELEVANCE_STOPWORDS:
-            continue
-
-        if token.endswith("ies") and len(token) > 4:
-            token = token[:-3] + "y"
-        elif token.endswith("s") and len(token) > 4:
-            token = token[:-1]
-
-        terms.append(token)
-
-    return set(terms)
+    return relevance_terms(text)
 
 
 def extract_question_concepts(question):
@@ -231,32 +213,125 @@ def split_policy_units(policy_text):
     return units
 
 
+def _semantic_unit_scores(question, units):
+    """Return BGE-M3 cosine-equivalent scores for complete policy units."""
+    if not units:
+        return []
+
+    from ingestion.embedder import embed_texts
+
+    vectors = embed_texts([question] + list(units))
+    question_vector = vectors[0]
+
+    return [
+        sum(
+            left * right
+            for left, right in zip(question_vector, unit_vector)
+        )
+        for unit_vector in vectors[1:]
+    ]
+
+
 def select_context(
     evidence,
     max_evidence_chunks=MAX_EVIDENCE_CHUNKS,
     max_context_chars=MAX_CONTEXT_CHARS,
+    question=None,
 ):
     """Freeze complete selected policy units within a bounded total context."""
-    selected = []
-    context_chars = 0
+    bounded_evidence = list(evidence[:max_evidence_chunks])
 
-    for chunk in evidence[:max_evidence_chunks]:
-        retained_units = []
+    # Preserve the established rank/document-order behaviour for callers that
+    # do not supply a question.
+    if not question:
+        selected = []
+        context_chars = 0
 
-        for unit in split_policy_units(chunk["policy_text"]):
-            separator_chars = 2 if retained_units else 0
-            required_chars = len(unit) + separator_chars
+        for chunk in bounded_evidence:
+            retained_units = []
 
-            if context_chars + required_chars > max_context_chars:
+            for unit in split_policy_units(chunk["policy_text"]):
+                separator_chars = 2 if retained_units else 0
+                required_chars = len(unit) + separator_chars
+
+                if context_chars + required_chars > max_context_chars:
+                    continue
+
+                retained_units.append(unit)
+                context_chars += required_chars
+
+            if not retained_units:
                 continue
 
-            retained_units.append(unit)
-            context_chars += required_chars
+            text = "\n\n".join(retained_units)
+            selected.append({
+                **chunk,
+                "evidence_id": f"E{len(selected) + 1}",
+                "context_text": text,
+                "context_truncated": len(text) < len(chunk["policy_text"]),
+                "context_sha256": hashlib.sha256(text.encode()).hexdigest(),
+            })
 
-        if not retained_units:
+        return selected
+
+    candidates = []
+
+    for chunk_index, chunk in enumerate(bounded_evidence):
+        for unit_index, unit in enumerate(split_policy_units(chunk["policy_text"])):
+            candidates.append({
+                "chunk_index": chunk_index,
+                "unit_index": unit_index,
+                "unit": unit,
+            })
+
+    if not candidates:
+        return []
+
+    scores = _semantic_unit_scores(
+        question,
+        [candidate["unit"] for candidate in candidates],
+    )
+
+    for candidate, score in zip(candidates, scores):
+        candidate["semantic_score"] = score
+
+    candidates.sort(
+        key=lambda candidate: (
+            -candidate["semantic_score"],
+            candidate["chunk_index"],
+            candidate["unit_index"],
+        )
+    )
+
+    retained_by_chunk = {}
+    context_chars = 0
+
+    for candidate in candidates:
+        chunk_index = candidate["chunk_index"]
+        retained_units = retained_by_chunk.setdefault(chunk_index, [])
+
+        separator_chars = 2 if retained_units else 0
+        required_chars = len(candidate["unit"]) + separator_chars
+
+        if context_chars + required_chars > max_context_chars:
             continue
 
-        text = "\n\n".join(retained_units)
+        retained_units.append(candidate)
+        context_chars += required_chars
+
+    selected = []
+
+    for chunk_index, chunk in enumerate(bounded_evidence):
+        retained = retained_by_chunk.get(chunk_index, [])
+
+        if not retained:
+            continue
+
+        # Restore document order within each selected source after semantic
+        # selection so model-facing policy context remains structurally coherent.
+        retained.sort(key=lambda candidate: candidate["unit_index"])
+        text = "\n\n".join(candidate["unit"] for candidate in retained)
+
         selected.append({
             **chunk,
             "evidence_id": f"E{len(selected) + 1}",
@@ -288,7 +363,7 @@ def support_options(selected):
     return options
 
 
-def build_prompt(question, selected):
+def build_prompt(question, selected, query_scope=None):
     # Titles/headings identify the evidence. Support IDs bind model selections to
     # server-owned evidence/quote pairs; source metadata remains server-derived.
     references = support_options(selected)
@@ -311,6 +386,13 @@ def build_prompt(question, selected):
             for c in selected
         ],
     }
+    if query_scope:
+        data["query_scope"] = {
+            "policy_titles": list(query_scope.get("policy_titles") or []),
+            "requested_section": query_scope.get("requested_section"),
+            "heading_filters": dict(query_scope.get("heading_filters") or {}),
+        }
+
     return (
         'Return {"claims": [{"text": "A supported claim", "support": ["R1"]}]}. '
         'Each support value must be a supplied support_id. Use only relevant evidence. '
@@ -456,10 +538,10 @@ def _semantic_claim_text(text, supporting_chunks):
         flags=re.I,
     ).strip()
 def build_cited_answer(generated_text, selected):
-    """Reject untraceable output; build all displayed source metadata on the server.
+    """Reject untraceable or unsupported output; build source metadata server-side.
 
-    Exact quote checking verifies provenance, not semantic entailment. A reviewer
-    must still check whether each paraphrase is actually supported by its quote.
+    Exact quote checking verifies provenance. Layered semantic groundedness,
+    attribution and constraint validation verify claim support before acceptance.
     """
     if not isinstance(generated_text, str) or len(generated_text) > 30000:
         raise CitationValidationError("invalid_generation")
@@ -479,6 +561,10 @@ def build_cited_answer(generated_text, selected):
     }
     sources, source_keys, links, public_claims = [], {}, [], []
     for index, claim in enumerate(claims, 1):
+        claim_sources_len = len(sources)
+        claim_links_len = len(links)
+        claim_source_keys = dict(source_keys)
+
         if not isinstance(claim, dict) or set(claim) != {"text", "support"}:
             raise CitationValidationError("invalid_claim")
         text, support = claim["text"], claim["support"]
@@ -528,10 +614,29 @@ def build_cited_answer(generated_text, selected):
 
         semantic_text = _semantic_claim_text(text, supporting_chunks)
         trusted_context = _trusted_semantic_context(supporting_chunks)
+        interpretive_units = []
+        for chunk in dict.fromkeys(chunk["evidence_id"] for chunk in supporting_chunks):
+            supporting_chunk = by_id[chunk]
+            context_without_anchors = _normalise_space(supporting_chunk["context_text"])
+            for reference in (
+                by_support_id[support_id]
+                for support_id in support
+                if by_support_id[support_id]["evidence_id"] == chunk
+            ):
+                context_without_anchors = context_without_anchors.replace(
+                    _normalise_space(reference["quote"]),
+                    " ",
+                    1,
+                )
+            context_without_anchors = _normalise_space(context_without_anchors)
+            if context_without_anchors:
+                interpretive_units.append(context_without_anchors)
+        interpretive_context = " ".join(interpretive_units)
         semantically_supported, semantic_diagnostics = is_semantically_supported(
             semantic_text,
             supporting_quotes,
             trusted_context=trusted_context,
+            interpretive_context=interpretive_context or None,
         )
         if not semantically_supported:
             print(
@@ -543,7 +648,11 @@ def build_cited_answer(generated_text, selected):
                     "diagnostics": semantic_diagnostics,
                 },
             )
-            raise CitationValidationError("unsupported_claim")
+            del sources[claim_sources_len:]
+            del links[claim_links_len:]
+            source_keys.clear()
+            source_keys.update(claim_source_keys)
+            continue
 
         constraints_preserved, constraint_diagnostics = preserves_policy_constraints(
             text,
@@ -558,7 +667,11 @@ def build_cited_answer(generated_text, selected):
                     "diagnostics": constraint_diagnostics,
                 },
             )
-            raise CitationValidationError("unsupported_claim")
+            del sources[claim_sources_len:]
+            del links[claim_links_len:]
+            source_keys.clear()
+            source_keys.update(claim_source_keys)
+            continue
         public_claims.append({
             "claim_id": f"C{index}", "text": text.strip(),
             "source_ids": list(dict.fromkeys(s["source_id"] for s in public_support)),

@@ -120,6 +120,183 @@ def _nominal_copular_definition_owner(sentence):
     return None
 
 
+def _nominal_copular_purpose_owner(sentence):
+    """
+    Return the owner lemma for the bounded relational PURPOSE question shape.
+
+    Qualified shape:
+        What is the purpose of X?
+
+    The outer copular structure matches a nominal definition question, but
+    the requested nominal owner must also govern an nmod identifying whose
+    purpose is being requested.
+    """
+    for word in sentence.words:
+        if (
+            word.upos != "PRON"
+            or str(word.lemma or "").casefold().strip() != "what"
+            or word.deprel not in {"root", "conj"}
+        ):
+            continue
+
+        children = [
+            child
+            for child in sentence.words
+            if child.head == word.id
+        ]
+
+        if not any(
+            child.deprel == "cop"
+            and str(child.lemma or "").casefold().strip() == "be"
+            for child in children
+        ):
+            continue
+
+        nominal_subjects = [
+            child
+            for child in children
+            if (
+                child.deprel.startswith("nsubj")
+                and child.upos in {"NOUN", "PROPN"}
+                and str(child.lemma or "").casefold().strip() == "purpose"
+            )
+        ]
+
+        if len(nominal_subjects) != 1:
+            continue
+
+        subject = nominal_subjects[0]
+
+        has_relational_nmod = any(
+            child.head == subject.id
+            and child.deprel == "nmod"
+            for child in sentence.words
+        )
+
+        if has_relational_nmod:
+            return str(
+                subject.lemma
+                or subject.text
+                or ""
+            ).casefold().strip()
+
+    return None
+
+
+def _conditional_condition_signature(sentence):
+    """
+    Return a conservative structural signature for one explicit if-condition.
+
+    The signature preserves the subordinate predicate plus its nominal
+    dependency hierarchy. It reports syntax only; coverage is decided by
+    api.requirement_coverage.
+    """
+    roots = [
+        word
+        for word in sentence.words
+        if word.upos == "VERB" and word.deprel == "root"
+    ]
+
+    if len(roots) != 1:
+        return None
+
+    root = roots[0]
+
+    conditions = [
+        word
+        for word in sentence.words
+        if word.head == root.id
+        and word.deprel == "advcl"
+        and any(
+            child.head == word.id
+            and child.deprel == "mark"
+            and str(child.lemma or "").casefold().strip() == "if"
+            for child in sentence.words
+        )
+    ]
+
+    if len(conditions) != 1:
+        return None
+
+    condition = conditions[0]
+
+    subjects = [
+        word
+        for word in sentence.words
+        if word.head == condition.id
+        and word.deprel in {"nsubj", "nsubj:pass"}
+    ]
+
+    if len(subjects) != 1:
+        return None
+
+    subject = subjects[0]
+
+    def nominal_children(parent):
+        children = []
+
+        for child in sentence.words:
+            if child.head != parent.id:
+                continue
+
+            if child.upos not in {"NOUN", "PROPN"}:
+                continue
+
+            if child.deprel not in {"nmod", "compound"}:
+                continue
+
+            children.append({
+                "lemma": str(child.lemma or "").casefold().strip(),
+                "relation": child.deprel,
+                "children": nominal_children(child),
+            })
+
+        return children
+
+    return {
+        "predicate": str(condition.lemma or "").casefold().strip(),
+        "subject": str(subject.lemma or "").casefold().strip(),
+        "subject_relation": subject.deprel,
+        "subject_children": nominal_children(subject),
+    }
+
+
+def _conditional_action_owner(sentence):
+    """
+    Return the owner lemma for a bounded CONDITIONAL_ACTION question.
+
+    Qualified shape: root verbal predicate governing exactly one advcl
+    whose subordinate predicate is explicitly marked by "if".
+
+    Classification only; this does not decide claim fulfilment.
+    """
+    for word in sentence.words:
+        if word.upos != "VERB" or word.deprel != "root":
+            continue
+
+        conditional_predicates = [
+            child
+            for child in sentence.words
+            if (
+                child.head == word.id
+                and child.deprel == "advcl"
+                and any(
+                    marker.head == child.id
+                    and marker.deprel == "mark"
+                    and str(marker.lemma or "").casefold().strip() == "if"
+                    for marker in sentence.words
+                )
+            )
+        ]
+
+        if len(conditional_predicates) == 1:
+            return str(
+                word.lemma or word.text or ""
+            ).casefold().strip()
+
+    return None
+
+
 def extract_question(question, nlp, extractor):
     question = str(question or "").strip()
 
@@ -132,11 +309,35 @@ def extract_question(question, nlp, extractor):
     for sentence in doc.sentences:
         sentence_requirements = list(extractor(sentence))
         definition_owner = _nominal_copular_definition_owner(sentence)
+        purpose_owner = _nominal_copular_purpose_owner(sentence)
+        conditional_action_owner = _conditional_action_owner(sentence)
 
         for requirement in sentence_requirements:
             item = dict(requirement)
 
             if (
+                conditional_action_owner
+                and str(item.get("kind") or "").casefold().strip() == "open"
+                and str(item.get("owner") or "").casefold().strip()
+                    == conditional_action_owner
+                and str(item.get("gap") or "").casefold().strip() == "what"
+            ):
+                item["requirement_type"] = "conditional_action"
+                condition_signature = _conditional_condition_signature(sentence)
+
+                if condition_signature is not None:
+                    item["condition_signature"] = condition_signature
+
+            elif (
+                purpose_owner
+                and str(item.get("kind") or "").casefold().strip() == "open"
+                and str(item.get("owner") or "").casefold().strip()
+                    == purpose_owner
+                and str(item.get("gap") or "").casefold().strip() == "what"
+            ):
+                item["requirement_type"] = "purpose"
+
+            elif (
                 definition_owner
                 and str(item.get("kind") or "").casefold().strip() == "open"
                 and str(item.get("owner") or "").casefold().strip()
@@ -259,10 +460,111 @@ def analyse_claims(texts, owners, nlp):
                             "copular_definition": True,
                         })
 
+        purpose_observations = []
+
+        if claim_text and "purpose" in normalised_owners:
+            for sentence in doc.sentences:
+                for subject in sentence.words:
+                    subject_lemma = str(
+                        subject.lemma or ""
+                    ).casefold().strip()
+
+                    if (
+                        subject_lemma != "purpose"
+                        or subject.upos not in {"NOUN", "PROPN"}
+                        or subject.deprel != "nsubj:outer"
+                    ):
+                        continue
+
+                    has_relational_nmod = any(
+                        child.head == subject.id
+                        and child.deprel == "nmod"
+                        for child in sentence.words
+                    )
+
+                    if not has_relational_nmod:
+                        continue
+
+                    predicate = next(
+                        (
+                            word
+                            for word in sentence.words
+                            if word.id == subject.head
+                        ),
+                        None,
+                    )
+
+                    if (
+                        predicate is None
+                        or predicate.upos != "VERB"
+                    ):
+                        continue
+
+                    predicate_children = [
+                        child
+                        for child in sentence.words
+                        if child.head == predicate.id
+                    ]
+
+                    has_copula = any(
+                        child.deprel == "cop"
+                        and str(
+                            child.lemma or ""
+                        ).casefold().strip() == "be"
+                        for child in predicate_children
+                    )
+
+                    has_infinitival_marker = any(
+                        child.deprel == "mark"
+                        and str(
+                            child.lemma or ""
+                        ).casefold().strip() == "to"
+                        for child in predicate_children
+                    )
+
+                    if has_copula and has_infinitival_marker:
+                        purpose_observations.append({
+                            "owner": subject_lemma,
+                            "predicate_relation": predicate.deprel,
+                            "purpose_answer": True,
+                        })
+
+        conditional_action_observations = []
+
+        if claim_text:
+            for sentence in doc.sentences:
+                condition_signature = _conditional_condition_signature(sentence)
+
+                if condition_signature is None:
+                    continue
+
+                roots = [
+                    word
+                    for word in sentence.words
+                    if word.upos == "VERB" and word.deprel == "root"
+                ]
+
+                if len(roots) != 1:
+                    continue
+
+                root = roots[0]
+
+                conditional_action_observations.append({
+                    "condition_signature": condition_signature,
+                    "consequence_owner": str(
+                        root.lemma or ""
+                    ).casefold().strip(),
+                    "consequence_present": True,
+                })
+
         analyses.append({
             "text": claim_text,
             "observations": observations,
             "definition_observations": definition_observations,
+            "purpose_observations": purpose_observations,
+            "conditional_action_observations": (
+                conditional_action_observations
+            ),
         })
 
     return analyses

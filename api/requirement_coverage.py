@@ -46,9 +46,14 @@ _TIME_UNITS = (
     "week|weeks|month|months|year|years"
 )
 
+_QUALIFIED_DAY_UNITS = (
+    "business\\s+day|business\\s+days|"
+    "calendar\\s+day|calendar\\s+days"
+)
+
 _DURATION_VALUE = re.compile(
     rf"\b(?:\d+|{_NUMBER_WORDS})\s+"
-    rf"(?:{_TIME_UNITS})\b",
+    rf"(?:{_TIME_UNITS}|{_QUALIFIED_DAY_UNITS})\b",
     re.IGNORECASE,
 )
 
@@ -168,6 +173,41 @@ def _is_definition_requirement(requirement):
     )
 
 
+def _is_purpose_requirement(requirement):
+    """Return True only for the qualified relational PURPOSE requirement."""
+    if not isinstance(requirement, dict):
+        return False
+
+    kind = str(requirement.get("kind") or "").casefold().strip()
+    owner = str(requirement.get("owner") or "").casefold().strip()
+    gap = str(requirement.get("gap") or "").casefold().strip()
+
+    return (
+        kind == "open"
+        and owner == "purpose"
+        and gap == "what"
+        and _requirement_type(requirement) == "purpose"
+    )
+
+
+def _is_conditional_action_requirement(requirement):
+    """Return True only for a qualified CONDITIONAL_ACTION requirement."""
+    if not isinstance(requirement, dict):
+        return False
+
+    kind = str(requirement.get("kind") or "").casefold().strip()
+    owner = str(requirement.get("owner") or "").casefold().strip()
+    gap = str(requirement.get("gap") or "").casefold().strip()
+
+    return (
+        kind == "open"
+        and bool(owner)
+        and gap == "what"
+        and _requirement_type(requirement) == "conditional_action"
+        and isinstance(requirement.get("condition_signature"), dict)
+    )
+
+
 def _is_open_what_requirement(requirement):
     """
     Return True only for the bounded verbal OPEN 'what' requirement shape.
@@ -185,7 +225,8 @@ def _is_open_what_requirement(requirement):
         kind == "open"
         and bool(owner)
         and gap == "what"
-        and _requirement_type(requirement) != "definition"
+        and _requirement_type(requirement)
+            not in {"definition", "purpose", "conditional_action"}
     )
 
 
@@ -308,6 +349,38 @@ def _analyse_claims_for_owners(claim_texts, owners):
     return analyses
 
 
+def _conditional_action_fulfilled(requirement, analyses):
+    """
+    Require an already-validated claim to supply a consequence under the
+    same conservatively matched fixed condition.
+    """
+    expected_condition = requirement.get("condition_signature")
+
+    if not isinstance(expected_condition, dict):
+        return False
+
+    for analysis in analyses:
+        if not isinstance(analysis, dict):
+            continue
+
+        observations = analysis.get("conditional_action_observations")
+
+        if not isinstance(observations, list):
+            continue
+
+        for observation in observations:
+            if not isinstance(observation, dict):
+                continue
+
+            if (
+                observation.get("condition_signature") == expected_condition
+                and observation.get("consequence_present") is True
+            ):
+                return True
+
+    return False
+
+
 def _open_what_fulfilled(requirement, analyses):
     """
     Require an owner predicate with an explicit answer-bearing obj/xcomp.
@@ -361,6 +434,39 @@ def _duration_fulfilled(claim_texts):
         _DURATION_VALUE.search(text)
         for text in claim_texts
     )
+
+
+def _purpose_fulfilled(requirement, analyses):
+    """
+    Require a bounded explicit PURPOSE relationship in an already-validated
+    claim.
+    """
+    owner = str(requirement.get("owner") or "").casefold().strip()
+
+    for analysis in analyses:
+        if not isinstance(analysis, dict):
+            continue
+
+        observations = analysis.get("purpose_observations")
+
+        if not isinstance(observations, list):
+            continue
+
+        for observation in observations:
+            if not isinstance(observation, dict):
+                continue
+
+            observed_owner = str(
+                observation.get("owner") or ""
+            ).casefold().strip()
+
+            if (
+                observed_owner == owner
+                and observation.get("purpose_answer") is True
+            ):
+                return True
+
+    return False
 
 
 def _definition_fulfilled(requirement, analyses):
@@ -429,6 +535,18 @@ def validate_requirement_coverage(requirements, claims, analyses=None):
         if _is_definition_requirement(requirement)
     }
 
+    purpose_indexes = {
+        index
+        for index, requirement in enumerate(requirements)
+        if _is_purpose_requirement(requirement)
+    }
+
+    conditional_action_indexes = {
+        index
+        for index, requirement in enumerate(requirements)
+        if _is_conditional_action_requirement(requirement)
+    }
+
     open_what_indexes = [
         index
         for index, requirement in enumerate(requirements)
@@ -494,6 +612,22 @@ def validate_requirement_coverage(requirements, claims, analyses=None):
                 "covered": covered,
             })
 
+        elif index in purpose_indexes:
+            covered = _purpose_fulfilled(
+                requirement,
+                analyses,
+            )
+
+            item.update({
+                "requirement_type": "purpose",
+                "coverage_status": (
+                    "covered"
+                    if covered
+                    else "uncovered"
+                ),
+                "covered": covered,
+            })
+
         elif index in definition_indexes:
             covered = _definition_fulfilled(
                 requirement,
@@ -502,6 +636,22 @@ def validate_requirement_coverage(requirements, claims, analyses=None):
 
             item.update({
                 "requirement_type": "definition",
+                "coverage_status": (
+                    "covered"
+                    if covered
+                    else "uncovered"
+                ),
+                "covered": covered,
+            })
+
+        elif index in conditional_action_indexes:
+            covered = _conditional_action_fulfilled(
+                requirement,
+                analyses,
+            )
+
+            item.update({
+                "requirement_type": "conditional_action",
                 "coverage_status": (
                     "covered"
                     if covered
@@ -532,12 +682,16 @@ def validate_requirement_coverage(requirements, claims, analyses=None):
                     "duration"
                     if _is_duration_requirement(requirement)
                     else (
-                        "definition"
-                        if _is_definition_requirement(requirement)
+                        "purpose"
+                        if _is_purpose_requirement(requirement)
                         else (
-                            "open_what"
-                            if _is_open_what_requirement(requirement)
-                            else "unsupported"
+                            "definition"
+                            if _is_definition_requirement(requirement)
+                            else (
+                                "open_what"
+                                if _is_open_what_requirement(requirement)
+                                else "unsupported"
+                            )
                         )
                     )
                 ),
