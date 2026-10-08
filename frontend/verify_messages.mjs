@@ -5,6 +5,7 @@
 // Run with:  npm run test:messages
 
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { createServer } from "vite";
@@ -16,6 +17,17 @@ try {
   const { default: Message } = await server.ssrLoadModule("/src/components/Message.jsx");
 
   let html;
+  // M3-BQ-01: Chatbot must propagate server-owned assurance to Message.
+  // This guards the integration seam that component-only rendering tests missed.
+  const chatbotSource = await readFile(
+    new URL("./src/components/Chatbot.jsx", import.meta.url),
+    "utf8"
+  );
+  assert.ok(
+    chatbotSource.includes("assurance={message.assurance}"),
+    "Chatbot must pass message.assurance to Message"
+  );
+  console.log("M3-BQ-01 assurance wiring ...... ok");
 
   // --- Test 1: a supported answer keeps its answer, claims and sources ---
   const answer = makeBotReply(true, 200, {
