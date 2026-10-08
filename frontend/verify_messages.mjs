@@ -77,12 +77,12 @@ try {
   }));
 
   assert.ok(html.includes("Answer checks"), "supported answer should show assurance panel");
-  assert.ok(html.includes("Question coverage"), "assurance panel should identify question coverage");
-  assert.ok(html.includes("100%"), "fully assessed coverage should show percentage");
-  assert.ok(html.includes("2 of 2 verified requirements addressed"), "coverage denominator should be explicit");
-  assert.ok(html.includes("Supported by current policy"), "policy support should be visible");
-  assert.ok(html.includes("Policy conditions preserved"), "constraint preservation should be visible");
-  assert.ok(html.includes("Sources verified"), "source verification should be visible");
+  assert.ok(html.includes("Looking good"), "fully verified answer should show positive status");
+  assert.ok(html.includes("all my checks passed"), "fully verified answer should say all checks passed");
+  assert.ok(html.includes("I verified all 2 parts of your question"), "fully verified answer should describe verified question parts");
+  assert.ok(html.includes("Based on current policy"), "policy support should be visible");
+  assert.ok(html.includes("Important policy conditions kept"), "constraint preservation should be visible");
+  assert.ok(html.includes("Sources checked"), "source verification should be visible");
 
   // Unknown requirements must never be hidden behind a reassuring percentage.
   const partiallyAssessed = {
@@ -104,9 +104,61 @@ try {
     ...partiallyAssessed,
   }));
 
-  assert.ok(!html.includes("100%"), "unknown requirements must suppress coverage percentage");
-  assert.ok(html.includes("2 verified requirements addressed"), "verified count should remain visible");
-  assert.ok(html.includes("1 not automatically assessed"), "unknown requirement must be disclosed");
+  assert.ok(!html.includes("100%"), "partial assessment must not show a reassuring percentage");
+  assert.ok(
+    html.includes("I couldn&#x27;t automatically check every part of this answer"),
+    "partial assessment should explain that not every part is automatically checkable"
+  );
+  assert.ok(
+    html.includes("I verified 2 parts of your question."),
+    "partial assessment should show the verified part count"
+  );
+  assert.ok(
+    html.includes("Another part is not yet supported by my automated checks."),
+    "partial assessment should explain the single unsupported part"
+  );
+  assert.ok(
+    html.includes("This capability requires further development."),
+    "partial assessment should identify the current capability boundary"
+  );
+  assert.ok(!html.includes("Something went wrong"), "UNKNOWN must not be presented as a failure");
+  assert.ok(!html.includes("Please try again."), "UNKNOWN must not incorrectly ask the user to retry");
+
+  const multipleUnknown = {
+    ...assuredAnswer,
+    assurance: {
+      ...assuredAnswer.assurance,
+      question_coverage: {
+        covered: 1,
+        enforced: 1,
+        unknown: 2,
+        percentage: null,
+      },
+    },
+  };
+
+  html = renderToStaticMarkup(React.createElement(Message, {
+    sender: "bot",
+    messageId: "multiple-unknown",
+    ...multipleUnknown,
+  }));
+
+  assert.ok(
+    html.includes("I couldn&#x27;t automatically check every part of this answer"),
+    "multiple UNKNOWN requirements should show the partial-assessment status"
+  );
+  assert.ok(
+    html.includes("I verified 1 part of your question."),
+    "multiple UNKNOWN requirements should preserve the verified count"
+  );
+  assert.ok(
+    html.includes("2 other parts are not yet supported by my automated checks."),
+    "multiple UNKNOWN requirements should show the server-owned unknown count"
+  );
+  assert.ok(
+    html.includes("This capability requires further development."),
+    "multiple UNKNOWN requirements should identify the capability boundary"
+  );
 
 
   // A requirement that RCV cannot automatically enforce must not look failed.
@@ -130,13 +182,20 @@ try {
   }));
 
   assert.ok(
-    html.includes("Requirement not automatically assessed"),
-    "not-enforced requirement should be described as not automatically assessed"
+    html.includes("I couldn&#x27;t automatically check this answer"),
+    "not-enforced assessment should explain that this answer cannot yet be automatically checked"
   );
   assert.ok(
-    !html.includes("0 verified requirements addressed"),
-    "not-enforced requirement must not look like failed question coverage"
+    html.includes("I identified what your question is asking, but this type of requirement is not yet supported by my automated checks."),
+    "not-enforced assessment should explain the unsupported requirement type"
   );
+  assert.ok(
+    html.includes("This capability requires further development."),
+    "not-enforced assessment should identify the current capability boundary"
+  );
+  assert.ok(!html.includes("I could verify 0 parts"), "not-enforced assessment must not present zero as a performance score");
+  assert.ok(!html.includes("Something went wrong"), "not-enforced UNKNOWN must not be presented as a failure");
+  assert.ok(!html.includes("Please try again."), "not-enforced UNKNOWN must not incorrectly ask the user to retry");
   // --- Test 2: not enough evidence is a fallback and keeps the escalation link ---
   const fallbackData = {
     status: "fallback",
