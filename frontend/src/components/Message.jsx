@@ -54,33 +54,50 @@ function Message({ message, sender, time, messageId, claims = [], sources = [], 
             <strong>Answer checks <span aria-hidden="true">{"\u2713"}</span></strong>
 
             <div className="answer-check">
-              <span aria-hidden="true">{"\u2713"}</span>{" "}
-              <strong>Question coverage:</strong>{" "}
-              {assurance.question_coverage?.percentage != null ? (
-                <>
-                  <strong>{assurance.question_coverage.percentage}%</strong>
-                  {" \u2014 "}
-                  {assurance.question_coverage.covered} of {assurance.question_coverage.enforced} verified requirements addressed
-                </>
-              ) : assurance.question_coverage?.enforced === 0 ? (
-                <>Requirement not automatically assessed</>
+              <strong>
+                {assurance.question_coverage?.unknown > 0
+                  ? (assurance.question_coverage?.covered ?? 0) > 0
+                    ? "I couldn't automatically check every part of this answer"
+                    : "I couldn't automatically check this answer"
+                  : "Looking good \u2014 all my checks passed"}
+              </strong>
+            </div>
+
+            <div className="answer-check">
+              {assurance.question_coverage?.unknown > 0 ? (
+                (assurance.question_coverage?.covered ?? 0) > 0 ? (
+                  <>
+                    <span aria-hidden="true">{"\u2713"}</span>{" "}
+                    I verified {assurance.question_coverage?.covered ?? 0}{" "}
+                    {(assurance.question_coverage?.covered ?? 0) === 1 ? "part" : "parts"} of your question.{" "}
+                    {assurance.question_coverage?.unknown === 1
+                      ? "Another part is not yet supported by my automated checks."
+                      : `${assurance.question_coverage?.unknown ?? 0} other parts are not yet supported by my automated checks.`}{" "}
+                    <strong>This capability requires further development.</strong>
+                  </>
+                ) : (
+                  <>
+                    I identified what your question is asking, but this type of requirement is not yet supported by my automated checks.{" "}
+                    <strong>This capability requires further development.</strong>
+                  </>
+                )
               ) : (
                 <>
-                  {assurance.question_coverage?.covered ?? 0} verified requirements addressed
-                  {assurance.question_coverage?.unknown > 0 &&
-                    <>{" \u00B7 "}{assurance.question_coverage.unknown} not automatically assessed</>}
+                  <span aria-hidden="true">{"\u2713"}</span>{" "}
+                  I verified all {assurance.question_coverage?.covered ?? 0}{" "}
+                  {(assurance.question_coverage?.covered ?? 0) === 1 ? "part" : "parts"} of your question
                 </>
               )}
             </div>
 
             {assurance.supported_by_current_policy && (
-              <div className="answer-check"><span aria-hidden="true">{"\u2713"}</span> Supported by current policy</div>
+              <div className="answer-check"><span aria-hidden="true">{"\u2713"}</span> Based on current policy</div>
             )}
             {assurance.policy_conditions_preserved && (
-              <div className="answer-check"><span aria-hidden="true">{"\u2713"}</span> Policy conditions preserved</div>
+              <div className="answer-check"><span aria-hidden="true">{"\u2713"}</span> Important policy conditions kept</div>
             )}
             {assurance.sources_verified && (
-              <div className="answer-check"><span aria-hidden="true">{"\u2713"}</span> Sources verified</div>
+              <div className="answer-check"><span aria-hidden="true">{"\u2713"}</span> Sources checked</div>
             )}
           </section>
         )}
