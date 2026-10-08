@@ -137,6 +137,7 @@ function Chatbot() {
             messageId={message.id}
             claims={message.claims}
             sources={message.sources}
+            assurance={message.assurance}
             type={message.type}
             escalation={message.escalation}
             message={message.message}
