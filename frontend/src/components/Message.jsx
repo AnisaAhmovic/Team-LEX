@@ -101,7 +101,7 @@ function Message({ message, sender, time, messageId, claims = [], sources = [], 
             )}
           </section>
         )}
-        {isBot && sources.length > 0 && (
+        {isBot && type === "answer" && (assurance?.question_coverage?.unknown ?? 0) === 0 && sources.length > 0 && (
           <section className="policy-sources" aria-label="Policy sources">
             <strong>Sources</strong>
             <ul>
