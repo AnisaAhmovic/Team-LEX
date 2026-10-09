@@ -83,6 +83,10 @@ try {
   assert.ok(html.includes("Based on current policy"), "policy support should be visible");
   assert.ok(html.includes("Important policy conditions kept"), "constraint preservation should be visible");
   assert.ok(html.includes("Sources checked"), "source verification should be visible");
+  assert.ok(
+    html.includes('class="policy-sources"'),
+    "fully assured answer should show policy sources"
+  );
 
   // Unknown requirements must never be hidden behind a reassuring percentage.
   const partiallyAssessed = {
@@ -123,6 +127,10 @@ try {
   );
   assert.ok(!html.includes("Something went wrong"), "UNKNOWN must not be presented as a failure");
   assert.ok(!html.includes("Please try again."), "UNKNOWN must not incorrectly ask the user to retry");
+  assert.ok(
+    !html.includes('class="policy-sources"'),
+    "partial assessment must not expose policy sources as verified answer evidence"
+  );
 
   const multipleUnknown = {
     ...assuredAnswer,
