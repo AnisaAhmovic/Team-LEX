@@ -8,17 +8,14 @@ ingestion/embedding_config.py for the embedding layer.
 
 Model choice: Qwen3, served locally through Ollama.
 
-Team hardware varies, so the exact tag is a deliberate, overridable
-setting rather than hardcoded:
+The current production baseline is qwen3:4b-instruct, established during
+S5-04 controlled integration testing for predictable instruction-following
+and structured generation. The original COPL-253 baseline used qwen3:4b.
 
-  qwen3:4b  - default. Runs on ~8GB RAM with no discrete GPU. Safest
-              choice for a shared team default - everyone can run it.
-  qwen3:8b  - noticeably better quality. Needs ~16GB RAM (or a GPU with
-              ~5GB VRAM). Use this if your machine comfortably supports it
-              by setting OLLAMA_MODEL=qwen3:8b in .env.
-
-Confirm actual available RAM on your machine before assuming qwen3:8b
-will run well - see docs/COPL-253_QWEN3_OLLAMA_SETUP.md step 1.
+The model remains environment-configurable for controlled testing, but a
+different model must not be treated as the shared production baseline unless
+it has been explicitly evaluated and adopted. See
+docs/COPL-253_QWEN3_OLLAMA_SETUP.md for setup instructions.
 
 Per COPL-253 requirement 14: Qwen3 is a generation layer only. It is
 never the source of policy facts - validated retrieval (the `retrieval`
@@ -39,8 +36,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen3:4b")
-OLLAMA_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_TIMEOUT_SECONDS", "60"))
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen3:4b-instruct")
+OLLAMA_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_TIMEOUT_SECONDS", "300"))
 OLLAMA_KEEP_ALIVE = os.getenv("OLLAMA_KEEP_ALIVE", "5m")
 
 CONFIG_RECORD_PATH = Path("llm/llm_config.json")

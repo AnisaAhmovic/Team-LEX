@@ -18,7 +18,7 @@ running Ollama locally:
 
 | Tag | Approx. RAM needed | Notes |
 |---|---|---|
-| `qwen3:4b` | ~8GB, no GPU required | **Default for this project.** Runs on any team laptop, including the modest hardware some of us are on. |
+| `qwen3:4b-instruct` | Verify on target machine | **Current production baseline.** Adopted during S5-04 controlled integration testing for predictable instruction-following and structured generation. |
 | `qwen3:8b` | ~16GB, or a GPU with ~5GB VRAM | Noticeably better quality. Only use if your machine comfortably has the RAM to spare. |
 
 Before assuming a size will work, check your actual available RAM:
@@ -26,11 +26,11 @@ Before assuming a size will work, check your actual available RAM:
 - Windows: Task Manager → Performance → Memory
 - Mac: Apple menu → About This Mac → Memory
 
-**Default for the team: `qwen3:4b`.** This is set in `llm/config.py` and
-overridable per-machine via `.env` (see step 4) - if your machine can
-comfortably run `qwen3:8b`, set that locally without needing to change
-code. Confirm as a team in the ticket if a different shared default is
-wanted before merging.
+**Current production baseline: `qwen3:4b-instruct`.** The original COPL-253
+baseline used `qwen3:4b`; S5-04 controlled integration testing subsequently
+established the instruction-tuned variant for predictable constrained and
+structured generation. This baseline is set in `llm/config.py` and mirrored
+in `.env.example`. Do not substitute another model without controlled testing.
 
 ## 2. Install Ollama
 
@@ -47,21 +47,10 @@ ollama --version
 ## 3. Pull the model
 
 ```bash
-ollama pull qwen3:4b
+ollama pull qwen3:4b-instruct
 ```
 
-This downloads roughly 2.5GB. If your machine can run the larger model
-instead:
-
-```bash
-ollama pull qwen3:8b
-```
-
-Check it's available locally:
-
-```bash
-ollama list
-```
+Use qwen3:4b-instruct for the shared production baseline. Verify the installed model with ollama list after the pull completes.
 
 ## 4. Configure environment variables
 
@@ -70,13 +59,13 @@ already per `docs/SETUP.md`):
 
 ```
 OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL=qwen3:4b
-OLLAMA_TIMEOUT_SECONDS=60
+OLLAMA_MODEL=qwen3:4b-instruct
+OLLAMA_TIMEOUT_SECONDS=300
 OLLAMA_KEEP_ALIVE=5m
 ```
 
-Only change `OLLAMA_MODEL` if you've pulled a different tag in step 3
-and confirmed your machine can run it well.
+Keep `OLLAMA_MODEL=qwen3:4b-instruct` for the production baseline. Any model
+substitution requires controlled testing before it is adopted into the shared configuration.
 
 Install the one additional Python dependency:
 
