@@ -80,6 +80,41 @@ class PolicyConstraintTests(SimpleTestCase):
         )
 
 
+    def test_equivalent_late_duration_preserves_after_timing_constraint(self):
+        """A bounded late duration may faithfully preserve an equivalent after condition."""
+        evidence = (
+            "Work will not be assessed if the submission is overdue by more than five "
+            "(5) calendar days after the original submission date without an approved "
+            "extension."
+        )
+
+        preserved_claims = (
+            "If an assessment submission is more than five calendar days late without "
+            "an approved extension, it will not be assessed.",
+            "If an assessment submission is more than 5 calendar days late without "
+            "an approved extension, it will not be assessed.",
+        )
+
+        for claim in preserved_claims:
+            with self.subTest(claim=claim):
+                self.assertPreserved(claim, evidence)
+
+        rejected_claims = (
+            "If an assessment submission is late without an approved extension, "
+            "it will not be assessed.",
+            "If an assessment submission involves five calendar days without an "
+            "approved extension, it will not be assessed.",
+            "If an assessment submission is more than three calendar days late without "
+            "an approved extension, it will not be assessed.",
+            "If an assessment submission is more than five business days late without "
+            "an approved extension, it will not be assessed.",
+        )
+
+        for claim in rejected_claims:
+            with self.subTest(claim=claim):
+                self.assertRejected(claim, evidence)
+
+
 class SemanticGroundednessTests(SimpleTestCase):
     def test_faithful_paraphrase_is_supported(self):
         from api.groundedness import is_semantically_supported

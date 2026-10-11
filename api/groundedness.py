@@ -173,6 +173,7 @@ _POLICY_CONSTRAINT_PATTERNS = {
         r"\bbefore\b",
         r"\bprior\s+to\b",
         r"\bafter\b",
+        r"\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\s+(?:calendar|business)\s+days?\s+(?:late|overdue)\b",
     ),
     "dependency": (
         r"\bwithout\b",
@@ -196,6 +197,75 @@ def _policy_constraints(text):
     return found
 
 
+_TIMING_NUMBER_VALUES = {
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+    "ten": 10,
+    "eleven": 11,
+    "twelve": 12,
+    "thirteen": 13,
+    "fourteen": 14,
+    "fifteen": 15,
+    "sixteen": 16,
+    "seventeen": 17,
+    "eighteen": 18,
+    "nineteen": 19,
+    "twenty": 20,
+}
+
+
+def _timing_day_signatures(text):
+    """Return bounded (amount, qualified-day-unit) timing values."""
+    signatures = set()
+
+    pattern = re.compile(
+        r"\b(?:more\s+than\s+)?"
+        r"(?P<number>\d+|one|two|three|four|five|six|seven|eight|nine|ten|"
+        r"eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|"
+        r"eighteen|nineteen|twenty)"
+        r"(?:\s*\(\s*\d+\s*\))?"
+        r"\s+(?P<qualifier>calendar|business)\s+days?\b",
+        re.IGNORECASE,
+    )
+
+    for match in pattern.finditer(text):
+        raw_number = match.group("number").casefold()
+        amount = (
+            int(raw_number)
+            if raw_number.isdigit()
+            else _TIMING_NUMBER_VALUES[raw_number]
+        )
+        signatures.add((amount, match.group("qualifier").casefold()))
+
+    return signatures
+
+
+def _preserves_timing_value(premise, claim):
+    """
+    Preserve bounded qualified-day timing values when a claim paraphrases
+    explicit evidence timing using late/overdue wording.
+    """
+    claim_lower = claim.casefold()
+
+    if not re.search(r"\b(?:late|overdue)\b", claim_lower):
+        return True
+
+    evidence_values = _timing_day_signatures(premise)
+    claim_values = _timing_day_signatures(claim)
+
+    if not evidence_values:
+        return True
+
+    return bool(claim_values) and claim_values.issubset(evidence_values)
+
+
 def preserves_policy_constraints(claim, supporting_quotes):
     """Reject paraphrases that drop or weaken explicit policy constraints."""
     premise = " ".join(quote.strip() for quote in supporting_quotes)
@@ -210,9 +280,12 @@ def preserves_policy_constraints(claim, supporting_quotes):
         and "mandatory" not in claim_constraints
     )
 
-    return not missing and not weakened, {
+    timing_value_preserved = _preserves_timing_value(premise, claim)
+
+    return not missing and not weakened and timing_value_preserved, {
         "evidence_constraints": sorted(evidence_constraints),
         "claim_constraints": sorted(claim_constraints),
         "missing_constraints": sorted(missing),
         "weakened": weakened,
+        "timing_value_preserved": timing_value_preserved,
     }
