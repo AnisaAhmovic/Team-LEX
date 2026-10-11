@@ -1,4 +1,4 @@
-﻿"""S5-04 RCV linguistic-boundary and bounded coverage regression tests."""
+"""S5-04 RCV linguistic-boundary and bounded coverage regression tests."""
 
 from django.test import SimpleTestCase
 
@@ -534,6 +534,34 @@ class RequirementCoverageTests(SimpleTestCase):
             requirements[0].get("requirement_type"),
             "conditional_action",
             requirements,
+        )
+
+        natural_requirements, _natural_analyses = (
+            analyse_requirement_coverage_inputs(
+                "What happens if my assessment is more than five calendar days late?",
+                [],
+            )
+        )
+
+        self.assertEqual(
+            len(natural_requirements),
+            1,
+            natural_requirements,
+        )
+        self.assertEqual(
+            natural_requirements[0].get("kind"),
+            "OPEN",
+            natural_requirements,
+        )
+        self.assertEqual(
+            natural_requirements[0].get("requirement_type"),
+            "conditional_action",
+            natural_requirements,
+        )
+        self.assertIsInstance(
+            natural_requirements[0].get("condition_signature"),
+            dict,
+            natural_requirements,
         )
 
         ordinary_requirements, _ordinary_analyses = (

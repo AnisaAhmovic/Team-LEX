@@ -315,11 +315,24 @@ def extract_question(question, nlp, extractor):
         for requirement in sentence_requirements:
             item = dict(requirement)
 
+            requirement_owner = str(
+                item.get("owner") or ""
+            ).casefold().strip()
+
+            requirement_owner_lemma = next(
+                (
+                    str(word.lemma or word.text or "").casefold().strip()
+                    for word in sentence.words
+                    if str(word.text or "").casefold().strip()
+                    == requirement_owner
+                ),
+                requirement_owner,
+            )
+
             if (
                 conditional_action_owner
                 and str(item.get("kind") or "").casefold().strip() == "open"
-                and str(item.get("owner") or "").casefold().strip()
-                    == conditional_action_owner
+                and requirement_owner_lemma == conditional_action_owner
                 and str(item.get("gap") or "").casefold().strip() == "what"
             ):
                 item["requirement_type"] = "conditional_action"
