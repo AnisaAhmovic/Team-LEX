@@ -16,7 +16,8 @@ function Message({ message, sender, time, messageId, claims = [], sources = [], 
   const suppressUnverifiedAnswer =
     isBot &&
     type === "answer" &&
-    (assurance?.question_coverage?.unknown ?? 0) > 0;
+    (assurance?.question_coverage?.unknown ?? 0) > 0 &&
+    (assurance?.question_coverage?.enforced ?? 0) > 0;
 
   // Pick the style for the bubble. Fallbacks and errors look different from
   // real answers so nobody mistakes them for policy advice.
@@ -60,9 +61,9 @@ function Message({ message, sender, time, messageId, claims = [], sources = [], 
             <div className="answer-check">
               <strong>
                 {assurance.question_coverage?.unknown > 0
-                  ? (assurance.question_coverage?.covered ?? 0) > 0
-                    ? "I couldn't automatically check every part of this answer"
-                    : "I couldn't automatically check this answer"
+                  ? (assurance.question_coverage?.enforced ?? 0) === 0
+                    ? "Requirement not automatically assessed"
+                    : "I couldn't automatically check every part of this answer"
                   : "Looking good \u2014 all my checks passed"}
               </strong>
             </div>
@@ -105,7 +106,7 @@ function Message({ message, sender, time, messageId, claims = [], sources = [], 
             )}
           </section>
         )}
-        {isBot && type === "answer" && (assurance?.question_coverage?.unknown ?? 0) === 0 && sources.length > 0 && (
+        {isBot && type === "answer" && ((assurance?.question_coverage?.unknown ?? 0) === 0 || (assurance?.question_coverage?.enforced ?? 0) === 0) && sources.length > 0 && (
           <section className="policy-sources" aria-label="Policy sources">
             <strong>Sources</strong>
             <ul>

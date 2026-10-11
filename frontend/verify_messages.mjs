@@ -194,16 +194,28 @@ try {
   }));
 
   assert.ok(
-    html.includes("I couldn&#x27;t automatically check this answer"),
-    "not-enforced assessment should explain that this answer cannot yet be automatically checked"
+    html.includes("Requirement not automatically assessed"),
+    "not-enforced requirement should disclose the RCV capability boundary"
   );
   assert.ok(
-    html.includes("I identified what your question is asking, but this type of requirement is not yet supported by my automated checks."),
-    "not-enforced assessment should explain the unsupported requirement type"
+    html.includes("Students normally receive feedback within 15 business days."),
+    "backend-supported not-enforced answer must retain its validated claim"
   );
   assert.ok(
-    html.includes("This capability requires further development."),
-    "not-enforced assessment should identify the current capability boundary"
+    html.includes('class="policy-sources"'),
+    "backend-supported not-enforced answer must retain its verified policy sources"
+  );
+  assert.ok(
+    html.includes("Based on current policy"),
+    "not-enforced answer should retain successful current-policy assurance"
+  );
+  assert.ok(
+    html.includes("Important policy conditions kept"),
+    "not-enforced answer should retain successful constraint assurance"
+  );
+  assert.ok(
+    html.includes("Sources checked"),
+    "not-enforced answer should retain successful source assurance"
   );
   assert.ok(!html.includes("I could verify 0 parts"), "not-enforced assessment must not present zero as a performance score");
   assert.ok(!html.includes("Something went wrong"), "not-enforced UNKNOWN must not be presented as a failure");
