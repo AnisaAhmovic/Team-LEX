@@ -843,6 +843,47 @@ class RequirementCoverageTests(SimpleTestCase):
             "covered",
         )
 
+    def test_open_what_generic_do_accepts_explicit_substantive_action(self):
+        question = (
+            "What must a departing La Trobe staff member "
+            "do with University property?"
+        )
+        claims = [{
+            "text": (
+                "A departing La Trobe staff member must return all "
+                "La Trobe University property including credit cards, "
+                "access keys, security passes, computers, mobile phones, "
+                "vehicles, uniforms, equipment, documentation, and "
+                "confidential information."
+            )
+        }]
+
+        requirements, analyses = analyse_requirement_coverage_inputs(
+            question,
+            claims,
+        )
+        complete, details = validate_requirement_coverage(
+            requirements,
+            claims,
+            analyses=analyses,
+        )
+
+        self.assertTrue(complete, details)
+        self.assertEqual(details["status"], "not_enforced")
+        self.assertEqual(details["requirement_count"], 1)
+        self.assertEqual(details["covered_count"], 0)
+        self.assertEqual(details["unknown_count"], 1)
+        self.assertEqual(details["enforced_count"], 0)
+        self.assertEqual(
+            details["requirements"][0]["requirement_type"],
+            "unsupported",
+        )
+        self.assertEqual(
+            details["requirements"][0]["coverage_status"],
+            "unknown",
+        )
+        self.assertIsNone(details["requirements"][0]["covered"])
+
     def test_open_what_without_supplied_value_is_uncovered(self):
         text = "Staff must avoid."
 

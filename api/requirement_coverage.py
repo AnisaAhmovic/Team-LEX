@@ -224,6 +224,7 @@ def _is_open_what_requirement(requirement):
     return (
         kind == "open"
         and bool(owner)
+        and owner != "do"
         and gap == "what"
         and _requirement_type(requirement)
             not in {"definition", "purpose", "conditional_action"}
