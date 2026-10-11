@@ -13,6 +13,10 @@ function authoritativeUrl(value) {
 
 function Message({ message, sender, time, messageId, claims = [], sources = [], type, escalation, assurance }) {
   const isBot = sender === "bot";
+  const suppressUnverifiedAnswer =
+    isBot &&
+    type === "answer" &&
+    (assurance?.question_coverage?.unknown ?? 0) > 0;
 
   // Pick the style for the bubble. Fallbacks and errors look different from
   // real answers so nobody mistakes them for policy advice.
@@ -41,14 +45,14 @@ function Message({ message, sender, time, messageId, claims = [], sources = [], 
       <div className={bubbleClass}>
         {type === "fallback" && <strong className="message-label">No policy answer found</strong>}
         {type === "error" && <strong className="message-label">Something went wrong. This is not a policy answer.</strong>}
-        {isBot && claims.length > 0 ? claims.map((claim) => (
+        {!suppressUnverifiedAnswer && (isBot && claims.length > 0 ? claims.map((claim) => (
           <p key={claim.claim_id}>
             {claim.text}{" "}
             {claim.source_ids.map((id) => (
               <a className="claim-citation" key={id} href={`#source-${messageId}-${id}`} aria-label={`View source ${id}`}>[{id}]</a>
             ))}
           </p>
-        )) : <p>{message}</p>}
+        )) : <p>{message}</p>)}
         {isBot && type === "answer" && assurance && (
           <section className="answer-checks" aria-label="Answer checks">
             <strong>Answer checks <span aria-hidden="true">{"\u2713"}</span></strong>

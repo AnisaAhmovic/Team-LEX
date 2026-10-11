@@ -131,6 +131,10 @@ try {
     !html.includes('class="policy-sources"'),
     "partial assessment must not expose policy sources as verified answer evidence"
   );
+  assert.ok(
+    !html.includes("Students normally receive feedback within 15 business days."),
+    "partial assessment must not expose unverified answer claims"
+  );
 
   const multipleUnknown = {
     ...assuredAnswer,
