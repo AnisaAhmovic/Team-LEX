@@ -472,6 +472,23 @@ class CitationTests(TestCase):
 
         self.assertEqual(len(result["claims"][0]["support"]), 2)
         self.assertEqual(result["claims"][0]["source_ids"], ["S1"])
+    def test_system_prompt_requires_answer_when_evidence_directly_supports_it(self):
+        """Directly answering evidence should produce a minimal supported claim, not abstention."""
+        prompt = SYSTEM_PROMPT.casefold()
+
+        self.assertIn(
+            "when supplied evidence directly answers the question",
+            prompt,
+        )
+        self.assertIn(
+            "return the minimum supported claim",
+            prompt,
+        )
+        self.assertIn(
+            "do not abstain merely because other supplied evidence is irrelevant or unnecessary",
+            prompt,
+        )
+
     def test_system_prompt_limits_answers_to_requested_scope(self):
         """Generation stays focused when retrieved evidence contains related material."""
         self.assertIn(
