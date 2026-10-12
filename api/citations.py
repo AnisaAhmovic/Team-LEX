@@ -13,7 +13,7 @@ MAX_EVIDENCE_CHUNKS = 5
 MAX_CHUNK_CHARS = 800
 MAX_CONTEXT_CHARS = 4000
 MAX_CLAIMS = 12
-GENERATION_OPTIONS = {"temperature": 0, "seed": 0, "num_predict": 2048, "num_ctx": 8192}
+GENERATION_OPTIONS = {"temperature": 0, "seed": 0, "num_predict": 2048, "num_ctx": 4096}
 SOURCE_FIELDS = (
     "policy_title", "section", "subsection", "topic", "subtopic",
     "paragraph_start", "paragraph_end", "source_url", "status_details_url",

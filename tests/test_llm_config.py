@@ -32,3 +32,9 @@ with patch("dotenv.load_dotenv", return_value=False):
     lines = result.stdout.strip().splitlines()
 
     assert lines == ["qwen3:4b-instruct", "300.0", "0"]
+
+
+def test_generation_context_matches_demo_hardware_baseline():
+    from api.citations import GENERATION_OPTIONS
+
+    assert GENERATION_OPTIONS["num_ctx"] == 4096
