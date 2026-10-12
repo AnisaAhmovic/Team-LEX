@@ -215,6 +215,7 @@ def _policy_request(request, generate):
         record["generation"]["validation"] = str(exc)
         return _respond(record, _fallback(question, "unverifiable_generation"))
     except Exception as exc:
+        logger.exception("LEX internal error at stage %s", stage)
         # Unexpected service failures still have a record, without exception text.
         record["error"] = {
             "stage": stage,
@@ -237,3 +238,4 @@ def policy_evidence(request):
 @api_view(["POST"])
 def policy_answer(request):
     return _policy_request(request, generate=True)
+
