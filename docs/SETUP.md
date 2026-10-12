@@ -100,7 +100,7 @@ The current production-generation baseline is:
 OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_MODEL=qwen3:4b-instruct
 OLLAMA_TIMEOUT_SECONDS=300
-OLLAMA_KEEP_ALIVE=5m
+OLLAMA_KEEP_ALIVE=0
 ```
 
 Use `.env.example` as the tracked configuration reference.
