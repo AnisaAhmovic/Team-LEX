@@ -1646,6 +1646,61 @@ class InteractionAuditTests(SimpleTestCase):
             json.dumps(record),
         )
 
+    def test_rcv_not_enforced_is_a_safe_fallback(self):
+        """RCV not_enforced must not expose an unverified generated answer."""
+        question = "What does the policy say?"
+        supported = "Feedback on assessment tasks is timely and constructive."
+
+        retriever = retrieve([
+            point(text=supported)
+        ])
+        context = select_context(retriever.retrieve(question)["evidence"])
+
+        value = {
+            "claims": [{
+                "text": supported,
+                "support": [
+                    support_id(context, "E1", supported),
+                ],
+            }]
+        }
+
+        requirements = [
+            {"kind": "TEST", "owner": "feedback", "gap": "timely"},
+        ]
+        analyses = [{"text": supported}]
+
+        with patch(
+            "api.views.analyse_requirement_coverage_inputs",
+            return_value=(requirements, analyses),
+        ), patch(
+            "api.views.validate_requirement_coverage",
+            return_value=(
+                True,
+                {
+                    "status": "not_enforced",
+                    "requirement_count": 1,
+                    "covered_count": 0,
+                    "unknown_count": 1,
+                    "enforced_count": 0,
+                },
+            ),
+        ):
+            response, record = self.request(
+                retriever,
+                json.dumps(value),
+                question=question,
+            )
+
+        self.assertEqual(response.data["status"], "fallback")
+        self.assertEqual(
+            response.data["fallback_reason"],
+            "generation_insufficient_evidence",
+        )
+        self.assertIsNone(response.data["answer"])
+        self.assertEqual(response.data["claims"], [])
+        self.assertEqual(response.data["sources"], [])
+
     def test_rcv_accepts_complete_remainder_after_unsupported_claim_is_filtered(self):
         """A complete validated remainder may be returned after an unsupported sibling is removed."""
         question = "Is feedback on assessment tasks timely?"
