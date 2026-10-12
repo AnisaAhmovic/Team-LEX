@@ -179,7 +179,7 @@ def _policy_request(request, generate):
             analyses=analyses,
         )
 
-        if not coverage_complete:
+        if not coverage_complete or coverage.get("status") == "not_enforced":
             record["generation"]["validation"] = "requirement_coverage_incomplete"
             return _respond(
                 record,
