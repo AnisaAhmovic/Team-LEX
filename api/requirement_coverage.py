@@ -156,6 +156,62 @@ def _requirement_type(requirement):
     ).casefold().strip()
 
 
+def _is_polar_requirement(requirement):
+    """Return True only for a structurally extracted POLAR BOOLEAN_STATUS requirement."""
+    if not isinstance(requirement, dict):
+        return False
+
+    kind = str(requirement.get("kind") or "").casefold().strip()
+    owner = str(requirement.get("owner") or "").casefold().strip()
+    gap = str(requirement.get("gap") or "").casefold().strip()
+
+    return (
+        kind == "polar"
+        and bool(owner)
+        and gap == "boolean_status"
+    )
+
+
+def _polar_fulfilled(requirement, claim_texts):
+    """
+    Require an already-validated claim to directly resolve the requested
+    Boolean proposition.
+
+    Upstream grounding, provenance, attribution and policy-constraint checks
+    establish claim truth. This bounded RCV check only establishes that the
+    claim directly answers the POLAR requirement rather than merely mentioning
+    its predicate in an explanatory or subordinate construction.
+    """
+    owner = str(requirement.get("owner") or "").casefold().strip()
+
+    if not owner:
+        return False
+
+    owner_pattern = re.compile(
+        rf"\b{re.escape(owner)}(?:s|es|ed|ing)?\b",
+        re.IGNORECASE,
+    )
+
+    subordinate_pattern = re.compile(
+        rf"\b(?:how|whether|if)\b[^.!?]*"
+        rf"\b{re.escape(owner)}(?:s|es|ed|ing)?\b",
+        re.IGNORECASE,
+    )
+
+    for text in claim_texts:
+        value = str(text or "").strip()
+
+        if not owner_pattern.search(value):
+            continue
+
+        if subordinate_pattern.search(value):
+            continue
+
+        return True
+
+    return False
+
+
 def _is_definition_requirement(requirement):
     """Return True only for an explicitly classified DEFINITION requirement."""
     if not isinstance(requirement, dict):
@@ -548,6 +604,12 @@ def validate_requirement_coverage(requirements, claims, analyses=None):
         if _is_conditional_action_requirement(requirement)
     }
 
+    polar_indexes = {
+        index
+        for index, requirement in enumerate(requirements)
+        if _is_polar_requirement(requirement)
+    }
+
     open_what_indexes = [
         index
         for index, requirement in enumerate(requirements)
@@ -677,6 +739,22 @@ def validate_requirement_coverage(requirements, claims, analyses=None):
                 "covered": covered,
             })
 
+        elif index in polar_indexes:
+            covered = _polar_fulfilled(
+                requirement,
+                claim_texts,
+            )
+
+            item.update({
+                "requirement_type": "polar",
+                "coverage_status": (
+                    "covered"
+                    if covered
+                    else "uncovered"
+                ),
+                "covered": covered,
+            })
+
         else:
             item.update({
                 "requirement_type": (
@@ -691,7 +769,11 @@ def validate_requirement_coverage(requirements, claims, analyses=None):
                             else (
                                 "open_what"
                                 if _is_open_what_requirement(requirement)
-                                else "unsupported"
+                                else (
+                                    "polar"
+                                    if _is_polar_requirement(requirement)
+                                    else "unsupported"
+                                )
                             )
                         )
                     )

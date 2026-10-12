@@ -143,7 +143,59 @@ class RequirementLinguisticIntegrationTests(SimpleTestCase):
 
 
 class RequirementCoverageTests(SimpleTestCase):
-    """Protect deterministic bounded requirement-coverage decisions."""
+
+    def test_polar_boolean_status_covered(self):
+        """A direct answer to a POLAR requirement is enforceable and covered."""
+        requirements = [
+            {
+                "kind": "POLAR",
+                "owner": "approve",
+                "gap": "BOOLEAN_STATUS",
+            }
+        ]
+        claims = [
+            {"text": "The manager approves the request."}
+        ]
+
+        complete, details = validate_requirement_coverage(
+            requirements,
+            claims,
+            analyses=[],
+        )
+
+        self.assertTrue(complete)
+        self.assertEqual(details["status"], "complete")
+        self.assertEqual(details["covered_count"], 1)
+        self.assertEqual(details["enforced_count"], 1)
+        self.assertEqual(
+            details["requirements"][0]["requirement_type"],
+            "polar",
+        )
+
+    def test_polar_boolean_status_uncovered_when_status_not_resolved(self):
+        """An embedded explanation does not resolve the POLAR requirement."""
+        requirements = [
+            {
+                "kind": "POLAR",
+                "owner": "approve",
+                "gap": "BOOLEAN_STATUS",
+            }
+        ]
+        claims = [
+            {"text": "The policy explains how the manager may approve the request."}
+        ]
+
+        complete, details = validate_requirement_coverage(
+            requirements,
+            claims,
+            analyses=[],
+        )
+
+        self.assertFalse(complete)
+        self.assertEqual(details["status"], "incomplete")
+        self.assertEqual(details["covered_count"], 0)
+        self.assertEqual(details["enforced_count"], 1)
+
 
     def setUp(self):
         self.requirements = [
